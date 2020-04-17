@@ -1,48 +1,54 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-class Login extends React.PureComponent {
-  state = {
-    username: "",
-    password: ""
+export class Login extends React.PureComponent<any, any> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      username: "",
+      password: "",
+    };
+    this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange ( event:any ){
+  handleChange(event: any) {
     this.setState({
-      [event.target.name]: event.target.value
+        [event.target.name]:  event.target.value,
     });
   }
 
-  handleSubmit ( event:any ){
-    event.preventDefault()
+  handleSubmit(event: any) {
+    event.preventDefault();
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <div>
         <h1>Login</h1>
 
         <label>Username</label>
         <input
-          name='username'
-          placeholder='Username'
+          name="username"
+          placeholder="Username"
           value={this.state.username}
           onChange={this.handleChange}
-          /><br/>
+        />
+        <br />
 
         <label>Password</label>
         <input
-          type='password'
-          name='password'
-          placeholder='Password'
+          type="password"
+          name="password"
+          placeholder="Password"
           value={this.state.password}
           onChange={this.handleChange}
-          /><br/>
+        />
+        <br />
 
-        <input type='submit'/>
-        <Link to={'/'}>Home</Link>
-      </form>
-    )
+        <input type="submit" />
+        <Link to={"/"}>Home</Link>
+      </div>
+    );
   }
 }
 
