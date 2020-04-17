@@ -20,11 +20,23 @@ export class Login extends React.PureComponent<any, any> {
 
   handleSubmit(event: any) {
     event.preventDefault();
+
+    // let config = {
+    //     headers: {
+    //       Origin: 'http://localhost:3000/'
+    //     }
+    //   }
+    axios.get(`http://192.168.0.104:8080/fetch/categories/all`)
+
+    .then(res => {
+      console.log(res);
+      console.log(res.data);
+    })
   }
 
   render() {
     return (
-      <div>
+      <form onSubmit={this.handleSubmit}>
         <h1>Login</h1>
 
         <label>Username</label>
@@ -48,7 +60,7 @@ export class Login extends React.PureComponent<any, any> {
 
         <input type="submit" />
         <Link to={"/"}>Home</Link>
-      </div>
+      </form>
     );
   }
 }
