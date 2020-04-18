@@ -10,6 +10,7 @@ export class Login extends React.PureComponent<any, any> {
       password: "",
     };
     this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleChange(event: any) {
@@ -20,13 +21,24 @@ export class Login extends React.PureComponent<any, any> {
 
   handleSubmit(event: any) {
     event.preventDefault();
-
-    // let config = {
-    //     headers: {
-    //       Origin: 'http://localhost:3000/'
-    //     }
-    //   }
-    axios.get(`http://192.168.0.104:8080/fetch/categories/all`)
+    console.log(this.state.username)
+    const axiosConfig = {
+      headers: {
+      'content-Type': 'application/json',
+      "Accept": "/",
+      "Cache-Control": "no-cache",
+      "Cookie": document.cookie
+      },
+      credentials: "same-origin"
+      };
+    let config = {
+        headers: {
+          authorization: 'Basic  lang=en; JSESSIONID=6B7F43004D6EC705DFB3F3978809FEF6'
+        },
+        withCredentials: true,
+      }
+    axios.post(`http://192.168.0.104:8080/users/authentication2`, this.state.username)
+    // axios.get(`http://192.168.0.104:8080/fetch/categories/all`)
 
     .then(res => {
       console.log(res);
