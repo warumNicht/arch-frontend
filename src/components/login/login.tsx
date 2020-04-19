@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import backendHost from '../../constants/appConstants';
 
 export class Login extends React.PureComponent<any, any> {
   constructor(props: any) {
@@ -30,7 +31,7 @@ export class Login extends React.PureComponent<any, any> {
     };
     axios
       .post(
-        `http://localhost:8080/fetch/categories/post`,null, config
+        `${backendHost}/fetch/categories/post`,null, config
       )
 
       .then((res) => {
@@ -42,7 +43,7 @@ export class Login extends React.PureComponent<any, any> {
   get() {
     console.log("GET");
     axios
-      .get(`http://localhost:8080/fetch/session`,{withCredentials: true})
+      .get(`${backendHost}/fetch/session`,{withCredentials: true})
       .then((res) => {
         console.log(res);
         console.log(res.data);
