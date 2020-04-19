@@ -22,15 +22,6 @@ export class Login extends React.PureComponent<any, any> {
   handleSubmit(event: any) {
     event.preventDefault();
     console.log('Post');
-    const axiosConfig = {
-      headers: {
-        "content-Type": "application/json",
-        Accept: "/",
-        "Cache-Control": "no-cache",
-        Cookie: document.cookie,
-      },
-      credentials: "same-origin",
-    };
     let config = {
       headers: {
         'X-CSRF-Token': "da5bf55f-0bb6-48b6-a97a-54eae1b47d7f",
