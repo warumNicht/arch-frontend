@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import backendHost from '../../constants/appConstants';
+import backendHost, {csrfHeaderName} from '../../constants/appConstants';
 
 export class Login extends React.PureComponent<any, any> {
   constructor(props: any) {
@@ -25,7 +25,7 @@ export class Login extends React.PureComponent<any, any> {
     console.log('Post');
     let config = {
       headers: {
-        'X-CSRF-Token': "da5bf55f-0bb6-48b6-a97a-54eae1b47d7f",
+        csrfHeaderName : "da5bf55f-0bb6-48b6-a97a-54eae1b47d7f",
       },
       withCredentials: true,
     };
@@ -42,6 +42,7 @@ export class Login extends React.PureComponent<any, any> {
 
   get() {
     console.log("GET");
+    console.log(csrfHeaderName);
     axios
       .get(`${backendHost}/fetch/session`,{withCredentials: true})
       .then((res) => {
