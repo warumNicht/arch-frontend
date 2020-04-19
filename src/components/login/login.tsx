@@ -21,7 +21,7 @@ export class Login extends React.PureComponent<any, any> {
 
   handleSubmit(event: any) {
     event.preventDefault();
-    console.log('Post');
+    console.log("Post");
     const axiosConfig = {
       headers: {
         "content-Type": "application/json",
@@ -33,15 +33,12 @@ export class Login extends React.PureComponent<any, any> {
     };
     let config = {
       headers: {
-        'X-CSRF-Token': "da5bf55f-0bb6-48b6-a97a-54eae1b47d7f",
+        "X-CSRF-Token": "da5bf55f-0bb6-48b6-a97a-54eae1b47d7f",
       },
       withCredentials: true,
     };
     axios
-      .post(
-        `http://localhost:8080/fetch/categories/post`,null, config
-      )
-
+      .post(`http://localhost:8080/fetch/categories/post`, null, config)
       .then((res) => {
         console.log(res);
         console.log(res.data);
@@ -51,7 +48,7 @@ export class Login extends React.PureComponent<any, any> {
   get() {
     console.log("GET");
     axios
-      .get(`http://localhost:8080/fetch/session`,{withCredentials: true})
+      .get(`http://localhost:8080/fetch/session`, { withCredentials: true })
       .then((res) => {
         console.log(res);
         console.log(res.data);
