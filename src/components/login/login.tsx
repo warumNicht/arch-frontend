@@ -21,7 +21,7 @@ export class Login extends React.PureComponent<any, any> {
 
   handleSubmit(event: any) {
     event.preventDefault();
-    console.log(this.state.username);
+    console.log('Post');
     const axiosConfig = {
       headers: {
         "content-Type": "application/json",
@@ -33,17 +33,14 @@ export class Login extends React.PureComponent<any, any> {
     };
     let config = {
       headers: {
-        authorization:
-          "Basic  lang=en; JSESSIONID=6B7F43004D6EC705DFB3F3978809FEF6",
+        'X-CSRF-Token': "da5bf55f-0bb6-48b6-a97a-54eae1b47d7f",
       },
       withCredentials: true,
     };
     axios
       .post(
-        `http://192.168.0.104:8080/users/authentication2`,
-        this.state.username
+        `http://localhost:8080/fetch/categories/post`,null, config
       )
-      // axios.get(`http://192.168.0.104:8080/fetch/categories/all`)
 
       .then((res) => {
         console.log(res);
@@ -54,7 +51,7 @@ export class Login extends React.PureComponent<any, any> {
   get() {
     console.log("GET");
     axios
-      .get(`http://192.168.0.104:8080/fetch/categories/all`)
+      .get(`http://localhost:8080/fetch/session`,{withCredentials: true})
       .then((res) => {
         console.log(res);
         console.log(res.data);
