@@ -12,6 +12,7 @@ export class Login extends React.PureComponent<any, any> {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.login = this.login.bind(this);
   }
 
   handleChange(event: any) {
@@ -51,6 +52,17 @@ export class Login extends React.PureComponent<any, any> {
       });
   }
 
+  login(){
+    axios
+      .post(
+        `${backendHost}/users/rest-authentication`, this.state
+      )
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+      });
+  }
+
   render() {
     return (
       <div>
@@ -80,6 +92,8 @@ export class Login extends React.PureComponent<any, any> {
           <Link to={"/"}>Home</Link>
         </form>
         <button onClick={() => this.get()}>Get items</button>
+        <br />
+        <button onClick={() => this.login()}>REST login</button>
       </div>
     );
   }
