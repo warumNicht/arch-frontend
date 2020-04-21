@@ -3,10 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import backendHost, { csrfHeaderName } from "../../constants/appConstants";
 
-const app = axios.create({
-  baseURL: 'http://localhost:8080',
-  withCredentials: true
-})
+axios.defaults.withCredentials = true;
 
 export class Login extends React.PureComponent<any, any> {
   constructor(props: any) {
@@ -78,17 +75,16 @@ export class Login extends React.PureComponent<any, any> {
   createCategory() {
 
     let config = {
-      withCredentials: true,
       headers: {
+        'Content-Type': 'application/json',
         "X-CSRF-Token": this.state.token,
       },
+      withCredentials: true
     };
-
-    
 
     console.log(this.state.token)
     axios
-      .post(`http://localhost:8080/admin/category/create/rest`, 'ff', config)
+      .post(`http://192.168.0.104:8080/admin/category/create/rest`, JSON.stringify({pp: 'eee'}), config)
       .then((res) => {
         console.log(res);
         console.log(res.headers);
