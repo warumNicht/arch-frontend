@@ -1,16 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import api from '../../util/api';
+import backendHost, { csrfHeaderName } from "../../constants/appConstants";
+
+axios.defaults.withCredentials = true;
 
 export class Login extends React.PureComponent<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      username: "",
-      password: "",
+      username: "Keiser",
+      password: "A12wert",
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.login = this.login.bind(this);
+    this.createCategory = this.createCategory.bind(this);
   }
 
   handleChange(event: any) {
@@ -22,23 +28,14 @@ export class Login extends React.PureComponent<any, any> {
   handleSubmit(event: any) {
     event.preventDefault();
     console.log("Post");
-    const axiosConfig = {
-      headers: {
-        "content-Type": "application/json",
-        Accept: "/",
-        "Cache-Control": "no-cache",
-        Cookie: document.cookie,
-      },
-      credentials: "same-origin",
-    };
     let config = {
       headers: {
-        "X-CSRF-Token": "da5bf55f-0bb6-48b6-a97a-54eae1b47d7f",
+        "X-CSRF-Token": this.state.token,
       },
       withCredentials: true,
     };
     axios
-      .post(`http://localhost:8080/fetch/categories/post`, null, config)
+      .post(`${backendHost}/fetch/categories/post`, null, config)
       .then((res) => {
         console.log(res);
         console.log(res.data);
@@ -47,10 +44,40 @@ export class Login extends React.PureComponent<any, any> {
 
   get() {
     console.log("GET");
+    console.log(csrfHeaderName);
     axios
-      .get(`http://localhost:8080/fetch/session`, { withCredentials: true })
+      .get(`${backendHost}/fetch/session`, { withCredentials: true })
       .then((res) => {
         console.log(res);
+        console.log(res.data);
+      });
+  }
+
+  login() {
+    api
+      .post(`/users/rest-authentication`, this.state)
+      .then((res) => {
+        console.log(res);
+        console.log(res.headers);
+        this.setState({
+          token: res.data,
+        });
+        console.log(res.data);
+      });
+  }
+
+  createCategory() {
+    let config = {
+      timeout: 5000,
+      headers: {
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": this.state.token,
+      }
+    };
+
+    api
+      .post(`/admin/category/create/rest`, JSON.stringify({pp: 'eee'}), config)
+      .then((res) => {
         console.log(res.data);
       });
   }
@@ -83,7 +110,12 @@ export class Login extends React.PureComponent<any, any> {
           <input type="submit" />
           <Link to={"/"}>Home</Link>
         </form>
-        <button onClick={() => this.get()}>Get items</button>
+        <button onClick={() => this.get()}>Get session</button>
+        <br />
+        <button onClick={() => this.login()}>REST login</button>
+
+        <br />
+        <button onClick={() => this.createCategory()}>Create category</button>
       </div>
     );
   }
