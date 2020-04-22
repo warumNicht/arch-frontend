@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import api from '../../util/api';
 import backendHost, { csrfHeaderName } from "../../constants/appConstants";
 
 axios.defaults.withCredentials = true;
@@ -53,8 +54,8 @@ export class Login extends React.PureComponent<any, any> {
   }
 
   login() {
-    axios
-      .post(`${backendHost}/users/rest-authentication`, this.state, { withCredentials: true })
+    api
+      .post(`/users/rest-authentication`, this.state)
       .then((res) => {
         console.log(res);
         console.log(res.headers);
@@ -74,8 +75,8 @@ export class Login extends React.PureComponent<any, any> {
       }
     };
 
-    axios
-      .post(`${backendHost}/admin/category/create/rest`, JSON.stringify({pp: 'eee'}), config)
+    api
+      .post(`/admin/category/create/rest`, JSON.stringify({pp: 'eee'}), config)
       .then((res) => {
         console.log(res.data);
       });
