@@ -32,7 +32,6 @@ export class Login extends React.PureComponent<any, any> {
       .post(
         `http://localhost:8080/fetch/categories/post`,null, config
       )
-
       .then((res) => {
         console.log(res);
         console.log(res.data);
