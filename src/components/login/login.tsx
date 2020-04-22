@@ -75,6 +75,7 @@ export class Login extends React.PureComponent<any, any> {
   createCategory() {
 
     let config = {
+      timeout: 180000,
       headers: {
         'Content-Type': 'application/json',
         "X-CSRF-Token": this.state.token,
@@ -88,9 +89,7 @@ export class Login extends React.PureComponent<any, any> {
       .then((res) => {
         console.log(res);
         console.log(res.headers);
-        this.setState({
-          token: res.data,
-        });
+
         console.log(res.data);
       });
   }
