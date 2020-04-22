@@ -29,13 +29,12 @@ export class Login extends React.PureComponent<any, any> {
     console.log("Post");
     let config = {
       headers: {
-        "X-CSRF-Token": "78b12161-c20b-46d1-a04f-4c0f687652a4",
+        "X-CSRF-Token": this.state.token,
       },
       withCredentials: true,
     };
     axios
       .post(`${backendHost}/fetch/categories/post`, null, config)
-
       .then((res) => {
         console.log(res);
         console.log(res.data);
@@ -54,12 +53,6 @@ export class Login extends React.PureComponent<any, any> {
   }
 
   login() {
-    let config = {
-      credentials: 'include',
-      headers: {
-        // "X-CSRF-Token": "78b12161-c20b-46d1-a04f-4c0f687652a4",
-      },
-    };
     axios
       .post(`${backendHost}/users/rest-authentication`, this.state, { withCredentials: true })
       .then((res) => {
@@ -73,23 +66,17 @@ export class Login extends React.PureComponent<any, any> {
   }
 
   createCategory() {
-
     let config = {
-      timeout: 180000,
+      timeout: 5000,
       headers: {
         'Content-Type': 'application/json',
         "X-CSRF-Token": this.state.token,
-      },
-      withCredentials: true
+      }
     };
 
-    console.log(this.state.token)
     axios
-      .post(`http://192.168.0.104:8080/admin/category/create/rest`, JSON.stringify({pp: 'eee'}), config)
+      .post(`${backendHost}/admin/category/create/rest`, JSON.stringify({pp: 'eee'}), config)
       .then((res) => {
-        console.log(res);
-        console.log(res.headers);
-
         console.log(res.data);
       });
   }
