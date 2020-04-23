@@ -106,10 +106,10 @@ export class Login extends React.PureComponent<any, any> {
             onChange={this.handleChange}
           />
           <br />
-
           <input type="submit" />
           <Link to={"/"}>Home</Link>
         </form>
+        
         <button onClick={() => this.get()}>Get session</button>
         <br />
         <button onClick={() => this.login()}>REST login</button>
