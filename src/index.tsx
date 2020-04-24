@@ -10,6 +10,7 @@ const store = createStore(() => {
   return [];
 }, []);
 
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
