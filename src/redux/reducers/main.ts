@@ -1,4 +1,5 @@
 import TokenActions, { UserActions } from '../actions/ActionTypes'
+import { combineReducers } from 'redux'
 
 const initialState = {
     token: '',
@@ -25,11 +26,9 @@ function users(state = {}, action: any) {
     }
 }
 
-function main(state = initialState, action: any) {
-    return {
-        token: tokens(state.token, action),
-        user: users(state.user, action)
-    }
-}
+const main = combineReducers({
+    tokens,
+    users
+})
 
 export default main;
