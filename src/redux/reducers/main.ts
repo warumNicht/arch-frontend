@@ -5,22 +5,46 @@ const initialState = {
     user: {}
 }
 
-function todoApp(state: any, action: any) {
+function tokens(state: string, action: any) {
+
     if (typeof state === 'undefined') {
-        return initialState
+        return ''
     }
 
     switch (action.type) {
         case TokenActions.SET_TOKEN:
-            return Object.assign({}, state, {
-                token: action.token
-            })
-        case UserActions.SET_CURRENT_USER:
-            return Object.assign({}, state, {
-                user: action.user
-            })
+            return action.token
+
         default:
             return state
     }
+}
 
-    export default todoApp;
+function users(state: Object, action: any) {
+
+    if (typeof state === 'undefined') {
+        return {}
+    }
+
+    switch (action.type) {
+        case UserActions.SET_CURRENT_USER:
+            return action.user
+
+        default:
+            return state
+    }
+}
+
+
+function main(state: any, action: any) {
+    if (typeof state === 'undefined') {
+        return initialState
+    }
+
+    return {
+        token: tokens(state.token, action),
+        user: users(state.user, action)
+    }
+}
+
+export default main;
