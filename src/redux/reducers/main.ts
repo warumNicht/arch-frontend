@@ -5,12 +5,7 @@ const initialState = {
     user: {}
 }
 
-function tokens(state: string, action: any) {
-
-    if (typeof state === 'undefined') {
-        return ''
-    }
-
+function tokens(state = '', action: any) {
     switch (action.type) {
         case TokenActions.SET_TOKEN:
             return action.token
@@ -20,12 +15,7 @@ function tokens(state: string, action: any) {
     }
 }
 
-function users(state: Object, action: any) {
-
-    if (typeof state === 'undefined') {
-        return {}
-    }
-
+function users(state = {}, action: any) {
     switch (action.type) {
         case UserActions.SET_CURRENT_USER:
             return action.user
@@ -35,12 +25,7 @@ function users(state: Object, action: any) {
     }
 }
 
-
-function main(state: any, action: any) {
-    if (typeof state === 'undefined') {
-        return initialState
-    }
-
+function main(state = initialState, action: any) {
     return {
         token: tokens(state.token, action),
         user: users(state.user, action)
