@@ -1,6 +1,6 @@
 import TokenActions, {UserActions} from './ActionTypes';
 
-export function setToken(token: string) {
+export default function setToken(token: string) {
     return { type: TokenActions.SET_TOKEN, token }
 }
 

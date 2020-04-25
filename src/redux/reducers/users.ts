@@ -1,6 +1,6 @@
 import  { UserActions } from '../actions/ActionTypes'
 
-function users(state = {}, action: any) {
+function user(state = {}, action: any) {
     switch (action.type) {
         case UserActions.SET_CURRENT_USER:
             return action.user
@@ -10,4 +10,4 @@ function users(state = {}, action: any) {
     }
 }
 
-export default users
+export default user

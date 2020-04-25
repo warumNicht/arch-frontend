@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import tokens from './tokens'
-import users from './users'
+import token from './tokens'
+import user from './users'
 
 const initialState = {
     token: '',
@@ -8,8 +8,8 @@ const initialState = {
 }
 
 const mainReducer = combineReducers({
-    tokens,
-    users
+    token,
+    user
 })
 
 export default mainReducer;
