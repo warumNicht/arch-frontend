@@ -3,10 +3,12 @@ import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import Login from "./components/login/login";
 import Signup from './components/signup/signup';
+import ProfileContainer from "./containers/profileContainer";
 
 function App() {
   return (
     <div>
+      <ProfileContainer></ProfileContainer>  
       <Router>
         <Switch>
           

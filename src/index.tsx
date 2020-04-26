@@ -17,8 +17,8 @@ console.log(store.getState())
 const unsubscribe = store.subscribe(() => console.log(store.getState()))
 
 // Dispatch some actions
-store.dispatch(setToken('Learn about actions'))
-// console.log(store.dispatch(getToken()))
+store.dispatch(setToken('This is the token set in redux'))
+console.log(store.getState().token)
 
 
 ReactDOM.render(
