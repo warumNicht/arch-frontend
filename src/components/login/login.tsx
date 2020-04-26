@@ -1,8 +1,11 @@
 import React from "react";
+import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import axios from "axios";
 import api from '../../util/api';
 import backendHost, { csrfHeaderName } from "../../constants/appConstants";
+
+import setToken from '../../redux/actions/actions'
 
 axios.defaults.withCredentials = true;
 
@@ -28,6 +31,7 @@ export class Login extends React.PureComponent<any, any> {
   handleSubmit(event: any) {
     event.preventDefault();
     console.log("Post");
+    this.props.login(this.state.username);
     let config = {
       headers: {
         "X-CSRF-Token": this.state.token,
@@ -121,4 +125,11 @@ export class Login extends React.PureComponent<any, any> {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch: any)=> ({
+  login: (token: string) => dispatch(setToken(token))
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Login);
