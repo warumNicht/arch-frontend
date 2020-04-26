@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
 
 class ProfileContainer extends React.PureComponent<any, any> {
   render() {
@@ -12,7 +13,7 @@ class ProfileContainer extends React.PureComponent<any, any> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: ArchitectureAppStore) => ({
   token: state.token,
 });
 
