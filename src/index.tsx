@@ -6,10 +6,21 @@ import * as serviceWorker from "./serviceWorker";
 
 import { createStore } from "redux";
 import { Provider } from "react-redux";
+import mainReducer from './redux/reducers'
 
-const store = createStore(() => {
-  return [];
-}, []);
+import setToken, {getToken} from './redux/actions/actions'
+
+const store = createStore(mainReducer);
+
+console.log(store.getState())
+// Every time the state changes, log it
+// Note that subscribe() returns a function for unregistering the listener
+const unsubscribe = store.subscribe(() => console.log(store.getState()))
+
+// Dispatch some actions
+store.dispatch(setToken('This is the token set in redux'))
+console.log(store.getState().token)
+
 
 ReactDOM.render(
   <React.StrictMode>
