@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import Signup from './components/signup/signup';
-import ProfileContainer from "./containers/profileContainer";
+import ProfileContainer from "./containers/ProfileContainer";
 import LoginContainer from "./containers/LoginContainer";
 
 function App() {
