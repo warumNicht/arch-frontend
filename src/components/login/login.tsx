@@ -1,11 +1,8 @@
 import React from "react";
-import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import axios from "axios";
 import api from '../../util/api';
 import backendHost, { csrfHeaderName } from "../../constants/appConstants";
-
-import setToken from '../../redux/actions/actions'
 
 axios.defaults.withCredentials = true;
 
@@ -125,11 +122,4 @@ export class Login extends React.PureComponent<any, any> {
   }
 }
 
-const mapDispatchToProps = (dispatch: any)=> ({
-  login: (token: string) => dispatch(setToken(token))
-})
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(Login);
+export default Login;
