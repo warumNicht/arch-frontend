@@ -1,22 +1,19 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
 class ProfileContainer extends React.PureComponent<any, any> {
-
-    render() {
-      return (
-       <div>
-           <p>Logged in user:</p>
-           <div>{this.props.token ? this.props.token : 'Not logged in'}</div>
-       </div>
-      )
-    }
+  render() {
+    return (
+      <div>
+        <p>Logged in user:</p>
+        <div>{this.props.token ? this.props.token : "Not logged in"}</div>
+      </div>
+    );
   }
-  
-  const mapStateToProps = function(state:any) {
-      return {
-        token: state.token
-      }
-    }
-  
-  export default connect(mapStateToProps)(ProfileContainer);
+}
+
+const mapStateToProps = (state: any) => ({
+  token: state.token,
+});
+
+export default connect(mapStateToProps)(ProfileContainer);
