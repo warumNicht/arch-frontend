@@ -64,6 +64,7 @@ export class Login extends React.PureComponent<any, any> {
           token: res.data,
         });
         console.log(res.data);
+        this.props.login(res.data);
       });
   }
 
@@ -72,7 +73,7 @@ export class Login extends React.PureComponent<any, any> {
       timeout: 5000,
       headers: {
         'Content-Type': 'application/json',
-        "X-CSRF-Token": this.state.token,
+        [csrfHeaderName] : this.state.token,
       }
     };
 
