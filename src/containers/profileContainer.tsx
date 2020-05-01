@@ -20,7 +20,9 @@ class ProfileContainer extends React.PureComponent<any, any> {
       <div>
         <p>Logged in user:</p>
         <div>{this.props.token ? this.props.token : "Not logged in"}</div>
-        <button onClick={()=>{this.decode()}}>Decode</button>
+        
+        <button onClick={()=>{this.decode()}}>Decode Token</button>
+
         {user ? (<div>
             <p>{user.username}</p>
             <div>{user.roles}</div>
