@@ -28,12 +28,12 @@ export class Login extends React.PureComponent<any, any> {
   handleSubmit(event: any) {
     event.preventDefault();
     console.log("Post");
-    this.props.login(this.state.username);
+
     let config = {
       headers: {
-        "X-CSRF-Token": this.state.token,
+        [csrfHeaderName]: this.state.token
       },
-      withCredentials: true,
+      withCredentials: false
     };
     axios
       .post(`${backendHost}/fetch/categories/post`, null, config)
