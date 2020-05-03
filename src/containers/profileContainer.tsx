@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
-import { Link, BrowserRouter as Router, Switch } from "react-router-dom";
+import { Link } from "react-router-dom";
 var jwtDecode = require('jwt-decode');
 
 class ProfileContainer extends React.PureComponent<any, any> {
