@@ -8,7 +8,11 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import mainReducer from './redux/reducers'
 
-import setToken, {getToken} from './redux/actions/actions'
+import setToken, { getToken } from './redux/actions/actions'
+import { Router } from "react-router-dom";
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
 
 const store = createStore(mainReducer);
 
@@ -25,7 +29,9 @@ console.log(store.getState().token)
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <Router history={history}>
+        <App />
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
