@@ -30,6 +30,10 @@ class AvatarContainer extends React.PureComponent<any, any> {
             <Link to={"/login"}>Login</Link>
           </div>
 
+          <div>
+            <Link to={"/admin"}>Admin</Link>
+          </div>
+
         <p>Logged in user:</p>
         <div>{this.props.token ? this.props.token : "Not logged in"}</div>
 
