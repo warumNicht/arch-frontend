@@ -7,6 +7,7 @@ import LoginContainer from "./containers/LoginContainer";
 import { Home } from "./components/home/home";
 import { Dashboard } from "./components/dashboard/dashboard";
 import { PrivateRoute } from "./shared/PrivateRoute";
+import { UserRoles } from "./constants/appConstants";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
 
         <Switch>
           <Route exact path="/" component={Home}/>
-          <PrivateRoute path="/dashboard" hasRole={'ROLE_ADMIN'} component={Dashboard}/>
+          <PrivateRoute path="/dashboard" hasRole={UserRoles.admin} component={Dashboard}/>
           <Route path="/login" component={LoginContainer} />
           <Route path="/register" component={Signup}/>
         </Switch>
