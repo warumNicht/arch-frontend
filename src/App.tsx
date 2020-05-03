@@ -4,6 +4,7 @@ import "./App.css";
 import Signup from './components/signup/signup';
 import ProfileContainer from "./containers/ProfileContainer";
 import LoginContainer from "./containers/LoginContainer";
+import NotFoundPage from "./components/not-found/NotFoundPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           
           <Route path="/login" component={LoginContainer} />
           <Route path="/" component={Signup}/>
+          <Route component={NotFoundPage}/>
         </Switch>
       </Router>
     </div>
