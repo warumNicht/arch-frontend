@@ -64,6 +64,7 @@ export class Login extends React.PureComponent<any, any> {
           token: res.data,
         });
         console.log(res.data);
+        localStorage.setItem('token', res.data);
         this.props.login(res.data);
       });
   }
