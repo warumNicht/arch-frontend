@@ -11,6 +11,7 @@ function App() {
       <ProfileContainer></ProfileContainer>  
       <Router>
         <Switch>
+          
           <Route path="/login" component={LoginContainer} />
           <Route path="/" component={Signup}/>
         </Switch>
