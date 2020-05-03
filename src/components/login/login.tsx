@@ -76,7 +76,6 @@ export class Login extends React.PureComponent<any, any> {
         [csrfHeaderName] : this.state.token,
       }
     };
-
     api
       .post(`/admin/category/create/rest`, JSON.stringify({pp: 'eee'}), config)
       .then((res) => {
