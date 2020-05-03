@@ -6,6 +6,7 @@ import ProfileContainer from "./containers/ProfileContainer";
 import LoginContainer from "./containers/LoginContainer";
 import { Home } from "./components/home/home";
 import { Dashboard } from "./components/dashboard/dashboard";
+import { PrivateRoute } from "./shared/PrivateRoute";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
 
         <Switch>
           <Route exact path="/" component={Home}/>
-          <Route path="/dashboard" component={Dashboard}/>
+          <PrivateRoute path="/dashboard" component={Dashboard}/>
           <Route path="/login" component={LoginContainer} />
           <Route path="/register" component={Signup}/>
         </Switch>

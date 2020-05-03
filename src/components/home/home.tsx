@@ -5,7 +5,7 @@ export class Home extends React.PureComponent {
     render() {
         return (
             <div>
-                <div>Home page for all users</div>
+                <h1>Home page for all users</h1>
             </div>
         );
     }

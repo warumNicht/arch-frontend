@@ -5,7 +5,7 @@ export class Dashboard extends React.PureComponent {
     render() {
         return (
             <div>
-                <div>Dashboard for all authenticated users</div>
+                <h1>Dashboard for all authenticated users</h1>
             </div>
         );
     }
