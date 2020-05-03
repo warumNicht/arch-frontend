@@ -9,11 +9,10 @@ interface PrivateRouteProps extends RouteProps {
 
 export class PrivateRoute extends Route <PrivateRouteProps>{
 
-
-
     render() {
         const { component: Component, hasRole, ...rest }: PrivateRouteProps = this.props;
         return <Route {...rest} render={props => {
+            
             const currentUserRoles: string[] = UserService.getCurrentUserRoles();
             if (currentUserRoles.length === 0) {
                 // not logged in so redirect to login page with the return url
@@ -30,17 +29,5 @@ export class PrivateRoute extends Route <PrivateRouteProps>{
             return <Component {...props} />
         }} />
     }
-
-    private renderFn = (renderProps: any) => {
-        if (this.props.hasRole) {
-            const { component: Component } = this.props; // JSX accepts only upprcase.
-            if (!Component) {
-                return null;
-            }
-            return <Component {...renderProps} />
-        }
-
-        return <Redirect to={this.props.hasRole} />;
-    };
 
 }

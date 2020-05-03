@@ -66,6 +66,8 @@ export class Login extends React.PureComponent<any, any> {
         console.log(res.data);
         localStorage.setItem('token', res.data);
         this.props.login(res.data);
+        const { from } = this.props.location.state || { from: { pathname: "/" } };
+        this.props.history.push(from);
       });
   }
 
