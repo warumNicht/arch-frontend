@@ -8,6 +8,7 @@ import { Home } from "./components/home/home";
 import { Dashboard } from "./components/dashboard/dashboard";
 import { PrivateRoute } from "./shared/PrivateRoute";
 import { UserRoles } from "./constants/appConstants";
+import { Unauthorized } from "./components/unauthorized/Unauthorized";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <PrivateRoute path="/dashboard" hasRole={UserRoles.admin} component={Dashboard}/>
           <Route path="/login" component={LoginContainer} />
           <Route path="/register" component={Signup}/>
+          <Route path="/unauthorized" component={Unauthorized}/>
         </Switch>
     </div>
   );
