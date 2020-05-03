@@ -4,7 +4,7 @@ import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
 var jwtDecode = require('jwt-decode');
 
-class ProfileContainer extends React.PureComponent<any, any> {
+class AvatarContainer extends React.PureComponent<any, any> {
 
   decode() {
     if (this.props.token && !this.props.token.startsWith('This')) {
@@ -48,4 +48,4 @@ const mapStateToProps = (state: ArchitectureAppStore) => ({
   token: state.token,
 });
 
-export default connect(mapStateToProps)(ProfileContainer);
+export default connect(mapStateToProps)(AvatarContainer);

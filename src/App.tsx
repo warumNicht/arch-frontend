@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import Signup from './components/signup/signup';
-import ProfileContainer from "./containers/ProfileContainer";
+import AvatarContainer from "./containers/AvatarContainer";
 import LoginContainer from "./containers/LoginContainer";
 import { Home } from "./components/home/home";
 import { Dashboard } from "./components/dashboard/dashboard";
@@ -13,7 +13,7 @@ import { Unauthorized } from "./components/unauthorized/Unauthorized";
 function App() {
   return (
     <div>
-      <ProfileContainer></ProfileContainer>  
+      <AvatarContainer></AvatarContainer>  
 
         <Switch>
           <Route exact path="/" component={Home}/>
