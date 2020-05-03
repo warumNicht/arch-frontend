@@ -4,17 +4,20 @@ import "./App.css";
 import Signup from './components/signup/signup';
 import ProfileContainer from "./containers/ProfileContainer";
 import LoginContainer from "./containers/LoginContainer";
+import { Home } from "./components/home/home";
+import { Dashboard } from "./components/dashboard/dashboard";
 
 function App() {
   return (
     <div>
       <ProfileContainer></ProfileContainer>  
-      <Router>
+
         <Switch>
+          <Route exact path="/" component={Home}/>
+          <Route path="/dashboard" component={Dashboard}/>
           <Route path="/login" component={LoginContainer} />
-          <Route path="/" component={Signup}/>
+          <Route path="/register" component={Signup}/>
         </Switch>
-      </Router>
     </div>
   );
 }
