@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 var jwtDecode = require('jwt-decode');
 
 class AvatarContainer extends React.PureComponent<any, any> {
-
   decode() {
     if (this.props.token && !this.props.token.startsWith('This')) {
       console.log(this.props.token)
