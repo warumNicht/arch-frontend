@@ -25,6 +25,7 @@ function App() {
           <PrivateRoute path="/dashboard" hasRole={UserRoles.user} component={Dashboard}/>
           <Route path="/users" component={UserModule} />
           <Route path="/unauthorized" component={Unauthorized}/>
+          <Route path="/404" component={NotFoundPage}/>
           <Route component={NotFoundPage}/>
         </Switch>
     </div>
