@@ -10,7 +10,7 @@ export class Login extends React.PureComponent<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      username: "Keiser",
+      username: "Kei",
       password: "A12wert",
     };
     this.handleChange = this.handleChange.bind(this);
@@ -68,6 +68,9 @@ export class Login extends React.PureComponent<any, any> {
         this.props.login(res.data);
         const { from } = this.props.location.state || { from: { pathname: "/" } };
         this.props.history.push(from);
+      })
+      .catch((e:any)=>{
+        console.log(e.toJSON())
       });
   }
 
