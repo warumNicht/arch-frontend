@@ -3,12 +3,12 @@ import { Switch, Route } from "react-router-dom";
 import LoginContainer from "../../../containers/LoginContainer";
 import Signup from "../../signup/signup";
 
-function UserModule() {
+function UserModule(props: any) {
     return (
 
         <Switch>
-            <Route path="/users/login" component={LoginContainer} />
-            <Route path="/users/register" component={Signup} />
+            <Route path={`${props.match.url}/login`} component={LoginContainer} />
+            <Route path={`${props.match.url}/register`} component={Signup} />
         </Switch>
 
     );
