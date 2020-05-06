@@ -2,12 +2,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-class Signup extends React.PureComponent {
-  state = {
-    username: "",
-    password: "",
-    avatar: "",
-    bio: ""
+class Signup extends React.PureComponent<any, any> {
+
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      username: "",
+      password: "",
+      avatar: "",
+      bio: ""
+    }
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange ( event:any ){

@@ -26,8 +26,13 @@ class AvatarContainer extends React.PureComponent<any, any> {
           <div>
             <Link to={"/dashboard"}>Dashboard</Link>
           </div>
+
           <div>
-            <Link to={"/login"}>Login</Link>
+            <Link to={"/users/register"}>Register</Link>
+          </div>
+          
+          <div>
+            <Link to={"/users/login"}>Login</Link>
           </div>
 
           <div>

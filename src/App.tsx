@@ -11,6 +11,7 @@ import { PrivateRoute } from "./shared/PrivateRoute";
 import { UserRoles } from "./constants/appConstants";
 import { Unauthorized } from "./components/unauthorized/Unauthorized";
 import AdminComponent from "./components/admin/AdminComponent";
+import UserModule from "./components/modules/user/UserModule";
 
 function App() {
   return (
@@ -22,8 +23,7 @@ function App() {
           <Route exact path="/" component={Home}/>
           <PrivateRoute path="/admin" hasRole={UserRoles.admin} component={AdminComponent}/>
           <PrivateRoute path="/dashboard" hasRole={UserRoles.user} component={Dashboard}/>
-          <Route path="/login" component={LoginContainer} />
-          <Route path="/register" component={Signup}/>
+          <Route path="/users" component={UserModule} />
           <Route path="/unauthorized" component={Unauthorized}/>
           <Route component={NotFoundPage}/>
         </Switch>
