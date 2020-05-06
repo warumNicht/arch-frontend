@@ -70,7 +70,7 @@ export class Login extends React.PureComponent<any, any> {
         this.props.history.push(from);
       })
       .catch((e:any)=>{
-        console.log(e.toJSON())
+        console.log(e)
       });
   }
 
