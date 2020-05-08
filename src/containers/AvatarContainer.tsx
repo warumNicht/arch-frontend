@@ -15,11 +15,17 @@ class AvatarContainer extends React.PureComponent<any, any> {
     }
 
   }
+
+  logout(){
+    localStorage.removeItem('token')
+  }
+
   render() {
     const user = this.decode();
     return (
       <div>
 
+        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <div>
             <Link to={"/"}>Home</Link>
           </div>
@@ -30,7 +36,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
           <div>
             <Link to={"/users/register"}>Register</Link>
           </div>
-          
+
           <div>
             <Link to={"/users/login"}>Login</Link>
           </div>
@@ -38,6 +44,9 @@ class AvatarContainer extends React.PureComponent<any, any> {
           <div>
             <Link to={"/admin"}>Admin</Link>
           </div>
+
+          <button onClick={() => { this.logout() }}>Logout</button>
+        </div>
 
         <p>Logged in user:</p>
         <div>{this.props.token ? this.props.token : "Not logged in"}</div>
