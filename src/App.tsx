@@ -17,9 +17,7 @@ function App() {
   return (
     <div>
       <AvatarContainer></AvatarContainer>  
-
-        <Switch>
-          
+        <Switch>  
           <Route exact path="/" component={Home}/>
           <PrivateRoute path="/admin" hasRole={UserRoles.admin} component={AdminComponent}/>
           <PrivateRoute path="/dashboard" hasRole={UserRoles.user} component={Dashboard}/>
