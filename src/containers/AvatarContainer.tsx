@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
+import  { csrfHeaderName } from '../constants/appConstants';
+import api from '../util/api';
 var jwtDecode = require('jwt-decode');
 
 class AvatarContainer extends React.PureComponent<any, any> {
@@ -16,7 +18,21 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
   }
 
-  logout(){
+  logout() {
+    const token = localStorage.getItem('token');
+    if(!token){
+      return;
+    }
+    const config = {
+      headers: {
+        [csrfHeaderName]: token
+      }
+    };
+    api.post(`/users/custom-logout`, null, config)
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+      });
     localStorage.removeItem('token')
   }
 
