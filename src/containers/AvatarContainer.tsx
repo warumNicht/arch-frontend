@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 
 var jwtDecode = require('jwt-decode');
 

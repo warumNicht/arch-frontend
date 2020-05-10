@@ -1,4 +1,7 @@
 {
     "register": "Register",
-    "home": "Home"
+    "home": "Home",
+    "content": {
+        "text": "Welcome at <1>your place</1>."
+    }
 }
