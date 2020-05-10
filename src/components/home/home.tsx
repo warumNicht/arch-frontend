@@ -4,7 +4,6 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 class Home extends React.PureComponent<WithTranslation> {
 
     render() {
-        // const { t } = this.props;
         return (
             <div>
                 <span>{this.props.t('welcome', 'Hello there')}</span>

@@ -2,7 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
+import { withTranslation } from 'react-i18next';
+
 var jwtDecode = require('jwt-decode');
+
 
 class AvatarContainer extends React.PureComponent<any, any> {
 
@@ -17,6 +20,8 @@ class AvatarContainer extends React.PureComponent<any, any> {
   }
   render() {
     const user = this.decode();
+    const { t } = this.props;
+    console.log(t)
     return (
       <div>
 
@@ -32,7 +37,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
           </div>
           
           <div>
-            <Link to={"/users/login"}>Login</Link>
+    <Link to={"/users/login"}>{this.props.t('welcome', 'Hello there')}</Link>
           </div>
 
           <div>
@@ -57,4 +62,4 @@ const mapStateToProps = (state: ArchitectureAppStore) => ({
   token: state.token,
 });
 
-export default connect(mapStateToProps)(AvatarContainer);
+export default connect(mapStateToProps)(withTranslation()(AvatarContainer));
