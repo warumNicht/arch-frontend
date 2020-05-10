@@ -20,29 +20,28 @@ class AvatarContainer extends React.PureComponent<any, any> {
   }
   render() {
     const user = this.decode();
-    const { t } = this.props;
-    console.log(t)
+
     return (
       <div>
 
-          <div>
-            <Link to={"/"}>Home</Link>
-          </div>
-          <div>
-            <Link to={"/dashboard"}>Dashboard</Link>
-          </div>
+        <div>
+          <Link to={"/"}>Home</Link>
+        </div>
+        <div>
+          <Link to={"/dashboard"}>Dashboard</Link>
+        </div>
 
-          <div>
-            <Link to={"/users/register"}>Register</Link>
-          </div>
-          
-          <div>
-    <Link to={"/users/login"}>{this.props.t('welcome', 'Hello there')}</Link>
-          </div>
+        <div>
+          <Link to={"/users/register"}>{this.props.t('navbar:register', 'Hello there')}</Link>
+        </div>
 
-          <div>
-            <Link to={"/admin"}>Admin</Link>
-          </div>
+        <div>
+          <Link to={"/users/login"}>{this.props.t('login', 'Hello there')}</Link>
+        </div>
+
+        <div>
+          <Link to={"/admin"}>Admin</Link>
+        </div>
 
         <p>Logged in user:</p>
         <div>{this.props.token ? this.props.token : "Not logged in"}</div>
@@ -62,4 +61,4 @@ const mapStateToProps = (state: ArchitectureAppStore) => ({
   token: state.token,
 });
 
-export default connect(mapStateToProps)(withTranslation()(AvatarContainer));
+export default connect(mapStateToProps)(withTranslation(['translation', 'navbar'])(AvatarContainer));

@@ -12,6 +12,9 @@ import setToken, { getToken } from './redux/actions/actions'
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
+import './i18n/i18n'; //executes content
+
+
 const history = createBrowserHistory();
 
 const store = createStore(mainReducer);
