@@ -18,6 +18,4 @@ class Dashboard extends React.PureComponent<any, any> {
     }
 }
 
-const Welcome = withTranslation()(Dashboard);
-
-export default Welcome;
+export default  withTranslation()(Dashboard);
