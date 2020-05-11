@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
+import "./AvatarContainer.css";
 var jwtDecode = require('jwt-decode');
 
 class AvatarContainer extends React.PureComponent<any, any> {
@@ -18,7 +19,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
   render() {
     const user = this.decode();
     return (
-      <div>
+      <div className="nav-link-wrapper">
 
           <div>
             <Link to={"/"}>Home</Link>
