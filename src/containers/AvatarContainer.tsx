@@ -19,8 +19,8 @@ class AvatarContainer extends React.PureComponent<any, any> {
   render() {
     const user = this.decode();
     return (
-      <div className="nav-link-wrapper">
-
+      <div>
+        <div className="nav-link-wrapper">
           <div>
             <Link to={"/"}>Home</Link>
           </div>
@@ -31,7 +31,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
           <div>
             <Link to={"/users/register"}>Register</Link>
           </div>
-          
+
           <div>
             <Link to={"/users/login"}>Login</Link>
           </div>
@@ -39,6 +39,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
           <div>
             <Link to={"/admin"}>Admin</Link>
           </div>
+        </div>
 
         <p>Logged in user:</p>
         <div>{this.props.token ? this.props.token : "Not logged in"}</div>
