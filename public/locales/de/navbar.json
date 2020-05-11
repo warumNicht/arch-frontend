@@ -1,4 +1,8 @@
 {
     "register": "Registrieren",
-    "home": "Seitenanfang"
+    "home": "Seitenanfang",
+    "lang": {
+        "en" : "Englisch",
+        "de" : "Deutsch"
+    }
 }

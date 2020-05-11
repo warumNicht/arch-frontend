@@ -1,6 +1,10 @@
 {
     "register": "Register",
     "home": "Home",
+    "lang": {
+        "en" : "English",
+        "de" : "German"
+    },
     "content": {
         "text": "Welcome at <1>your place</1>."
     }

@@ -19,8 +19,8 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
   }
 
-  changeLanguage(lang: string){
-      this.props.i18n.changeLanguage(lang);
+  changeLanguage(lang: string) {
+    this.props.i18n.changeLanguage(lang);
   }
 
 
@@ -31,12 +31,12 @@ class AvatarContainer extends React.PureComponent<any, any> {
       <div>
 
         <div>
-          <button type="button" onClick={() => this.changeLanguage('de')}>
-            DE
+          <button type="button" onClick={() => this.changeLanguage('en')}>
+            {this.props.t('navbar:lang.en', 'English')}
           </button>
 
-          <button type="button" onClick={() => this.changeLanguage('en')}>
-            EN
+          <button type="button" onClick={() => this.changeLanguage('de')}>
+            {this.props.t('navbar:lang.de', 'German')}
           </button>
         </div>
 
