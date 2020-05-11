@@ -18,11 +18,27 @@ class AvatarContainer extends React.PureComponent<any, any> {
     }
 
   }
+
+  changeLanguage(lang: string){
+      this.props.i18n.changeLanguage(lang);
+  }
+
+
   render() {
     const user = this.decode();
 
     return (
       <div>
+
+        <div>
+          <button type="button" onClick={() => this.changeLanguage('de')}>
+            DE
+          </button>
+
+          <button type="button" onClick={() => this.changeLanguage('en')}>
+            EN
+          </button>
+        </div>
 
         <div>
           <Link to={"/"}>Home</Link>
