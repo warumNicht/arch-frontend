@@ -6,7 +6,6 @@ import { withTranslation, Trans } from 'react-i18next';
 
 var jwtDecode = require('jwt-decode');
 
-
 class AvatarContainer extends React.PureComponent<any, any> {
 
   decode() {
@@ -16,13 +15,11 @@ class AvatarContainer extends React.PureComponent<any, any> {
       console.log(decoded);
       return decoded.user;
     }
-
   }
 
   changeLanguage(lang: string) {
     this.props.i18n.changeLanguage(lang);
   }
-
 
   render() {
     const user = this.decode();
