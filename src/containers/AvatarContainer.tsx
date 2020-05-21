@@ -25,6 +25,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
   }
 
   changeLanguage(lang: string) {
+    this.props.cookies.set('lang',lang,{ path: '/' });
     this.props.i18n.changeLanguage(lang);
   }
 
