@@ -5,9 +5,16 @@ import { Link } from "react-router-dom";
 import "./AvatarContainer.css";
 import  { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
+import { withTranslation, Trans } from 'react-i18next';
+
 var jwtDecode = require('jwt-decode');
 
 class AvatarContainer extends React.PureComponent<any, any> {
+
+  componentDidMount(){
+    console.log(this.props)
+    this.props.i18n.changeLanguage(this.props.cookies.get('lang')||'en');
+  }
 
   decode() {
     if (this.props.token && !this.props.token.startsWith('This')) {
@@ -16,7 +23,11 @@ class AvatarContainer extends React.PureComponent<any, any> {
       console.log(decoded);
       return decoded.user;
     }
+  }
 
+  changeLanguage(lang: string) {
+    this.props.cookies.set('lang',lang,{ path: '/' });
+    this.props.i18n.changeLanguage(lang);
   }
 
   logout() {
@@ -42,28 +53,39 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
   render() {
     const user = this.decode();
+
     return (
       <div>
         <div className="nav-link-wrapper">
 
-          <div>
-            <Link to={"/"}>Home</Link>
-          </div>
-          <div>
-            <Link to={"/dashboard"}>Dashboard</Link>
-          </div>
+        <div>
+          <button type="button" onClick={() => this.changeLanguage('en')}>
+            {this.props.t('navbar:lang.en', 'English')}
+          </button>
 
-          <div>
-            <Link to={"/users/register"}>Register</Link>
-          </div>
+          <button type="button" onClick={() => this.changeLanguage('de')}>
+            {this.props.t('navbar:lang.de', 'German')}
+          </button>
+        </div>
 
-          <div>
-            <Link to={"/users/login"}>Login</Link>
-          </div>
+        <div>
+          <Link to={"/"}>Home</Link>
+        </div>
+        <div>
+          <Link to={"/dashboard"}>Dashboard</Link>
+        </div>
 
-          <div>
-            <Link to={"/admin"}>Admin</Link>
-          </div>
+        <div>
+          <Link to={"/users/register"}>{this.props.t('navbar:register', 'Hello there')}</Link>
+        </div>
+
+        <div>
+          <Link to={"/users/login"}>{this.props.t('login', 'Hello there')}</Link>
+        </div>
+
+        <div>
+          <Link to={"/admin"}>Admin</Link>
+        </div>
 
           <button onClick={() => { this.logout() }}>Logout</button>
         </div>
@@ -86,4 +108,4 @@ const mapStateToProps = (state: ArchitectureAppStore) => ({
   token: state.token,
 });
 
-export default connect(mapStateToProps)(AvatarContainer);
+export default connect(mapStateToProps)(withTranslation(['translation', 'navbar'])(AvatarContainer));

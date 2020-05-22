@@ -19,11 +19,11 @@ export class PrivateRoute extends Route <PrivateRouteProps>{
                 return <Redirect to={{ pathname: '/users/login', state: { from: props.location } }} />
             }
 
-            // check if route is restricted by role
-            if (hasRole && currentUserRoles.indexOf(hasRole) === -1) {
-                // role not authorised so redirect to unauthorized page
-                return <Redirect to={{ pathname: '/unauthorized' }} />
-            }
+            // // check if route is restricted by role
+            // if (hasRole && currentUserRoles.indexOf(hasRole) === -1) {
+            //     // role not authorised so redirect to unauthorized page
+            //     return <Redirect to={{ pathname: '/unauthorized' }} />
+            // }
 
             // authorised so return component
             return <Component {...props} />
