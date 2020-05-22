@@ -10,7 +10,7 @@ export class Login extends React.PureComponent<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      username: "Keiser",
+      username: "Kei",
       password: "A12wert",
     };
     this.handleChange = this.handleChange.bind(this);
@@ -47,7 +47,7 @@ export class Login extends React.PureComponent<any, any> {
     console.log("GET");
     console.log(csrfHeaderName);
     axios
-      .get(`${backendHost}/fetch/session`, { withCredentials: true })
+      .get(`/fetch/session`, { withCredentials: true })
       .then((res) => {
         console.log(res);
         console.log(res.data);
@@ -68,6 +68,9 @@ export class Login extends React.PureComponent<any, any> {
         this.props.login(res.data);
         const { from } = this.props.location.state || { from: { pathname: "/" } };
         this.props.history.push(from);
+      })
+      .catch((e:any)=>{
+        console.log(e)
       });
   }
 
@@ -79,7 +82,6 @@ export class Login extends React.PureComponent<any, any> {
         [csrfHeaderName] : this.state.token,
       }
     };
-
     api
       .post(`/admin/category/create/rest`, JSON.stringify({pp: 'eee'}), config)
       .then((res) => {

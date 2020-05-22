@@ -1,4 +1,4 @@
-const backendHost: string = 'http://localhost:8080/';
+const backendHost: string = 'http://localhost:8080';
 const csrfHeaderName: string = 'X-CSRF-Token';
 
 enum UserRoles{

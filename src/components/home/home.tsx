@@ -1,12 +1,16 @@
 import React from "react";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
-export class Home extends React.PureComponent {
+class Home extends React.PureComponent<WithTranslation> {
 
     render() {
         return (
             <div>
+                <span>{this.props.t('welcome', 'Hello there')}</span>
                 <h1>Home page for all users</h1>
             </div>
         );
     }
 }
+
+export default withTranslation()(Home);
