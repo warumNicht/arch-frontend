@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./AvatarContainer.css";
 import  { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
-import { withTranslation, Trans } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 var jwtDecode = require('jwt-decode');
 
