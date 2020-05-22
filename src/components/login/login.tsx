@@ -47,7 +47,7 @@ export class Login extends React.PureComponent<any, any> {
     console.log("GET");
     console.log(csrfHeaderName);
     axios
-      .get(`${backendHost}/fetch/session`, { withCredentials: true })
+      .get(`/fetch/session`, { withCredentials: true })
       .then((res) => {
         console.log(res);
         console.log(res.data);

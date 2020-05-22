@@ -16,7 +16,7 @@ export class PrivateRoute extends Route <PrivateRouteProps>{
             const currentUserRoles: string[] = UserService.getCurrentUserRoles();
             if (currentUserRoles.length === 0) {
                 // not logged in so redirect to login page with the return url
-                return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+                return <Redirect to={{ pathname: '/users/login', state: { from: props.location } }} />
             }
 
             // check if route is restricted by role

@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
 import "./AvatarContainer.css";
+import  { csrfHeaderName } from '../constants/appConstants';
+import api from '../util/api';
 var jwtDecode = require('jwt-decode');
 
 class AvatarContainer extends React.PureComponent<any, any> {
@@ -16,11 +18,34 @@ class AvatarContainer extends React.PureComponent<any, any> {
     }
 
   }
+
+  logout() {
+    const token = localStorage.getItem('token');
+    if(!token){
+      return;
+    }
+    const config = {
+      headers: {
+        [csrfHeaderName]: token
+      }
+    };
+    api.post(`/users/custom-logout`, null, config)
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch((e:any)=>{
+        console.log(e)
+      });
+    localStorage.removeItem('token')
+  }
+
   render() {
     const user = this.decode();
     return (
       <div>
         <div className="nav-link-wrapper">
+
           <div>
             <Link to={"/"}>Home</Link>
           </div>
@@ -39,6 +64,8 @@ class AvatarContainer extends React.PureComponent<any, any> {
           <div>
             <Link to={"/admin"}>Admin</Link>
           </div>
+
+          <button onClick={() => { this.logout() }}>Logout</button>
         </div>
 
         <p>Logged in user:</p>
