@@ -11,6 +11,7 @@ import mainReducer from './redux/reducers'
 import setToken, { getToken } from './redux/actions/actions'
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from 'history';
+import { CookiesProvider } from 'react-cookie';
 
 import './i18n/i18n'; //executes content
 
@@ -31,13 +32,15 @@ console.log(store.getState().token)
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <Router history={history}>
-        <Suspense fallback={null}>
-          <App />
-        </Suspense>
-      </Router>
-    </Provider>
+    <CookiesProvider>
+      <Provider store={store}>
+        <Router history={history}>
+          <Suspense fallback={null}>
+            <App />
+          </Suspense>
+        </Router>
+      </Provider>
+    </CookiesProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

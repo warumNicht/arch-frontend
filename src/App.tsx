@@ -13,16 +13,18 @@ import { Unauthorized } from "./components/unauthorized/Unauthorized";
 import AdminComponent from "./components/admin/AdminComponent";
 import UserModule from "./components/modules/user/UserModule";
 import { useTranslation } from 'react-i18next';
+import { withCookies } from 'react-cookie';
 
 
-function App() {
+function App(props: any) {
   const { t } = useTranslation();
+  console.log(props.cookies)
   return (
     <div>
       <div>
         <p>{t('welcome', 'Hello there')}</p>
       </div>
-      <AvatarContainer></AvatarContainer>
+      <AvatarContainer {...props}></AvatarContainer>
       <Switch>
         <Route exact path="/" component={Home} />
         <PrivateRoute path="/admin" hasRole={UserRoles.admin} component={AdminComponent} />
@@ -36,4 +38,4 @@ function App() {
   );
 }
 
-export default App;
+export default withCookies(App);

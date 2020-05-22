@@ -8,6 +8,11 @@ var jwtDecode = require('jwt-decode');
 
 class AvatarContainer extends React.PureComponent<any, any> {
 
+  componentDidMount(){
+    console.log(this.props)
+    this.props.i18n.changeLanguage(this.props.cookies.get('lang')||'en');
+  }
+
   decode() {
     if (this.props.token && !this.props.token.startsWith('This')) {
       console.log(this.props.token)
@@ -18,6 +23,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
   }
 
   changeLanguage(lang: string) {
+    this.props.cookies.set('lang',lang,{ path: '/' });
     this.props.i18n.changeLanguage(lang);
   }
 
