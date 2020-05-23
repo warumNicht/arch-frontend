@@ -14,6 +14,7 @@ import { createBrowserHistory } from 'history';
 import { CookiesProvider } from 'react-cookie';
 
 import './i18n/i18n'; //executes content
+import { supportedLanguages } from './constants/appConstants'
 
 
 const history = createBrowserHistory();
@@ -38,9 +39,9 @@ ReactDOM.render(
       <Provider store={store}>
         <Router history={history}>
           <Switch>
-            <Route  path={['/en', '/de']} render={props => {
+            <Route path={supportedLanguages} render={props => {
               return (<Suspense fallback={null}>
-                <App {...props}/>
+                <App {...props} />
               </Suspense>)
             }} />
             <Redirect to={{ pathname: '/en/' }} />
