@@ -3,17 +3,18 @@ import { connect } from "react-redux";
 import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
 import "./AvatarContainer.css";
-import  { csrfHeaderName } from '../constants/appConstants';
+import { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
 import { withTranslation, Trans } from 'react-i18next';
+import getPathWithoutLangPrefix from '../util/LangPrefixUtil';
 
 var jwtDecode = require('jwt-decode');
 
 class AvatarContainer extends React.PureComponent<any, any> {
 
-  componentDidMount(){
+  componentDidMount() {
     console.log(this.props)
-    this.props.i18n.changeLanguage(this.props.cookies.get('lang')||'en');
+    this.props.i18n.changeLanguage(this.props.cookies.get('lang') || 'en');
   }
 
   decode() {
@@ -26,13 +27,15 @@ class AvatarContainer extends React.PureComponent<any, any> {
   }
 
   changeLanguage(lang: string) {
-    this.props.cookies.set('lang',lang,{ path: '/' });
+    this.props.cookies.set('lang', lang, { path: '/' });
     this.props.i18n.changeLanguage(lang);
+    console.log(this.props.location)
+    this.props.history.push(`/${lang}${getPathWithoutLangPrefix(this.props.location.pathname)}`);
   }
 
   logout() {
     const token = localStorage.getItem('token');
-    if(!token){
+    if (!token) {
       return;
     }
     const config = {
@@ -45,7 +48,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
         console.log(res);
         console.log(res.data);
       })
-      .catch((e:any)=>{
+      .catch((e: any) => {
         console.log(e)
       });
     localStorage.removeItem('token')
@@ -53,40 +56,40 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
   render() {
     const user = this.decode();
-    console.log('Avatar -> ' ,this.props.match.path)
+    console.log('Avatar -> ', this.props.match.path)
 
     return (
       <div>
         <div className="nav-link-wrapper">
 
-        <div>
-          <button type="button" onClick={() => this.changeLanguage('en')}>
-            {this.props.t('navbar:lang.en', 'English')}
-          </button>
+          <div>
+            <button type="button" onClick={() => this.changeLanguage('en')}>
+              {this.props.t('navbar:lang.en', 'English')}
+            </button>
 
-          <button type="button" onClick={() => this.changeLanguage('de')}>
-            {this.props.t('navbar:lang.de', 'German')}
-          </button>
-        </div>
+            <button type="button" onClick={() => this.changeLanguage('de')}>
+              {this.props.t('navbar:lang.de', 'German')}
+            </button>
+          </div>
 
-        <div>
-          <Link to={`${this.props.match.path}/`}>Home</Link>
-        </div>
-        <div>
-          <Link to={`${this.props.match.path}/dashboard`}>Dashboard</Link>
-        </div>
+          <div>
+            <Link to={`${this.props.match.path}/`}>Home</Link>
+          </div>
+          <div>
+            <Link to={`${this.props.match.path}/dashboard`}>Dashboard</Link>
+          </div>
 
-        <div>
-          <Link to={`${this.props.match.path}/users/register`}>{this.props.t('navbar:register', 'Hello there')}</Link>
-        </div>
+          <div>
+            <Link to={`${this.props.match.path}/users/register`}>{this.props.t('navbar:register', 'Hello there')}</Link>
+          </div>
 
-        <div>
-          <Link to={`${this.props.match.path}/users/login`}>{this.props.t('login', 'Hello there')}</Link>
-        </div>
+          <div>
+            <Link to={`${this.props.match.path}/users/login`}>{this.props.t('login', 'Hello there')}</Link>
+          </div>
 
-        <div>
-          <Link to={`${this.props.match.path}/admin`}>Admin</Link>
-        </div>
+          <div>
+            <Link to={`${this.props.match.path}/admin`}>Admin</Link>
+          </div>
 
           <button onClick={() => { this.logout() }}>Logout</button>
         </div>
