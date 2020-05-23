@@ -19,6 +19,7 @@ import { withCookies } from 'react-cookie';
 function App(props: any) {
   const { t } = useTranslation();
   console.log(props.cookies)
+  console.log(props.match.path)
   return (
     <div>
       <div>
@@ -26,12 +27,12 @@ function App(props: any) {
       </div>
       <AvatarContainer {...props}></AvatarContainer>
       <Switch>
-        <Route exact path="/" component={Home} />
-        <PrivateRoute path="/admin" hasRole={UserRoles.admin} component={AdminComponent} />
-        <PrivateRoute path="/dashboard" hasRole={UserRoles.user} component={Dashboard} />
-        <Route path="/users" component={UserModule} />
-        <Route path="/unauthorized" component={Unauthorized} />
-        <Route path="/404" component={NotFoundPage} />
+        <Route exact path={`${props.match.path}/`} component={Home} />
+        <PrivateRoute path={`${props.match.path}/admin`} hasRole={UserRoles.admin} component={AdminComponent} />
+        <PrivateRoute path={`${props.match.path}/dashboard`} hasRole={UserRoles.user} component={Dashboard} />
+        <Route path={`${props.match.path}/users`} component={UserModule} />
+        <Route path={`${props.match.path}/unauthorized`} component={Unauthorized} />
+        <Route path={`${props.match.path}/404`} component={NotFoundPage} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>

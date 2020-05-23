@@ -53,6 +53,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
   render() {
     const user = this.decode();
+    console.log('Avatar -> ' ,this.props.match.path)
 
     return (
       <div>
@@ -69,22 +70,22 @@ class AvatarContainer extends React.PureComponent<any, any> {
         </div>
 
         <div>
-          <Link to={"/"}>Home</Link>
+          <Link to={`${this.props.match.path}/`}>Home</Link>
         </div>
         <div>
-          <Link to={"/dashboard"}>Dashboard</Link>
-        </div>
-
-        <div>
-          <Link to={"/users/register"}>{this.props.t('navbar:register', 'Hello there')}</Link>
+          <Link to={`${this.props.match.path}/dashboard`}>Dashboard</Link>
         </div>
 
         <div>
-          <Link to={"/users/login"}>{this.props.t('login', 'Hello there')}</Link>
+          <Link to={`${this.props.match.path}/users/register`}>{this.props.t('navbar:register', 'Hello there')}</Link>
         </div>
 
         <div>
-          <Link to={"/admin"}>Admin</Link>
+          <Link to={`${this.props.match.path}/users/login`}>{this.props.t('login', 'Hello there')}</Link>
+        </div>
+
+        <div>
+          <Link to={`${this.props.match.path}/admin`}>Admin</Link>
         </div>
 
           <button onClick={() => { this.logout() }}>Logout</button>
