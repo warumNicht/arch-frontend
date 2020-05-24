@@ -1,9 +1,7 @@
 import React from "react";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import Signup from './components/signup/signup';
 import AvatarContainer from "./containers/AvatarContainer";
-import LoginContainer from "./containers/LoginContainer";
 import NotFoundPage from "./components/not-found/NotFoundPage";
 import Home  from "./components/home/home";
 import Dashboard from "./components/dashboard/dashboard";
