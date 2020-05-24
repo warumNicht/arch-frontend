@@ -15,6 +15,7 @@ import { CookiesProvider } from 'react-cookie';
 
 import './i18n/i18n'; //executes content
 import { supportedLanguages } from './constants/appConstants'
+import PrefixRedirect from "./shared/PrefixRedirect";
 
 
 const history = createBrowserHistory();
@@ -44,7 +45,11 @@ ReactDOM.render(
                 <App {...props} />
               </Suspense>)
             }} />
-            <Redirect to={{ pathname: '/en/' }} />
+
+            <Route  render={props => {
+              return (<PrefixRedirect {...props} />)
+            }} />
+            
 
           </Switch>
         </Router>
