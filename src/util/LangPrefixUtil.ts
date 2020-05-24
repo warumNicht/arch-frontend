@@ -17,7 +17,7 @@ export function getLangPrefix(path: string): string {
 }
 
 export function getLangCookie(props: any): string {    
-    return props.cookies.get('lang') || defaultLang;
+    return props.cookies.get('lang');
 }
 
 export default getPathWithoutLangPrefix;

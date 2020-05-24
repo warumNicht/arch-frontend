@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router, Redirect } from "react-router-dom";
 import "./App.css";
 import AvatarContainer from "./containers/AvatarContainer";
 import NotFoundPage from "./components/not-found/NotFoundPage";
@@ -12,12 +12,24 @@ import AdminComponent from "./components/admin/AdminComponent";
 import UserModule from "./components/modules/user/UserModule";
 import { useTranslation } from 'react-i18next';
 import { withCookies } from 'react-cookie';
+import {getLangCookie} from './util/LangPrefixUtil';
 
 
 function App(props: any) {
-  const { t } = useTranslation();
-  console.log(props.cookies)
-  console.log(props.match.path)
+  const { t, i18n } = useTranslation();
+  const currentLangCookie = getLangCookie(props);
+  const currentUrlLangPrefix = props.match.path.substring(1);
+
+  if(!currentLangCookie){
+    //set cookie
+    props.cookies.set('lang', currentUrlLangPrefix, { path: '/' });
+    i18n.changeLanguage(currentUrlLangPrefix);
+  }
+  if(currentLangCookie && currentLangCookie !== currentUrlLangPrefix){
+    props.cookies.set('lang', currentUrlLangPrefix, { path: '/' });
+    i18n.changeLanguage(currentUrlLangPrefix);
+    return (<Redirect to={{ pathname: `/${currentUrlLangPrefix}/` }} />)
+  }
   return (
     <div>
       <div>
@@ -35,6 +47,10 @@ function App(props: any) {
       </Switch>
     </div>
   );
+}
+
+function schouldRedirect(){
+
 }
 
 export default withCookies(App);
