@@ -15,7 +15,6 @@ import UserModule from "./components/modules/user/UserModule";
 import { useTranslation } from 'react-i18next';
 import { withCookies } from 'react-cookie';
 
-
 function App(props: any) {
   const { t } = useTranslation();
   console.log(props.cookies)
