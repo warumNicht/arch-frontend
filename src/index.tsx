@@ -40,16 +40,16 @@ ReactDOM.render(
       <Provider store={store}>
         <Router history={history}>
           <Switch>
+
             <Route path={supportedLanguages} render={props => {
               return (<Suspense fallback={null}>
                 <App {...props} />
               </Suspense>)
             }} />
 
-            <Route  render={props => {
+            <Route render={props => {
               return (<PrefixRedirect {...props} />)
             }} />
-            
 
           </Switch>
         </Router>
