@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router, Redirect } from "react-router-dom";
 import "./App.css";
 import AvatarContainer from "./containers/AvatarContainer";
 import NotFoundPage from "./components/not-found/NotFoundPage";
@@ -12,11 +12,23 @@ import AdminComponent from "./components/admin/AdminComponent";
 import UserModule from "./components/modules/user/UserModule";
 import { useTranslation } from 'react-i18next';
 import { withCookies } from 'react-cookie';
-
+import {getLangCookie} from './util/LangPrefixUtil';
 
 function App(props: any) {
-  const { t } = useTranslation();
-  console.log(props.cookies)
+  const { t, i18n } = useTranslation();
+  const currentLangCookie = getLangCookie(props);
+  const currentUrlLangPrefix = props.match.path.substring(1);
+
+  if(!currentLangCookie){
+    //set cookie
+    props.cookies.set('lang', currentUrlLangPrefix, { path: '/' });
+    i18n.changeLanguage(currentUrlLangPrefix);
+  }
+  if(currentLangCookie && currentLangCookie !== currentUrlLangPrefix){
+    props.cookies.set('lang', currentUrlLangPrefix, { path: '/' });
+    i18n.changeLanguage(currentUrlLangPrefix);
+    return (<Redirect to={{ pathname: `/${currentUrlLangPrefix}/` }} />)
+  }
   return (
     <div>
       <div>
@@ -24,16 +36,20 @@ function App(props: any) {
       </div>
       <AvatarContainer {...props}></AvatarContainer>
       <Switch>
-        <Route exact path="/" component={Home} />
-        <PrivateRoute path="/admin" hasRole={UserRoles.admin} component={AdminComponent} />
-        <PrivateRoute path="/dashboard" hasRole={UserRoles.user} component={Dashboard} />
-        <Route path="/users" component={UserModule} />
-        <Route path="/unauthorized" component={Unauthorized} />
-        <Route path="/404" component={NotFoundPage} />
+        <Route exact path={`${props.match.path}/`} component={Home} />
+        <PrivateRoute path={`${props.match.path}/admin`} hasRole={UserRoles.admin} component={AdminComponent} />
+        <PrivateRoute path={`${props.match.path}/dashboard`} hasRole={UserRoles.user} component={Dashboard} />
+        <Route path={`${props.match.path}/users`} component={UserModule} />
+        <Route path={`${props.match.path}/unauthorized`} component={Unauthorized} />
+        <Route path={`${props.match.path}/404`} component={NotFoundPage} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>
   );
+}
+
+function schouldRedirect(){
+
 }
 
 export default withCookies(App);
