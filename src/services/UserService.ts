@@ -1,4 +1,5 @@
-import { User } from "../redux/interfaces/ArchitectureAppStore";
+import ArchitectureAppStore, { User } from "../redux/interfaces/ArchitectureAppStore";
+import store from '../redux/store';
 
 var jwtDecode = require('jwt-decode');
 
@@ -8,12 +9,9 @@ const userService = {
 };
 
 function getCurrentUserRoles(): string[] {
-    const token = localStorage.getItem('token');
-    if (token) {
-        var decoded = jwtDecode(token);
-        if (decoded.user) {
-            return decoded.user.roles
-        }
+    const state: ArchitectureAppStore = store.getState();
+    if(state.user){
+        return state.user.roles;
     }
     return [];
 }

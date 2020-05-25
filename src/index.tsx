@@ -18,12 +18,14 @@ import { supportedLanguages } from './constants/appConstants'
 import PrefixRedirect from "./shared/PrefixRedirect";
 import UserService from './services/UserService'
 
+import store from './redux/store';
+
 
 const history = createBrowserHistory();
 
 // const history = createBrowserHistory({ basename: '/app' });
 
-const store = createStore(mainReducer);
+// const store = createStore(mainReducer);
 
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
