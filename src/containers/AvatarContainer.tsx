@@ -100,9 +100,9 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
         <button onClick={() => { this.decode() }}>Decode Token</button>
 
-        {user ? (<div>
-          <p>{user.username}</p>
-          <div>{user.roles}</div>
+        {this.props.user ? (<div>
+          <p>{this.props.user.username}</p>
+          <div>{this.props.user.roles}</div>
         </div>) : ''}
       </div>
     );
@@ -111,6 +111,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
 const mapStateToProps = (state: ArchitectureAppStore) => ({
   token: state.token,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(withTranslation(['translation', 'navbar'])(AvatarContainer));

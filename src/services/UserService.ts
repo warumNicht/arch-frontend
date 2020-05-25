@@ -1,11 +1,13 @@
 import ArchitectureAppStore, { User } from "../redux/interfaces/ArchitectureAppStore";
 import store from '../redux/store';
+import { UserRoles } from "../constants/appConstants";
 
 var jwtDecode = require('jwt-decode');
 
 const userService = {
     getCurrentUserRoles,
-    getPrincipal
+    getPrincipal,
+    getMainRole
 };
 
 function getCurrentUserRoles(): string[] {
@@ -25,6 +27,17 @@ function getPrincipal(): User | null {
         }
     }
     return null;
+}
+
+function getMainRole(): string {
+    const state: ArchitectureAppStore = store.getState();
+    if(state.user){
+        if(state.user.roles.indexOf(UserRoles.admin) === -1){
+            return UserRoles.user
+        }
+        return UserRoles.admin;
+    }
+    return '';
 }
 
 
