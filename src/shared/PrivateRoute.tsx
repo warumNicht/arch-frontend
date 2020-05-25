@@ -21,10 +21,10 @@ export class PrivateRoute extends Route <PrivateRouteProps>{
             }
 
             // // check if route is restricted by role
-            // if (hasRole && currentUserRoles.indexOf(hasRole) === -1) {
-            //     // role not authorised so redirect to unauthorized page
-            //     return <Redirect to={{ pathname: '/unauthorized' }} />
-            // }
+            if (hasRole && currentUserRoles.indexOf(hasRole) === -1) {
+                // role not authorised so redirect to unauthorized page
+                return <Redirect to={{ pathname: `/${getLangPrefix(props.match.path)}/unauthorized` }} />
+            }
 
             // authorised so return component
             return <Component {...props} />
