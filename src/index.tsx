@@ -8,7 +8,7 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import mainReducer from './redux/reducers'
 
-import setToken, { getToken } from './redux/actions/actions'
+import setToken, { getToken, setCurrentUser } from './redux/actions/actions'
 import { Router, Switch, Route, Redirect } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 import { CookiesProvider } from 'react-cookie';
@@ -16,6 +16,7 @@ import { CookiesProvider } from 'react-cookie';
 import './i18n/i18n'; //executes content
 import { supportedLanguages } from './constants/appConstants'
 import PrefixRedirect from "./shared/PrefixRedirect";
+import UserService from './services/UserService'
 
 
 const history = createBrowserHistory();
@@ -24,14 +25,15 @@ const history = createBrowserHistory();
 
 const store = createStore(mainReducer);
 
-console.log(store.getState())
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
-const unsubscribe = store.subscribe(() => console.log(store.getState()))
+// const unsubscribe = store.subscribe(() => console.log(store.getState()))
 
 // Dispatch some actions
+store.dispatch(setCurrentUser(UserService.getPrincipal()))
 store.dispatch(setToken('This is the token set in redux'))
-console.log(store.getState().token)
+
+console.log(store.getState())
 
 
 ReactDOM.render(
