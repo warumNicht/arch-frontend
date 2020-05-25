@@ -6,7 +6,7 @@ import "./AvatarContainer.css";
 import { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
 import { withTranslation, Trans } from 'react-i18next';
-import getPathWithoutLangPrefix from '../util/LangPrefixUtil';
+import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
 
 var jwtDecode = require('jwt-decode');
 
@@ -52,6 +52,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
         console.log(e)
       });
     localStorage.removeItem('token')
+    this.props.history.push(`/${getLangPrefix(this.props.location.pathname)}/`);
   }
 
   render() {
