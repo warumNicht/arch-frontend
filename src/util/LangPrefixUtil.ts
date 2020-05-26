@@ -1,4 +1,4 @@
-import {defaultLang} from '../constants/appConstants';
+import {defaultLang, LangEnum} from '../constants/appConstants';
 
 function getPathWithoutLangPrefix(path: string): string {
     if (path.charAt(3) === '/') {
@@ -17,7 +17,7 @@ export function getLangPrefix(path: string): string {
 }
 
 export function getLangCookie(props: any): string {    
-    return props.cookies.get('lang');
+    return props.cookies.get('lang') || LangEnum.EN;
 }
 
 export default getPathWithoutLangPrefix;
