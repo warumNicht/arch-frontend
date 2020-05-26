@@ -15,5 +15,4 @@ function getCurrentUserRoles() : string[] {
     return [];
 }
 
-
 export default userService;
