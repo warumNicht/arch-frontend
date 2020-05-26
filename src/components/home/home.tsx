@@ -11,7 +11,7 @@ class Home extends React.PureComponent<WithTranslation> {
             <div>
                 <span>{this.props.t('welcome', 'Hello there')}</span>
                 <h1>Home page for all users</h1>
-                {userRole ? userRole===UserRoles.admin ? <div>Admin Content</div> : <div>User Content</div> : <div>Visitor Content</div>}
+                {userRole ? userRole===UserRoles.ADMIN ? <div>Admin Content</div> : <div>User Content</div> : <div>Visitor Content</div>}
             </div>
         );
     }

@@ -32,10 +32,10 @@ function getPrincipal(): User | null {
 function getMainRole(): string {
     const state: ArchitectureAppStore = store.getState();
     if(state.user){
-        if(state.user.roles.indexOf(UserRoles.admin) === -1){
-            return UserRoles.user
+        if(state.user.roles.indexOf(UserRoles.ADMIN) === -1){
+            return UserRoles.USER
         }
-        return UserRoles.admin;
+        return UserRoles.ADMIN;
     }
     return '';
 }

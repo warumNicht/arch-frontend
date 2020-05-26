@@ -37,8 +37,8 @@ function App(props: any) {
       <AvatarContainer {...props}></AvatarContainer>
       <Switch>
         <Route exact path={`${props.match.path}/`} component={Home} />
-        <PrivateRoute path={`${props.match.path}/admin`} hasRole={UserRoles.admin} component={AdminComponent} />
-        <PrivateRoute path={`${props.match.path}/dashboard`} hasRole={UserRoles.user} component={Dashboard} />
+        <PrivateRoute path={`${props.match.path}/admin`} hasRole={UserRoles.ADMIN} component={AdminComponent} />
+        <PrivateRoute path={`${props.match.path}/dashboard`} hasRole={UserRoles.USER} component={Dashboard} />
         <Route path={`${props.match.path}/users`} component={UserModule} />
         <Route path={`${props.match.path}/unauthorized`} component={Unauthorized} />
         <Route path={`${props.match.path}/404`} component={NotFoundPage} />
