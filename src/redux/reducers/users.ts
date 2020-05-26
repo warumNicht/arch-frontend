@@ -1,11 +1,10 @@
 import  { UserActions } from '../actions/ActionTypes'
-import Action  from '../interfaces/Action';
+import { SetUserAction }  from '../interfaces/Action';
 
-function user(state = {}, action: Action) {
+function user(state = null, action: SetUserAction) {
     switch (action.type) {
         case UserActions.SET_CURRENT_USER:
-            return action.payload.user
-
+            return action.user;
         default:
             return state
     }

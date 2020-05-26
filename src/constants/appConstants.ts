@@ -1,13 +1,23 @@
 const backendHost: string = 'http://localhost:8080';
 const csrfHeaderName: string = 'X-CSRF-Token';
 
-const defaultLang: string = 'en';
-const supportedLanguages: string[] = ['/en', '/de'];
+enum LangEnum {
+    EN = 'en',
+    DE = 'de'
+}
+
+const defaultLang: string = LangEnum.EN;
+
+const supportedLanguages: string[] = Object.entries(LangEnum).filter(entry => typeof entry[0] !== 'number')
+.map(entry => {
+    return `/${entry[1]}`
+})
+
 
 enum UserRoles {
-    user = 'ROLE_USER',
-    admin = 'ROLE_ADMIN'
+    USER = 'ROLE_USER',
+    ADMIN = 'ROLE_ADMIN'
 }
 
 export default backendHost;
-export { csrfHeaderName, UserRoles, defaultLang ,supportedLanguages};
+export { csrfHeaderName, UserRoles, defaultLang, supportedLanguages, LangEnum};

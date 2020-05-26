@@ -6,7 +6,7 @@ import "./AvatarContainer.css";
 import { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
 import { withTranslation, Trans } from 'react-i18next';
-import getPathWithoutLangPrefix from '../util/LangPrefixUtil';
+import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
 
 var jwtDecode = require('jwt-decode');
 
@@ -52,6 +52,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
         console.log(e)
       });
     localStorage.removeItem('token')
+    this.props.history.push(`/${getLangPrefix(this.props.location.pathname)}/`);
   }
 
   render() {
@@ -99,9 +100,9 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
         <button onClick={() => { this.decode() }}>Decode Token</button>
 
-        {user ? (<div>
-          <p>{user.username}</p>
-          <div>{user.roles}</div>
+        {this.props.user ? (<div>
+          <p>{this.props.user.username}</p>
+          <div>{this.props.user.roles}</div>
         </div>) : ''}
       </div>
     );
@@ -110,6 +111,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
 const mapStateToProps = (state: ArchitectureAppStore) => ({
   token: state.token,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(withTranslation(['translation', 'navbar'])(AvatarContainer));
