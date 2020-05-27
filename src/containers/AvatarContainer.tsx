@@ -1,12 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import ArchitectureAppStore from "../redux/interfaces/ArchitectureAppStore";
+import ArchitectureAppStore, { User } from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
 import "./AvatarContainer.css";
 import { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
 import { withTranslation, Trans } from 'react-i18next';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
+import { setCurrentUser } from "../redux/actions/actions";
 
 var jwtDecode = require('jwt-decode');
 
@@ -47,12 +48,14 @@ class AvatarContainer extends React.PureComponent<any, any> {
       .then((res) => {
         console.log(res);
         console.log(res.data);
+        localStorage.removeItem('token')
+        this.props.setReduxUser(null);
+        this.props.history.push(`/${getLangPrefix(this.props.location.pathname)}/`);
       })
       .catch((e: any) => {
         console.log(e)
       });
-    localStorage.removeItem('token')
-    this.props.history.push(`/${getLangPrefix(this.props.location.pathname)}/`);
+
   }
 
   render() {
@@ -114,4 +117,8 @@ const mapStateToProps = (state: ArchitectureAppStore) => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(withTranslation(['translation', 'navbar'])(AvatarContainer));
+const mapDispatchToProps = (dispatch: any) => ({
+  setReduxUser: (user: User) => dispatch(setCurrentUser(user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['translation', 'navbar'])(AvatarContainer));

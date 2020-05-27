@@ -1,5 +1,6 @@
 import React from "react";
 import api from '../../util/api';
+import UserService from '../../services/UserService';
 
 export class Login extends React.PureComponent<any, any> {
   constructor(props: any) {
@@ -30,6 +31,7 @@ export class Login extends React.PureComponent<any, any> {
         console.log(res.data);
         localStorage.setItem('token', res.data);
         this.props.login(res.data);
+        this.props.setReduxUser(UserService.getPrincipal())
         const { from } = this.props.location.state || { from: { pathname: "/" } };
         this.props.history.push(from);
       })
