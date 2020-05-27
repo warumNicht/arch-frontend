@@ -7,7 +7,8 @@ var jwtDecode = require('jwt-decode');
 const userService = {
     getCurrentUserRoles,
     getPrincipal,
-    getMainRole
+    getMainRole,
+    isAuthenticated
 };
 
 function getCurrentUserRoles(): string[] {
@@ -38,6 +39,11 @@ function getMainRole(): string {
         return UserRoles.ADMIN;
     }
     return '';
+}
+
+function isAuthenticated(): boolean {
+    const state: ArchitectureAppStore = store.getState();
+    return !!(state.user);
 }
 
 export default userService;

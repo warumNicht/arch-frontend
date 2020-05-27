@@ -8,6 +8,7 @@ import api from '../util/api';
 import { withTranslation, Trans } from 'react-i18next';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
 import { setCurrentUser } from "../redux/actions/actions";
+import UserService from '../services/UserService';
 
 var jwtDecode = require('jwt-decode');
 
@@ -61,6 +62,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
   render() {
     const user = this.decode();
     console.log('Avatar -> ', this.props.match.path)
+    const isLoggedIn: boolean = UserService.isAuthenticated();
 
     return (
       <div>
@@ -87,15 +89,18 @@ class AvatarContainer extends React.PureComponent<any, any> {
             <Link to={`${this.props.match.path}/users/register`}>{this.props.t('navbar:register', 'Hello there')}</Link>
           </div>
 
-          <div>
-            <Link to={`${this.props.match.path}/users/login`}>{this.props.t('login', 'Hello there')}</Link>
-          </div>
+          {isLoggedIn ? '' :
+            (<div>
+              <Link to={`${this.props.match.path}/users/login`}>{this.props.t('login', 'Hello there')}</Link>
+            </div>
+          )}
 
           <div>
             <Link to={`${this.props.match.path}/admin`}>Admin</Link>
           </div>
 
-          <button onClick={() => { this.logout() }}>Logout</button>
+          {isLoggedIn ? <button onClick={() => { this.logout() }}>Logout</button> : ''}
+
         </div>
 
         <p>Logged in user:</p>
