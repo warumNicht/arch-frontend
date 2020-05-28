@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import ArchitectureAppStore, { User } from "../redux/interfaces/ArchitectureAppStore";
+import ArchitectureAppStore, { User, Category } from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
 import "./AvatarContainer.css";
 import { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
 import { withTranslation, Trans } from 'react-i18next';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
-import { setCurrentUser } from "../redux/actions/actions";
+import { setCurrentUser, loadCategories } from "../redux/actions/actions";
 import UserService from '../services/UserService';
 
 var jwtDecode = require('jwt-decode');
@@ -22,7 +22,8 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
   loadCategories() {
     api.get('/fetch/categories/all').then(res => {
-      console.log(res)
+      console.log(res.data)
+      this.props.loadCategories(res.data)
     }).catch(error => {
       console.log(error);
     });
@@ -133,7 +134,8 @@ const mapStateToProps = (state: ArchitectureAppStore) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  setReduxUser: (user: User) => dispatch(setCurrentUser(user))
+  setReduxUser: (user: User) => dispatch(setCurrentUser(user)),
+  loadCategories: (categories: Category[]) => dispatch(loadCategories(categories))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['translation', 'navbar'])(AvatarContainer));
