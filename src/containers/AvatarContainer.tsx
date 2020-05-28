@@ -60,8 +60,6 @@ class AvatarContainer extends React.PureComponent<any, any> {
   }
 
   render() {
-    const user = this.decode();
-    console.log('Avatar -> ', this.props.match.path)
     const isLoggedIn: boolean = UserService.isAuthenticated();
 
     return (
