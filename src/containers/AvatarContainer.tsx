@@ -17,6 +17,16 @@ class AvatarContainer extends React.PureComponent<any, any> {
   componentDidMount() {
     console.log(this.props)
     this.props.i18n.changeLanguage(this.props.cookies.get('lang') || 'en');
+    this.loadCategories();
+  }
+
+  loadCategories() {
+    api.get('/fetch/categories/all').then(res => {
+      console.log(res)
+    }).catch(error => {
+      console.log(error);
+    });
+
   }
 
   decode() {
@@ -93,7 +103,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
             (<div>
               <Link to={`${this.props.match.path}/users/login`}>{this.props.t('login', 'Hello there')}</Link>
             </div>
-          )}
+            )}
 
           <div>
             <Link to={`${this.props.match.path}/admin`}>Admin</Link>
