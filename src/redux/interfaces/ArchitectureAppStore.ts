@@ -3,7 +3,13 @@ export interface User{
     roles: string[]
 }
 
+export interface Category{
+    id: string,
+    name: string
+}
+
 export default interface ArchitectureAppStore {
     token: string,
-    user: User
+    user: User,
+    categories: Category[]
 }

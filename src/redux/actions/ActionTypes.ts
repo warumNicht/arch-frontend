@@ -8,5 +8,9 @@ const UserActions = {
     GET_CURRENT_USER: 'GET_CURRENT_USER'
 }
 
+const CategoryActions = {
+    LOAD_CATEGORIES: 'LOAD_CATEGORIES'
+}
+
 export default TokenActions;
-export { UserActions };
+export { UserActions, CategoryActions };
