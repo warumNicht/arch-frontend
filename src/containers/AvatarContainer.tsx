@@ -9,8 +9,22 @@ import { withTranslation, Trans } from 'react-i18next';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
 import { setCurrentUser, loadCategories } from "../redux/actions/actions";
 import UserService from '../services/UserService';
+import categories from "../redux/reducers/categories";
 
 var jwtDecode = require('jwt-decode');
+
+const renderCategories = (categories: Category[]) =>{
+  return(
+    <div>
+      {categories.map((cat:Category)=>{
+        return <div>
+          <div>{cat.id}</div>
+          <div>{cat.name}</div>
+        </div>
+      })}
+    </div>
+  )
+}
 
 class AvatarContainer extends React.PureComponent<any, any> {
 
@@ -114,6 +128,8 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
         </div>
 
+        {renderCategories(this.props.categories)}
+
         <p>Logged in user:</p>
         <div>{this.props.token ? this.props.token : "Not logged in"}</div>
 
@@ -130,7 +146,8 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
 const mapStateToProps = (state: ArchitectureAppStore) => ({
   token: state.token,
-  user: state.user
+  user: state.user,
+  categories: state.categories
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
