@@ -10,19 +10,18 @@ import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil'
 import { setCurrentUser, loadCategories } from "../redux/actions/actions";
 import UserService from '../services/UserService';
 import categories from "../redux/reducers/categories";
+import SlidingDropdown from "../shared/SlidingDropdown/SlidingDropdown";
 
 var jwtDecode = require('jwt-decode');
 
-const renderCategories = (categories: Category[]) =>{
-  return(
-    <div>
-      {categories.map((cat:Category)=>{
-        return <div>
-          <div>{cat.id}</div>
-          <div>{cat.name}</div>
-        </div>
-      })}
-    </div>
+const renderCategories = (categories: Category[]) => {
+  return (
+    categories.map((cat: Category) => {
+      return <li>
+        <div>{cat.id}</div>
+        <div>{cat.name}</div>
+      </li>
+    })
   )
 }
 
@@ -120,6 +119,9 @@ class AvatarContainer extends React.PureComponent<any, any> {
             </div>
             )}
 
+          <div><SlidingDropdown data={this.props.categories} mapData={renderCategories} />
+          </div>
+
           <div>
             <Link to={`${this.props.match.path}/admin`}>Admin</Link>
           </div>
@@ -127,8 +129,6 @@ class AvatarContainer extends React.PureComponent<any, any> {
           {isLoggedIn ? <button onClick={() => { this.logout() }}>Logout</button> : ''}
 
         </div>
-
-        {renderCategories(this.props.categories)}
 
         <p>Logged in user:</p>
         <div>{this.props.token ? this.props.token : "Not logged in"}</div>
