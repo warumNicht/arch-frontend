@@ -15,4 +15,8 @@
     background: #d5d5d5;
 }
 
+.dropdwn-item:hover{
+    background-color: lightcoral;
+}
+
 

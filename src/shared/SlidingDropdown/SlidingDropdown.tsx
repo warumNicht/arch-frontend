@@ -49,7 +49,7 @@ class SlidingDropdown extends React.PureComponent<SlidingDropdownProps, SlidingD
             console.log(this.props.mapData)
             return this.state.data.map((d: any, index: number) => {
                 return <div key={index} onClick={() => { this.setSelectedIndex(index) }}
-                    className={this.state.selectedIndex === index ? 'selected-item' : ''}>
+                    className={'dropdwn-item' + (this.state.selectedIndex === index ? ' selected-item' : '')}>
                     {this.props.mapData(d)}
                 </div>;
             })

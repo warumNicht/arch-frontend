@@ -9,21 +9,9 @@ import { withTranslation, Trans } from 'react-i18next';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
 import { setCurrentUser, loadCategories } from "../redux/actions/actions";
 import UserService from '../services/UserService';
-import categories from "../redux/reducers/categories";
 import SlidingDropdown from "../shared/SlidingDropdown/SlidingDropdown";
 
 var jwtDecode = require('jwt-decode');
-
-const renderCategories = (categories: Category[]) => {
-  return (
-    categories.map((cat: Category, index: number) => {
-      return <li key={index}>
-        <div>{cat.id}</div>
-        <div>{cat.name}</div>
-      </li>
-    })
-  )
-}
 
 const mapCategory = (category: Category) => {
   return (
