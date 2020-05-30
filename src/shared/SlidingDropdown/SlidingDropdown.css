@@ -1,6 +1,6 @@
 .sliding-dropdown:hover .dropdown-content{
     max-height: 500px;
-    transition: max-height 2s ease-in;
+    transition: max-height 1.5s ease-in;
 }
 
 .selected-item{
@@ -10,7 +10,7 @@
 .dropdown-content{
     max-height: 0;
     position: absolute;
-    transition: max-height 2s ease-out;
+    transition: max-height 1.5s ease-out;
     overflow: hidden;
     background: #d5d5d5;
 }

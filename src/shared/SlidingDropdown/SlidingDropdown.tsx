@@ -1,7 +1,17 @@
 import React from 'react';
 import './SlidingDropdown.css';
 
-class SlidingDropdown extends React.PureComponent<any, any> {
+interface SlidingDropdownProps {
+    data: [],
+    mapData: (dataElement:any) => {}
+}
+
+interface SlidingDropdownState {
+    selectedIndex: number,
+    data: []
+}
+
+class SlidingDropdown extends React.PureComponent<SlidingDropdownProps, SlidingDropdownState> {
     constructor(props: any) {
         super(props)
         this.state = {
@@ -28,7 +38,7 @@ class SlidingDropdown extends React.PureComponent<any, any> {
         return 'Title'
     }
 
-    setSelectedIndex(index: number){
+    setSelectedIndex(index: number) {
         this.setState({
             selectedIndex: index
         })
@@ -38,8 +48,8 @@ class SlidingDropdown extends React.PureComponent<any, any> {
         if (this.props.mapData) {
             console.log(this.props.mapData)
             return this.state.data.map((d: any, index: number) => {
-                return <div key={index} onClick={() => { this.setSelectedIndex(index)}}
-                className={this.state.selectedIndex===index ? 'selected-item' : ''}>
+                return <div key={index} onClick={() => { this.setSelectedIndex(index) }}
+                    className={this.state.selectedIndex === index ? 'selected-item' : ''}>
                     {this.props.mapData(d)}
                 </div>;
             })
