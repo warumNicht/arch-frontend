@@ -13,6 +13,10 @@ const supportedLanguages: string[] = Object.entries(LangEnum).filter(entry => ty
     return `/${entry[1]}`
 })
 
+export const languagesArray: string[] = Object.entries(LangEnum).filter(entry => typeof entry[0] !== 'number')
+.map(entry => {
+    return entry[1];
+})
 
 enum UserRoles {
     USER = 'ROLE_USER',

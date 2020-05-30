@@ -10,6 +10,7 @@ import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil'
 import { setCurrentUser, loadCategories } from "../redux/actions/actions";
 import UserService from '../services/UserService';
 import SlidingDropdown from "../shared/SlidingDropdown/SlidingDropdown";
+import { languagesArray } from '../constants/appConstants';
 
 var jwtDecode = require('jwt-decode');
 
@@ -116,8 +117,9 @@ class AvatarContainer extends React.PureComponent<any, any> {
             </div>
             )}
 
-          <div><SlidingDropdown data={this.props.categories} mapData={mapCategory} />
-          </div>
+          <SlidingDropdown data={this.props.categories} mapData={mapCategory} />
+
+          <SlidingDropdown data={languagesArray} />
 
           <div>
             <Link to={`${this.props.match.path}/admin`}>Admin</Link>

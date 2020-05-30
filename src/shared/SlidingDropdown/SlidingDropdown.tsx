@@ -2,12 +2,12 @@ import React from 'react';
 import './SlidingDropdown.css';
 
 interface SlidingDropdownProps {
-    data: [],
-    mapData: (dataElement:any) => {}
+    data: any[],
+    mapData?: (dataElement: any) => {}
 }
 
 interface SlidingDropdownState {
-    selectedIndex: number,
+    selectedIndex?: number,
     data: []
 }
 
@@ -15,7 +15,6 @@ class SlidingDropdown extends React.PureComponent<SlidingDropdownProps, SlidingD
     constructor(props: any) {
         super(props)
         this.state = {
-            selectedIndex: 0,
             data: props.data
         }
         this.setSelectedIndex = this.setSelectedIndex.bind(this)
@@ -23,37 +22,36 @@ class SlidingDropdown extends React.PureComponent<SlidingDropdownProps, SlidingD
 
     componentWillReceiveProps(props: any) {
         this.setState({
-            selectedIndex: 0,
             data: props.data
         })
     }
 
     renderSelectedItem(): any {
-        if (this.props.data.length > 0) {
+        if (this.state.selectedIndex!==undefined) {
             console.log(this.props.mapData)
 
-            return this.props.mapData(this.state.data[this.state.selectedIndex]);
+            return this.props.mapData ? this.props.mapData(this.state.data[this.state.selectedIndex]) :
+            this.state.data[this.state.selectedIndex];
 
         }
         return 'Title'
     }
 
     setSelectedIndex(index: number) {
+        console.log(index)
         this.setState({
             selectedIndex: index
         })
     }
 
     renderList(): any {
-        if (this.props.mapData) {
-            console.log(this.props.mapData)
-            return this.state.data.map((d: any, index: number) => {
-                return <div key={index} onClick={() => { this.setSelectedIndex(index) }}
-                    className={'dropdwn-item' + (this.state.selectedIndex === index ? ' selected-item' : '')}>
-                    {this.props.mapData(d)}
-                </div>;
-            })
-        }
+        return this.state.data.map((d: any, index: number) => {
+            return <div key={index} onClick={() => { this.setSelectedIndex(index) }}
+                className={'dropdwn-item' + (this.state.selectedIndex === index ? ' selected-item' : '')}>
+                {this.props.mapData ? this.props.mapData(d) : d}
+            </div>;
+        })
+
     }
 
     render() {
