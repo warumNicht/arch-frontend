@@ -1,3 +1,14 @@
+.sliding-dropdown:hover .dropdown-content{
+    display:initial;
+}
+
 .selected-item{
     background-color: aqua;
 }
+
+.dropdown-content{
+    display: none;
+    position: absolute;   
+}
+
+

@@ -38,10 +38,10 @@ class SlidingDropdown extends React.PureComponent<any, any> {
         if (this.props.mapData) {
             console.log(this.props.mapData)
             return this.state.data.map((d: any, index: number) => {
-                return <li key={index} onClick={() => { this.setSelectedIndex(index)}}
+                return <div key={index} onClick={() => { this.setSelectedIndex(index)}}
                 className={this.state.selectedIndex===index ? 'selected-item' : ''}>
                     {this.props.mapData(d)}
-                </li>;
+                </div>;
             })
         }
     }
@@ -50,13 +50,13 @@ class SlidingDropdown extends React.PureComponent<any, any> {
         console.log(this.props.data)
         console.log(2)
         return (
-            <div>
-                <div className='displayed-item'>
+            <div className='sliding-dropdown'>
+                <div className='placeholder-item'>
                     {this.renderSelectedItem()}
                 </div>
-                <ul className='dropdown-content'>
+                <div className='dropdown-content'>
                     {this.renderList()}
-                </ul>
+                </div>
 
             </div>
         );
