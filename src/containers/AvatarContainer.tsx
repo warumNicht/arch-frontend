@@ -16,12 +16,21 @@ var jwtDecode = require('jwt-decode');
 
 const renderCategories = (categories: Category[]) => {
   return (
-    categories.map((cat: Category) => {
-      return <li>
+    categories.map((cat: Category, index: number) => {
+      return <li key={index}>
         <div>{cat.id}</div>
         <div>{cat.name}</div>
       </li>
     })
+  )
+}
+
+const mapCategory = (category: Category) => {
+  return (
+    <div>
+      <div>{category.id}</div>
+      <div>{category.name}</div>
+    </div>
   )
 }
 
@@ -119,7 +128,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
             </div>
             )}
 
-          <div><SlidingDropdown data={this.props.categories} mapData={renderCategories} />
+          <div><SlidingDropdown data={this.props.categories} mapData={mapCategory} />
           </div>
 
           <div>
