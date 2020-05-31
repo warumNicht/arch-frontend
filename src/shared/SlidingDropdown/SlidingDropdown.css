@@ -3,20 +3,32 @@
     transition: max-height 1.5s ease-in;
 }
 
-.selected-item{
-    background-color: aqua;
-}
-
 .dropdown-content{
     max-height: 0;
     position: absolute;
     transition: max-height 1.5s ease-out;
     overflow: hidden;
-    background: #d5d5d5;
+}
+
+.dropdwn-item{
+    padding-left: 15px;
+    background-color: lightcyan;
+}
+
+.dropdwn-item:not(:last-child){
+    border-bottom: 1px solid lightgray;
+}
+
+.selected-item{
+    background-color: lightgoldenrodyellow;
+    border-left: 5px solid gold;
 }
 
 .dropdwn-item:hover{
-    background-color: lightcoral;
+    background-color: lightblue;
+    border-left: 5px solid;
+    padding-left: 10px;
+
 }
 
 
