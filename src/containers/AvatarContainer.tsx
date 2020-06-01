@@ -47,7 +47,6 @@ class AvatarContainer extends React.PureComponent<any, any> {
     }).catch(error => {
       console.log(error);
     });
-
   }
 
   decode() {
