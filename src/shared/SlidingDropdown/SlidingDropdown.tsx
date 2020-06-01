@@ -75,6 +75,7 @@ class SlidingDropdown extends React.PureComponent<SlidingDropdownProps, SlidingD
                 <div className='placeholder-item'>
                     {this.renderSelectedItem()}
                 </div>
+                
                 <div className='dropdown-content'>
                     {this.renderList()}
                 </div>

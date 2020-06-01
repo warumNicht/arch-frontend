@@ -27,6 +27,7 @@ const mapLang = (lang: string) => {
   return (
     <div>
       <div>{lang}</div>
+      <img src={`/images/icons/flag-${lang}.svg`} alt="Kiwi standing on oval"></img>
     </div>
   )
 }
