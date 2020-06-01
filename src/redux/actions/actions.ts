@@ -1,6 +1,6 @@
-import TokenActions, {UserActions} from './ActionTypes';
+import TokenActions, {UserActions, CategoryActions} from './ActionTypes';
 import Action, { SetUserAction } from '../interfaces/Action';
-import {User} from '../interfaces/ArchitectureAppStore';
+import {User, Category} from '../interfaces/ArchitectureAppStore';
 
 export default function setToken(token: string): Action {
     return { type: TokenActions.SET_TOKEN, payload: token }
@@ -16,4 +16,8 @@ export function setCurrentUser(user: User | null): SetUserAction  {
 
 export function getCurrentUser() {
     return { type: UserActions.GET_CURRENT_USER}
+}
+
+export function loadCategories(categories: Category[]): Action {
+    return { type: CategoryActions.LOAD_CATEGORIES, payload: categories }
 }
