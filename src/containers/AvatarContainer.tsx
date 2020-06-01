@@ -37,6 +37,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
     console.log(this.props)
     this.props.i18n.changeLanguage(this.props.cookies.get('lang') || 'en');
     this.loadCategories();
+    this.changeLanguage = this.changeLanguage.bind(this)
   }
 
   loadCategories() {
@@ -127,10 +128,13 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
           <SlidingDropdown selectedOption={{ id: 555, name: 'all' }} data={this.props.categories} mapData={mapCategory} />
 
-          <SlidingDropdown selectedOption={'en'} data={languagesArray} mapData={mapLang}
+          <SlidingDropdown
+            selectedOption={this.props.cookies.get('lang') || 'en'}
+            data={languagesArray} mapData={mapLang}
             comparator={(currentLang: string, selectedLang: string) => {
               return currentLang === selectedLang;
-            }} />
+            }} 
+            callback={this.changeLanguage}/>
 
           <div>
             <Link to={`${this.props.match.path}/admin`}>Admin</Link>
