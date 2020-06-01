@@ -4,12 +4,13 @@ import './SlidingDropdown.css';
 interface SlidingDropdownProps {
     selectedOption: any,
     data: any[],
-    mapData: (dataElement: any) => {}
+    mapData: (dataElement: any) => {},
+    comparator?: (currentElement: any, selectedElement: any) => boolean,
 }
 
 interface SlidingDropdownState {
     selectedIndex?: number,
-    data: []
+    data: any[]
 }
 
 class SlidingDropdown extends React.PureComponent<SlidingDropdownProps, SlidingDropdownState> {
@@ -21,14 +22,28 @@ class SlidingDropdown extends React.PureComponent<SlidingDropdownProps, SlidingD
         this.setSelectedIndex = this.setSelectedIndex.bind(this)
     }
 
-    componentWillReceiveProps(props: any) {
+    componentWillReceiveProps(props: SlidingDropdownProps) {
         this.setState({
-            data: props.data
+            data: props.data,
+            selectedIndex: props.selectedOption ? this.calculateSelectedIndex() : undefined
         })
     }
 
+    calculateSelectedIndex() {
+        let selectedIndex: number = -1;
+        this.props.data.forEach((d: any, index: number) => {
+            if (this.props.comparator && this.props.comparator(d, this.props.selectedOption)){
+                selectedIndex = index
+            }
+        })
+        if(selectedIndex<0){
+            return undefined;
+        }
+        return selectedIndex;
+    }
+
     renderSelectedItem(): any {
-        if (this.state.selectedIndex!==undefined) {
+        if (this.state.selectedIndex !== undefined) {
             return this.props.mapData(this.state.data[this.state.selectedIndex]);
         }
         return this.props.mapData(this.props.selectedOption)

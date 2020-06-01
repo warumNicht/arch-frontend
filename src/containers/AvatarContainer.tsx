@@ -125,9 +125,12 @@ class AvatarContainer extends React.PureComponent<any, any> {
             </div>
             )}
 
-          <SlidingDropdown selectedOption={{id: 555, name: 'all'}} data={this.props.categories} mapData={mapCategory} />
+          <SlidingDropdown selectedOption={{ id: 555, name: 'all' }} data={this.props.categories} mapData={mapCategory} />
 
-          <SlidingDropdown selectedOption={'en'}  data={languagesArray} mapData={mapLang}/>
+          <SlidingDropdown selectedOption={'en'} data={languagesArray} mapData={mapLang}
+            comparator={(currentLang: string, selectedLang: string) => {
+              return currentLang === selectedLang;
+            }} />
 
           <div>
             <Link to={`${this.props.match.path}/admin`}>Admin</Link>
