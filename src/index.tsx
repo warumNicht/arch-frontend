@@ -3,10 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-
-import { createStore } from "redux";
 import { Provider } from "react-redux";
-import mainReducer from './redux/reducers'
 
 import setToken, { getToken, setCurrentUser } from './redux/actions/actions'
 import { Router, Switch, Route, Redirect } from "react-router-dom";

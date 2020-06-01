@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./AvatarContainer.css";
 import { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
-import { withTranslation, Trans } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
 import { setCurrentUser } from "../redux/actions/actions";
 import UserService from '../services/UserService';
