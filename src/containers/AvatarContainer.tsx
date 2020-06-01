@@ -23,6 +23,14 @@ const mapCategory = (category: Category) => {
   )
 }
 
+const mapLang = (lang: string) => {
+  return (
+    <div>
+      <div>{lang}</div>
+    </div>
+  )
+}
+
 class AvatarContainer extends React.PureComponent<any, any> {
 
   componentDidMount() {
@@ -117,9 +125,9 @@ class AvatarContainer extends React.PureComponent<any, any> {
             </div>
             )}
 
-          <SlidingDropdown data={this.props.categories} mapData={mapCategory} />
+          <SlidingDropdown selectedOption={{id: 555, name: 'all'}} data={this.props.categories} mapData={mapCategory} />
 
-          <SlidingDropdown data={languagesArray} />
+          <SlidingDropdown selectedOption={'en'}  data={languagesArray} mapData={mapLang}/>
 
           <div>
             <Link to={`${this.props.match.path}/admin`}>Admin</Link>

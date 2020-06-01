@@ -2,8 +2,9 @@ import React from 'react';
 import './SlidingDropdown.css';
 
 interface SlidingDropdownProps {
+    selectedOption: any,
     data: any[],
-    mapData?: (dataElement: any) => {}
+    mapData: (dataElement: any) => {}
 }
 
 interface SlidingDropdownState {
@@ -28,13 +29,9 @@ class SlidingDropdown extends React.PureComponent<SlidingDropdownProps, SlidingD
 
     renderSelectedItem(): any {
         if (this.state.selectedIndex!==undefined) {
-            console.log(this.props.mapData)
-
-            return this.props.mapData ? this.props.mapData(this.state.data[this.state.selectedIndex]) :
-            this.state.data[this.state.selectedIndex];
-
+            return this.props.mapData(this.state.data[this.state.selectedIndex]);
         }
-        return 'Title'
+        return this.props.mapData(this.props.selectedOption)
     }
 
     setSelectedIndex(index: number) {
