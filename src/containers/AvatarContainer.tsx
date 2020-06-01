@@ -1,22 +1,53 @@
 import React from "react";
 import { connect } from "react-redux";
-import ArchitectureAppStore, { User } from "../redux/interfaces/ArchitectureAppStore";
+import ArchitectureAppStore, { User, Category } from "../redux/interfaces/ArchitectureAppStore";
 import { Link } from "react-router-dom";
 import "./AvatarContainer.css";
 import { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
 import { withTranslation } from 'react-i18next';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
-import { setCurrentUser } from "../redux/actions/actions";
+import { setCurrentUser, loadCategories } from "../redux/actions/actions";
 import UserService from '../services/UserService';
+import SlidingDropdown from "../shared/SlidingDropdown/SlidingDropdown";
+import { languagesArray } from '../constants/appConstants';
 
 var jwtDecode = require('jwt-decode');
+
+const mapCategory = (category: Category) => {
+  return (
+    <div>
+      <div>{category.id}</div>
+      <div>{category.name}</div>
+    </div>
+  )
+}
+
+const mapLang = (lang: string) => {
+  return (
+    <div>
+      <div>{lang}</div>
+    </div>
+  )
+}
 
 class AvatarContainer extends React.PureComponent<any, any> {
 
   componentDidMount() {
     console.log(this.props)
     this.props.i18n.changeLanguage(this.props.cookies.get('lang') || 'en');
+    this.loadCategories();
+    this.changeLanguage = this.changeLanguage.bind(this)
+  }
+
+  loadCategories() {
+    api.get('/fetch/categories/all').then(res => {
+      console.log(res.data)
+      this.props.loadCategories(res.data)
+    }).catch(error => {
+      console.log(error);
+    });
+
   }
 
   decode() {
@@ -60,8 +91,6 @@ class AvatarContainer extends React.PureComponent<any, any> {
   }
 
   render() {
-    const user = this.decode();
-    console.log('Avatar -> ', this.props.match.path)
     const isLoggedIn: boolean = UserService.isAuthenticated();
 
     return (
@@ -93,7 +122,17 @@ class AvatarContainer extends React.PureComponent<any, any> {
             (<div>
               <Link to={`${this.props.match.path}/users/login`}>{this.props.t('login', 'Hello there')}</Link>
             </div>
-          )}
+            )}
+
+          <SlidingDropdown selectedOption={{ id: 555, name: 'all' }} data={this.props.categories} mapData={mapCategory} />
+
+          <SlidingDropdown
+            selectedOption={this.props.cookies.get('lang') || 'en'}
+            data={languagesArray} mapData={mapLang}
+            comparator={(currentLang: string, selectedLang: string) => {
+              return currentLang === selectedLang;
+            }} 
+            callback={this.changeLanguage}/>
 
           <div>
             <Link to={`${this.props.match.path}/admin`}>Admin</Link>
@@ -119,11 +158,13 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
 const mapStateToProps = (state: ArchitectureAppStore) => ({
   token: state.token,
-  user: state.user
+  user: state.user,
+  categories: state.categories
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  setReduxUser: (user: User) => dispatch(setCurrentUser(user))
+  setReduxUser: (user: User) => dispatch(setCurrentUser(user)),
+  loadCategories: (categories: Category[]) => dispatch(loadCategories(categories))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['translation', 'navbar'])(AvatarContainer));
