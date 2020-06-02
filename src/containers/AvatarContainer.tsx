@@ -16,7 +16,7 @@ var jwtDecode = require('jwt-decode');
 
 const mapCategory = (category: Category) => {
   return (
-    <div>
+    <div className={'option-wrapper'}>
       <div>{category.id}</div>
       <div>{category.name}</div>
     </div>
@@ -25,9 +25,9 @@ const mapCategory = (category: Category) => {
 
 const mapLang = (lang: string) => {
   return (
-    <div>
+    <div className={'option-wrapper'}>
       <div>{lang}</div>
-      <img src={`/images/icons/flag-${lang}.svg`} alt="Kiwi standing on oval"></img>
+      <img className={'lang-icon'} src={`/images/icons/flag-${lang}.svg`} alt="flag"></img>
     </div>
   )
 }

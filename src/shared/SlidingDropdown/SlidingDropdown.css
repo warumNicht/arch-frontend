@@ -3,6 +3,10 @@
     transition: max-height 1.5s ease-in;
 }
 
+.placeholder-item{
+    min-width: 100px;
+}
+
 .dropdown-content{
     max-height: 0;
     position: absolute;
@@ -22,6 +26,7 @@
 .selected-item{
     background-color: lightgoldenrodyellow;
     border-left: 5px solid gold;
+    padding-left: 10px;
 }
 
 .dropdwn-item:hover{
