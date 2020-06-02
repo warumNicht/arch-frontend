@@ -1,0 +1,7 @@
+<svg viewBox="0 0 45 30" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0 h15 v30 l-15 0  Z" style="fill:#0055A4"/>
+    <path d="M15 0 h15 v30 l-15 0  Z" style="fill:#fff"/>
+    <path d="M30 0 h15 v30 l-15 0  Z" style="fill:#EF4135"/>
+    <polyline points="15,0 30,0" style="fill:none;stroke:#707070;stroke-width:1" />
+    <polyline points="15,30 30,30" style="fill:none;stroke:#707070;stroke-width:1" />
+</svg>
