@@ -8,7 +8,6 @@ function categories(state = initialCattegoriesState, action: Action) {
     switch (action.type) {
         case CategoryActions.LOAD_CATEGORIES:
             return action.payload
-
         default:
             return state
     }
