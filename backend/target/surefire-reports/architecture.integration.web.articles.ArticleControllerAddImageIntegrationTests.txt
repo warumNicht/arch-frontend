@@ -1,0 +1,24 @@
+-------------------------------------------------------------------------------
+Test set: architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 5, Errors: 0, Skipped: 0, Time elapsed: 4.677 s <<< FAILURE! - in architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests
+putArticleAddMainImage_withImage_Admin_validData_returnsCorrectUrlAndModifiesData(architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests)  Time elapsed: 0.2 s  <<< FAILURE!
+java.lang.AssertionError: Response status expected:<202> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests.putArticleAddMainImage_withImage_Admin_validData_returnsCorrectUrlAndModifiesData(ArticleControllerAddImageIntegrationTests.java:128)
+
+putArticleAddImage_withImage_Anonymous_validData_redirectsLogin(architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests)  Time elapsed: 0.128 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests.putArticleAddImage_withImage_Anonymous_validData_redirectsLogin(ArticleControllerAddImageIntegrationTests.java:168)
+
+putArticleAddImage_withImage_Admin_validData_returnsCorrectUrl(architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests)  Time elapsed: 0.491 s  <<< FAILURE!
+java.lang.AssertionError: Response status expected:<202> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests.putArticleAddImage_withImage_Admin_validData_returnsCorrectUrl(ArticleControllerAddImageIntegrationTests.java:103)
+
+putArticleAddImage_withImage_User_validData_redirectsUnauthorized(architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests)  Time elapsed: 0.218 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests.putArticleAddImage_withImage_User_validData_redirectsUnauthorized(ArticleControllerAddImageIntegrationTests.java:185)
+
+putArticleAddImage_withImage_Admin_nullData_returnsErrorMap(architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests)  Time elapsed: 0.178 s  <<< FAILURE!
+java.lang.AssertionError: Response status expected:<405> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerAddImageIntegrationTests.putArticleAddImage_withImage_Admin_nullData_returnsErrorMap(ArticleControllerAddImageIntegrationTests.java:149)
+

@@ -1,0 +1,44 @@
+-------------------------------------------------------------------------------
+Test set: architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests
+-------------------------------------------------------------------------------
+Tests run: 18, Failures: 10, Errors: 0, Skipped: 0, Time elapsed: 9.675 s <<< FAILURE! - in architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests
+post_addLang_withUserRole_validModelWithImage_redirectsUnauthorized(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.565 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.post_addLang_withUserRole_validModelWithImage_redirectsUnauthorized(ArticleControllerAddLangIntegrationTests.java:139)
+
+post_addLang_withRoleAdmin_validModelWithImage_redirectsEdit(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.175 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.post_addLang_withRoleAdmin_validModelWithImage_redirectsEdit(ArticleControllerAddLangIntegrationTests.java:95)
+
+patch_editLang_withRoleAdmin_validModel_returnsCorrectView_andModifiesData(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.134 s  <<< FAILURE!
+java.lang.AssertionError: Response status expected:<202> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.patch_editLang_withRoleAdmin_validModel_returnsCorrectView_andModifiesData(ArticleControllerAddLangIntegrationTests.java:237)
+
+patch_editLang_withRoleAdmin_nonexistentArticle_returnsNotFound(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.566 s  <<< FAILURE!
+java.lang.AssertionError: Response status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.patch_editLang_withRoleAdmin_nonexistentArticle_returnsNotFound(ArticleControllerAddLangIntegrationTests.java:308)
+
+post_addLang_withRoleAdmin_validModelWithImageNull_redirectsEdit(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.529 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.post_addLang_withRoleAdmin_validModelWithImageNull_redirectsEdit(ArticleControllerAddLangIntegrationTests.java:109)
+
+patch_editLang_withRoleAdmin_invalidModel_returnsForm(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.213 s  <<< FAILURE!
+java.lang.AssertionError: Response status expected:<202> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.patch_editLang_withRoleAdmin_invalidModel_returnsForm(ArticleControllerAddLangIntegrationTests.java:288)
+
+patch_editLang_withAnonymous_redirectsLogin(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.11 s  <<< FAILURE!
+java.lang.AssertionError: Response status expected:<302> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.patch_editLang_withAnonymous_redirectsLogin(ArticleControllerAddLangIntegrationTests.java:257)
+
+post_addLang_withAnonymous_validModelWithImage_redirectsLogin(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.08 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.post_addLang_withAnonymous_validModelWithImage_redirectsLogin(ArticleControllerAddLangIntegrationTests.java:124)
+
+patch_editLang_withRoleUser_redirectsUnauthorized(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.091 s  <<< FAILURE!
+java.lang.AssertionError: Response status expected:<302> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.patch_editLang_withRoleUser_redirectsUnauthorized(ArticleControllerAddLangIntegrationTests.java:272)
+
+post_addLang_withAdmin_nullModel_returnsForm(architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests)  Time elapsed: 0.123 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerAddLangIntegrationTests.post_addLang_withAdmin_nullModel_returnsForm(ArticleControllerAddLangIntegrationTests.java:153)
+

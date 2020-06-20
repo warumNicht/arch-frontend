@@ -1,0 +1,68 @@
+-------------------------------------------------------------------------------
+Test set: architecture.integration.web.articles.ArticleControllerCreateIntegrationTests
+-------------------------------------------------------------------------------
+Tests run: 20, Failures: 14, Errors: 2, Skipped: 0, Time elapsed: 2.967 s <<< FAILURE! - in architecture.integration.web.articles.ArticleControllerCreateIntegrationTests
+post_createArticle_withTitleLessThen2_returnsForm(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.093 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withTitleLessThen2_returnsForm(ArticleControllerCreateIntegrationTests.java:382)
+
+post_createArticle_withValidData_AndFullImage_storesCorrect(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.093 s  <<< ERROR!
+java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withValidData_AndFullImage_storesCorrect(ArticleControllerCreateIntegrationTests.java:188)
+
+post_createArticle_withValidData_andFullImage_redirectsCorrect(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.12 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withValidData_andFullImage_redirectsCorrect(ArticleControllerCreateIntegrationTests.java:112)
+
+post_createArticle_withNullUrl_returnsForm(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.129 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withNullUrl_returnsForm(ArticleControllerCreateIntegrationTests.java:299)
+
+post_createArticle_withEmptyTitle_returnsForm(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.114 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withEmptyTitle_returnsForm(ArticleControllerCreateIntegrationTests.java:349)
+
+post_createArticle_withValidData_RoleUser_redirectsUnauthorized(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.1 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withValidData_RoleUser_redirectsUnauthorized(ArticleControllerCreateIntegrationTests.java:146)
+
+post_createArticle_withNullData_returnsForm(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.126 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withNullData_returnsForm(ArticleControllerCreateIntegrationTests.java:213)
+
+post_createArticle_withNullTitle_returnsForm(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.113 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withNullTitle_returnsForm(ArticleControllerCreateIntegrationTests.java:333)
+
+post_createArticle_withNullCountry_returnsForm(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.093 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withNullCountry_returnsForm(ArticleControllerCreateIntegrationTests.java:260)
+
+post_createArticle_withInvalidCountry_returnsErrorPage(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.093 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withInvalidCountry_returnsErrorPage(ArticleControllerCreateIntegrationTests.java:281)
+
+post_createArticle_withValidData_andEmptyImage_redirectsCorrect(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.117 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withValidData_andEmptyImage_redirectsCorrect(ArticleControllerCreateIntegrationTests.java:96)
+
+post_createArticle_withLowercaseTitle_returnsForm(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.12 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withLowercaseTitle_returnsForm(ArticleControllerCreateIntegrationTests.java:365)
+
+post_createArticle_withValidData_AndEmptyImage_storesCorrect(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.105 s  <<< ERROR!
+java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withValidData_AndEmptyImage_storesCorrect(ArticleControllerCreateIntegrationTests.java:162)
+
+post_createArticle_invalidUrl_returnsForm(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.093 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_invalidUrl_returnsForm(ArticleControllerCreateIntegrationTests.java:315)
+
+post_createArticle_withValidData_AndNonexistentCategory_returnsErrorPage(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.093 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<403>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withValidData_AndNonexistentCategory_returnsErrorPage(ArticleControllerCreateIntegrationTests.java:241)
+
+post_createArticle_withValidData_Anonymous_redirectsLogin(architecture.integration.web.articles.ArticleControllerCreateIntegrationTests)  Time elapsed: 0.101 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 403 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at architecture.integration.web.articles.ArticleControllerCreateIntegrationTests.post_createArticle_withValidData_Anonymous_redirectsLogin(ArticleControllerCreateIntegrationTests.java:129)
+
