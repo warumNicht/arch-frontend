@@ -16,7 +16,7 @@ var jwtDecode = require('jwt-decode');
 
 const mapCategory = (category: Category) => {
   return (
-    <div>
+    <div className={'option-wrapper'}>
       <div>{category.id}</div>
       <div>{category.name}</div>
     </div>
@@ -25,8 +25,9 @@ const mapCategory = (category: Category) => {
 
 const mapLang = (lang: string) => {
   return (
-    <div>
+    <div className={'option-wrapper'}>
       <div>{lang}</div>
+      <img className={'lang-icon'} src={`/images/icons/flag-${lang}.svg`} alt="flag"></img>
     </div>
   )
 }
@@ -47,7 +48,6 @@ class AvatarContainer extends React.PureComponent<any, any> {
     }).catch(error => {
       console.log(error);
     });
-
   }
 
   decode() {
