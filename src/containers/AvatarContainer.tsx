@@ -76,11 +76,11 @@ class AvatarContainer extends React.PureComponent<any, any> {
         [csrfHeaderName]: token
       }
     };
+    localStorage.removeItem('token');
     api.post(`/users/custom-logout`, null, config)
       .then((res) => {
         console.log(res);
         console.log(res.data);
-        localStorage.removeItem('token')
         this.props.setReduxUser(null);
         this.props.history.push(`/${getLangPrefix(this.props.location.pathname)}/`);
       })
