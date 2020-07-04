@@ -11,6 +11,7 @@ import { setCurrentUser, loadCategories } from "../redux/actions/actions";
 import UserService from '../services/UserService';
 import SlidingDropdown from "../shared/SlidingDropdown/SlidingDropdown";
 import { languagesArray } from '../constants/appConstants';
+import { createCookieOptions } from '../util/LangPrefixUtil';
 
 var jwtDecode = require('jwt-decode');
 
@@ -36,7 +37,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
   componentDidMount() {
     console.log(this.props)
-    this.props.i18n.changeLanguage(this.props.cookies.get('lang') || 'en');
+    // this.props.i18n.changeLanguage(this.props.cookies.get('lang') || 'en');
     this.loadCategories();
     this.changeLanguage = this.changeLanguage.bind(this)
   }
@@ -60,7 +61,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
   }
 
   changeLanguage(lang: string) {
-    this.props.cookies.set('lang', lang, { path: '/' });
+    this.props.cookies.set('lang', lang, createCookieOptions());
     this.props.i18n.changeLanguage(lang);
     console.log(this.props.location)
     this.props.history.push(`/${lang}${getPathWithoutLangPrefix(this.props.location.pathname)}`);
@@ -76,11 +77,11 @@ class AvatarContainer extends React.PureComponent<any, any> {
         [csrfHeaderName]: token
       }
     };
+    localStorage.removeItem('token');
     api.post(`/users/custom-logout`, null, config)
       .then((res) => {
         console.log(res);
         console.log(res.data);
-        localStorage.removeItem('token')
         this.props.setReduxUser(null);
         this.props.history.push(`/${getLangPrefix(this.props.location.pathname)}/`);
       })
@@ -131,8 +132,8 @@ class AvatarContainer extends React.PureComponent<any, any> {
             data={languagesArray} mapData={mapLang}
             comparator={(currentLang: string, selectedLang: string) => {
               return currentLang === selectedLang;
-            }} 
-            callback={this.changeLanguage}/>
+            }}
+            callback={this.changeLanguage} />
 
           <div>
             <Link to={`${this.props.match.path}/admin`}>Admin</Link>

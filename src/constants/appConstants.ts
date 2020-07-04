@@ -9,6 +9,8 @@ enum LangEnum {
 
 const defaultLang: string = LangEnum.EN;
 
+export const cookieValidity: number = 60 * 60 * 1000; // 60 min
+
 const supportedLanguages: string[] = Object.entries(LangEnum).filter(entry => typeof entry[0] !== 'number')
     .map(entry => {
         return `/${entry[1]}`
