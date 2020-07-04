@@ -3,7 +3,7 @@ import { Switch, Route, BrowserRouter as Router, Redirect } from "react-router-d
 import "./App.css";
 import AvatarContainer from "./containers/AvatarContainer";
 import NotFoundPage from "./components/not-found/NotFoundPage";
-import Home  from "./components/home/home";
+import Home from "./components/home/home";
 import Dashboard from "./components/dashboard/dashboard";
 import { PrivateRoute } from "./shared/PrivateRoute";
 import { UserRoles } from "./constants/appConstants";
@@ -12,20 +12,25 @@ import AdminComponent from "./components/admin/AdminComponent";
 import UserModule from "./components/modules/user/UserModule";
 import { useTranslation } from 'react-i18next';
 import { withCookies } from 'react-cookie';
-import {getLangCookie} from './util/LangPrefixUtil';
+import { getLangCookie, createCookieOptions } from './util/LangPrefixUtil';
 
 function App(props: any) {
   const { t, i18n } = useTranslation();
   const currentLangCookie = getLangCookie(props);
   const currentUrlLangPrefix = props.match.path.substring(1);
 
-  if(!currentLangCookie){
+  let d = new Date();
+  console.log(d)
+  d.setTime(d.getTime() + (1 * 60 * 1000)); //1 min
+  console.log(d)
+
+  if (!currentLangCookie) {
     //set cookie
-    props.cookies.set('lang', currentUrlLangPrefix, { path: '/' });
+    props.cookies.set('lang', currentUrlLangPrefix, createCookieOptions());
     i18n.changeLanguage(currentUrlLangPrefix);
   }
-  if(currentLangCookie && currentLangCookie !== currentUrlLangPrefix){
-    props.cookies.set('lang', currentUrlLangPrefix, { path: '/' });
+  if (currentLangCookie && currentLangCookie !== currentUrlLangPrefix) {
+    props.cookies.set('lang', currentUrlLangPrefix,createCookieOptions());
     i18n.changeLanguage(currentUrlLangPrefix);
     return (<Redirect to={{ pathname: `/${currentUrlLangPrefix}/` }} />)
   }
@@ -48,7 +53,7 @@ function App(props: any) {
   );
 }
 
-function schouldRedirect(){
+function schouldRedirect() {
 
 }
 
