@@ -1,4 +1,4 @@
-import { defaultLang, LangEnum } from '../constants/appConstants';
+import { defaultLang, LangEnum, cookieValidity } from '../constants/appConstants';
 
 function getPathWithoutLangPrefix(path: string): string {
     if (path.charAt(3) === '/') {
@@ -22,7 +22,7 @@ export function getLangCookie(props: any): string {
 
 export function createCookieOptions(): Object {
     let d = new Date();
-    d.setTime(d.getTime() + (1 * 60 * 1000)); //1 min
+    d.setTime(d.getTime() + cookieValidity); 
     return {
         path: '/',
         expires: d,
