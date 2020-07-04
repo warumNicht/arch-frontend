@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, BrowserRouter as Router, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 import AvatarContainer from "./containers/AvatarContainer";
 import NotFoundPage from "./components/not-found/NotFoundPage";
@@ -46,10 +46,6 @@ function App(props: any) {
       </Switch>
     </div>
   );
-}
-
-function schouldRedirect(){
-
 }
 
 export default withCookies(App);
