@@ -51,7 +51,6 @@ class AvatarContainer extends React.PureComponent<AvatarContainerProps, any> {
 
   componentDidMount() {
     console.log(this.props)
-    // this.props.i18n.changeLanguage(this.props.cookies.get('lang') || 'en');
     this.loadCategories();
     this.changeLanguage = this.changeLanguage.bind(this)
   }
