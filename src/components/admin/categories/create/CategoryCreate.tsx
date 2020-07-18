@@ -11,6 +11,24 @@ const createLangOptions = () => {
     )
 }
 
+enum CategoryFields {
+    LANGUAGE = 'language',
+    NAME = 'name',
+    AGE = 'age'
+}
+
+const validators: any = {
+    [CategoryFields.NAME]: (value: string) => {
+        return value.length < 3 ? "minimum 3 characaters required" : null;
+    },
+    [CategoryFields.AGE]: (value: number) => {
+        return value < 18 ? "Age is < 18" : null;
+    },
+    [CategoryFields.LANGUAGE]: (value: LangEnum) => {
+        return value.length < 3 ? "minimum 3 characaters required" : null;
+    }
+}
+
 interface CategoryCreateState {
     language: LangEnum,
     name: string,
@@ -41,27 +59,11 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         event.preventDefault();
         const { name, value } = event.target;
         const formErrors = this.state.errors;
-        let errorMessage= null;
+        const errorMessage = validators[name](value);
 
-        switch (name) {
-            case "name":
-                errorMessage =
-                    value.length < 3 ? "minimum 3 characaters required" : null;
-                break;
-            case "language":
-                errorMessage =
-                    value.length > 2 ? "maximum 2 characaters required" : null;
-                break;
-            case "age":
-                errorMessage =
-                    value < 18 ? "Age is <18" : null;
-                break;
-            default:
-                break;
-        }
-        if(errorMessage){
+        if (errorMessage) {
             formErrors[name] = errorMessage;
-        }else{
+        } else {
             delete formErrors[name];
         }
 
@@ -69,7 +71,6 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
             [name]: value,
             errors: formErrors
         }
-
         this.setState(newState as any);
     }
 
@@ -79,19 +80,19 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
                 <h1>Category Create</h1>
 
                 <form onSubmit={this.handleSubmit} >
-                    <select value={this.state.language} name='language' onChange={this.handleChange}>
+                    <select value={this.state.language} name={CategoryFields.LANGUAGE} onChange={this.handleChange}>
                         {createLangOptions()}
                     </select>
 
 
-                    <input type='text' name='name' onChange={this.handleChange} />
+                    <input type='text' name={CategoryFields.NAME} onChange={this.handleChange} />
                     <div>
-                        {this.state.errors['name'] ? this.state.errors['name'] : 'Kein Fehler!'}
+                        {this.state.errors[CategoryFields.NAME] ? this.state.errors[CategoryFields.NAME] : 'Kein Fehler!'}
                     </div>
 
-                    <input type='number' name='age' onChange={this.handleChange} />
+                    <input type='number' name={CategoryFields.AGE} onChange={this.handleChange} />
                     <div>
-                        {this.state.errors['age'] ? this.state.errors['age'] : 'Kein Fehler!'}
+                        {this.state.errors[CategoryFields.AGE] ? this.state.errors[CategoryFields.AGE] : 'Kein Fehler!'}
                     </div>
 
                     <button>Create</button>
