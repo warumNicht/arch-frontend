@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import ArchitectureAppStore, { User, Category } from "../redux/interfaces/ArchitectureAppStore";
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 import "./AvatarContainer.css";
 import { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { Cookies } from 'react-cookie';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
 import { setCurrentUser, storeCategoriesInRedux } from "../redux/actions/actions";
 import UserService from '../services/UserService';
@@ -33,9 +34,18 @@ const mapLang = (lang: string) => {
   )
 }
 
-class AvatarContainer extends React.PureComponent<any, any> {
+interface AvatarContainerProps extends WithTranslation, RouteComponentProps{
+  token: string,
+  user: User,
+  categories: Category[],
+  setReduxUser: (user: User|null) => void,
+  storeCategoriesInRedux: (categories: Category[]) => void,
+  cookies: Cookies
+}
 
-  componentWillUpdate(){
+class AvatarContainer extends React.PureComponent<AvatarContainerProps, any> {
+
+  componentWillUpdate() {
     console.log('update')
   }
 
@@ -170,7 +180,7 @@ const mapStateToProps = (state: ArchitectureAppStore) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  setReduxUser: (user: User) => dispatch(setCurrentUser(user)),
+  setReduxUser: (user: User | null) => dispatch(setCurrentUser(user)),
   storeCategoriesInRedux: (categories: Category[]) => dispatch(storeCategoriesInRedux(categories))
 })
 
