@@ -14,7 +14,9 @@ const createLangOptions = () => {
 interface CategoryCreateState {
     language: LangEnum,
     name: string,
-    errors: {}
+    errors: {
+        [key: string]: string
+    }
 }
 
 
@@ -24,11 +26,9 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         this.state = {
             language: LangEnum.DE,
             name: '',
-            errors: {
-                language: '',
-                name: '',
-            }
+            errors: {}
         };
+        console.log(this.state)
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -40,11 +40,36 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
     handleChange = (event: any) => {
         event.preventDefault();
         const { name, value } = event.target;
+        const formErrors = this.state.errors;
+        let errorMessage= null;
 
-        const newState= {
-            [name]: value,
+        switch (name) {
+            case "name":
+                errorMessage =
+                    value.length < 3 ? "minimum 3 characaters required" : null;
+                break;
+            case "language":
+                errorMessage =
+                    value.length > 2 ? "maximum 2 characaters required" : null;
+                break;
+            case "age":
+                errorMessage =
+                    value < 18 ? "Age is <18" : null;
+                break;
+            default:
+                break;
         }
-        
+        if(errorMessage){
+            formErrors[name] = errorMessage;
+        }else{
+            delete formErrors[name];
+        }
+
+        const newState = {
+            [name]: value,
+            errors: formErrors
+        }
+
         this.setState(newState as any);
     }
 
@@ -58,7 +83,16 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
                         {createLangOptions()}
                     </select>
 
+
                     <input type='text' name='name' onChange={this.handleChange} />
+                    <div>
+                        {this.state.errors['name'] ? this.state.errors['name'] : 'Kein Fehler!'}
+                    </div>
+
+                    <input type='number' name='age' onChange={this.handleChange} />
+                    <div>
+                        {this.state.errors['age'] ? this.state.errors['age'] : 'Kein Fehler!'}
+                    </div>
 
                     <button>Create</button>
                 </form>
