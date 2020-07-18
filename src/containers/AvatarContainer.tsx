@@ -35,6 +35,10 @@ const mapLang = (lang: string) => {
 
 class AvatarContainer extends React.PureComponent<any, any> {
 
+  componentWillUpdate(){
+    console.log('update')
+  }
+
   componentDidMount() {
     console.log(this.props)
     // this.props.i18n.changeLanguage(this.props.cookies.get('lang') || 'en');
@@ -64,6 +68,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
     this.props.cookies.set('lang', lang, createCookieOptions());
     this.props.i18n.changeLanguage(lang);
     console.log(this.props.location)
+    this.loadCategories();
     this.props.history.push(`/${lang}${getPathWithoutLangPrefix(this.props.location.pathname)}`);
   }
 
@@ -93,6 +98,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
 
   render() {
     const isLoggedIn: boolean = UserService.isAuthenticated();
+    console.log(isLoggedIn)
 
     return (
       <div>
