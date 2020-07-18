@@ -11,8 +11,26 @@ const createLangOptions = () => {
     )
 }
 
+interface CategoryCreateState {
+    language: LangEnum,
+    name: string,
+    errors: {}
+}
 
-class CategoryCreate extends React.PureComponent<any> {
+
+class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            language: LangEnum.DE,
+            name: '',
+            errors: {
+                language: '',
+                name: '',
+            }
+        };
+        this.handleChange = this.handleChange.bind(this);
+    }
 
     handleSubmit = (event: any) => {
         event.preventDefault();
@@ -21,7 +39,13 @@ class CategoryCreate extends React.PureComponent<any> {
 
     handleChange = (event: any) => {
         event.preventDefault();
-        console.log(event)
+        const { name, value } = event.target;
+
+        const newState= {
+            [name]: value,
+        }
+        
+        this.setState(newState as any);
     }
 
     render() {
@@ -29,10 +53,14 @@ class CategoryCreate extends React.PureComponent<any> {
             <div>
                 <h1>Category Create</h1>
 
-                <form onSubmit={this.handleSubmit}>
-                    <select value={languagesArray[1]} onChange={this.handleChange}>
+                <form onSubmit={this.handleSubmit} >
+                    <select value={this.state.language} name='language' onChange={this.handleChange}>
                         {createLangOptions()}
                     </select>
+
+                    <input type='text' name='name' onChange={this.handleChange} />
+
+                    <button>Create</button>
                 </form>
 
 
