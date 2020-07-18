@@ -18,6 +18,6 @@ export function getCurrentUser() {
     return { type: UserActions.GET_CURRENT_USER}
 }
 
-export function loadCategories(categories: Category[]): Action {
+export function storeCategoriesInRedux(categories: Category[]): Action {
     return { type: CategoryActions.LOAD_CATEGORIES, payload: categories }
 }

@@ -7,7 +7,7 @@ import { csrfHeaderName } from '../constants/appConstants';
 import api from '../util/api';
 import { withTranslation } from 'react-i18next';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
-import { setCurrentUser, loadCategories } from "../redux/actions/actions";
+import { setCurrentUser, storeCategoriesInRedux } from "../redux/actions/actions";
 import UserService from '../services/UserService';
 import SlidingDropdown from "../shared/SlidingDropdown/SlidingDropdown";
 import { languagesArray } from '../constants/appConstants';
@@ -49,7 +49,7 @@ class AvatarContainer extends React.PureComponent<any, any> {
   loadCategories() {
     api.get('/fetch/categories/all').then(res => {
       console.log(res.data)
-      this.props.loadCategories(res.data)
+      this.props.storeCategoriesInRedux(res.data)
     }).catch(error => {
       console.log(error);
     });
@@ -171,7 +171,7 @@ const mapStateToProps = (state: ArchitectureAppStore) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   setReduxUser: (user: User) => dispatch(setCurrentUser(user)),
-  loadCategories: (categories: Category[]) => dispatch(loadCategories(categories))
+  storeCategoriesInRedux: (categories: Category[]) => dispatch(storeCategoriesInRedux(categories))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['translation', 'navbar'])(AvatarContainer));
