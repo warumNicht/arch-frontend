@@ -8,7 +8,7 @@ import Dashboard from "./components/dashboard/dashboard";
 import { PrivateRoute } from "./shared/PrivateRoute";
 import { UserRoles } from "./constants/appConstants";
 import { Unauthorized } from "./components/unauthorized/Unauthorized";
-import AdminComponent from "./components/admin/AdminComponent";
+import AdminModule from "./components/admin/AdminModule";
 import UserModule from "./components/modules/user/UserModule";
 import { useTranslation } from 'react-i18next';
 import { withCookies } from 'react-cookie';
@@ -42,7 +42,7 @@ function App(props: any) {
       <AvatarContainer {...props}></AvatarContainer>
       <Switch>
         <Route exact path={`${props.match.path}/`} component={Home} />
-        <PrivateRoute path={`${props.match.path}/admin`} hasRole={UserRoles.ADMIN} component={AdminComponent} />
+        <PrivateRoute path={`${props.match.path}/admin`} hasRole={UserRoles.ADMIN} component={AdminModule} />
         <PrivateRoute path={`${props.match.path}/dashboard`} hasRole={UserRoles.USER} component={Dashboard} />
         <Route path={`${props.match.path}/users`} component={UserModule} />
         <Route path={`${props.match.path}/unauthorized`} component={Unauthorized} />

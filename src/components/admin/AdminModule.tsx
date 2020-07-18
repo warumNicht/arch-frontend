@@ -1,8 +1,8 @@
 import React from "react";
 import { Switch, Route, Redirect, RouteComponentProps } from "react-router-dom";
 import { withTranslation, Trans, WithTranslation } from 'react-i18next';
-import CategoriesComponent from "./categories/CategoriesComponent";
-import ProjectsComponent from "./projects/ProjectsComponent";
+import CategoriesModule from "./categories/CategoriesModule";
+import ProjectsModule from "./projects/ProjectsModule";
 import { getLangPrefix } from "../../util/LangPrefixUtil";
 
 class AdminComponent extends React.PureComponent<WithTranslation & RouteComponentProps> {
@@ -16,8 +16,8 @@ class AdminComponent extends React.PureComponent<WithTranslation & RouteComponen
                 </Trans>
 
                 <Switch>
-                    <Route path={`${this.props.match.path}/category`} component={CategoriesComponent} />
-                    <Route path={`${this.props.match.path}/projects`} component={ProjectsComponent} />
+                    <Route path={`${this.props.match.path}/category`} component={CategoriesModule} />
+                    <Route path={`${this.props.match.path}/projects`} component={ProjectsModule} />
                     <Redirect to={{ pathname: `/${getLangPrefix(this.props.match.path)}/404` }} />
                 </Switch>
             </div>
