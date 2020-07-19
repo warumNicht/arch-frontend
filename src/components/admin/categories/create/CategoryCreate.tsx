@@ -17,15 +17,28 @@ enum CategoryFields {
     AGE = 'age'
 }
 
-const validators: any = {
+interface ValidatorsByField {
+    [key: string]: (value: any) => string[] | null,
+    // [CategoryFields.AGE]: (value: number) => string[] | null,
+    // [CategoryFields.LANGUAGE]: (value: LangEnum) => string[] | null,
+}
+
+const validators: ValidatorsByField = {
     [CategoryFields.NAME]: (value: string) => {
-        return value.length < 3 ? "minimum 3 characaters required" : null;
+        return value.length < 3 ? ["minimum 3 characaters required"] : null;
     },
     [CategoryFields.AGE]: (value: number) => {
-        return value < 18 ? "Age is < 18" : null;
+        return value < 18 ? ["Age is < 18"] : null;
     },
     [CategoryFields.LANGUAGE]: (value: LangEnum) => {
-        return value.length > 2 ? "maximum 2 characaters required" : null;
+        return value.length > 2 ? ["maximum 2 characaters required"] : null;
+    }
+}
+
+interface ErrorMessages{
+    [key: string]: {
+        isTouched: boolean,
+        messages: string[] | null
     }
 }
 
@@ -34,12 +47,7 @@ interface CategoryCreateState {
     language: LangEnum,
     name: string,
     age: number,
-    errors: {
-        [key: string]: {
-            isTouched: boolean,
-            message: string
-        }
-    }
+    errors: ErrorMessages
 }
 
 
@@ -64,13 +72,13 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
     }
 
     setInitialErrors() {
-        let initialErrors: any = {};
+        let initialErrors: ErrorMessages = {};
         Object.entries(CategoryFields)
             .forEach(entry => {
                 const currentErrrorMessage = validators[entry[1]](this.state[entry[1]])
                 initialErrors[entry[1]] = {
                     isTouched: false,
-                    message: currentErrrorMessage
+                    messages: currentErrrorMessage
                 }
             });
         this.setState({
@@ -87,12 +95,12 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         event.preventDefault();
         const { name, value } = event.target;
         const formErrors = this.state.errors;
-        const errorMessage = validators[name](value);
+        const errorMessages: string[] | null = validators[name](value);
 
 
         formErrors[name] = {
             isTouched: true,
-            message: errorMessage
+            messages: errorMessages
         };
 
 
@@ -107,11 +115,18 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
     }
 
     shouldDisableSubmit(): boolean {
-        const res = !!Object.entries(this.state.errors).find(entry => entry[1].message);
+        const res = Object.entries(this.state.errors).find(entry => entry[1].messages);
         console.log(res)
         const b: boolean = !!res;
         console.log(b)
         return b;
+    }
+
+    getErrorsByFieldName(fieldName: string): string[] {
+        if (this.state.errors[fieldName] && this.state.errors[fieldName].isTouched) {
+
+        }
+        return [];
     }
 
     render() {
@@ -127,12 +142,12 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
                     <input type='text' value={this.state.name} name={CategoryFields.NAME} onChange={this.handleChange} />
                     <div>
-                        {this.state.errors[CategoryFields.NAME] && this.state.errors[CategoryFields.NAME].isTouched ? this.state.errors[CategoryFields.NAME].message : 'Kein Fehler!'}
+                        {this.state.errors[CategoryFields.NAME] && this.state.errors[CategoryFields.NAME].isTouched ? this.state.errors[CategoryFields.NAME].messages : 'Kein Fehler!'}
                     </div>
 
                     <input type='number' value={this.state.age} name={CategoryFields.AGE} onChange={this.handleChange} />
                     <div>
-                        {this.state.errors[CategoryFields.AGE] && this.state.errors[CategoryFields.AGE].isTouched ? this.state.errors[CategoryFields.AGE].message : 'Kein Fehler!'}
+                        {this.state.errors[CategoryFields.AGE] && this.state.errors[CategoryFields.AGE].isTouched ? this.state.errors[CategoryFields.AGE].messages : 'Kein Fehler!'}
                     </div>
 
                     <button disabled={this.shouldDisableSubmit()}>Create</button>
