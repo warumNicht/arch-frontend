@@ -25,7 +25,18 @@ interface ValidatorsByField {
 
 const validators: ValidatorsByField = {
     [CategoryFields.NAME]: (value: string) => {
-        return value.length < 3 ? ["minimum 3 characaters required"] : null;
+        let messages: string[] = [];
+        if(value.length === 0 ){
+            messages.push("Should not be empty");
+        }
+        if(value.length < 3 ){
+            messages.push("minimum 3 characaters required")
+        }
+        if(value.length > 0 && value.charAt(0)!==value.charAt(0).toUpperCase()){
+            messages.push("Should begin with uppercase");
+        }
+        
+        return messages.length > 0 ? messages : null;
     },
     [CategoryFields.AGE]: (value: number) => {
         return value < 18 ? ["Age is < 18"] : null;
