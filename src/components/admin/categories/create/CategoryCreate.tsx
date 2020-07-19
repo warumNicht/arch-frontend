@@ -1,7 +1,7 @@
 import React from "react";
-import { Switch, Route, Redirect, RouteComponentProps } from "react-router-dom";
 import { LangEnum } from "../../../../constants/appConstants";
 import { languagesArray } from '../../../../constants/appConstants';
+import ValidationMessages from '../../../../shared/ValidationMessages/ValidationMessages';
 
 const createLangOptions = () => {
     return (
@@ -35,7 +35,7 @@ const validators: ValidatorsByField = {
     }
 }
 
-interface ErrorMessages{
+interface ErrorMessages {
     [key: string]: {
         isTouched: boolean,
         messages: string[] | null
@@ -122,11 +122,8 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         return b;
     }
 
-    getErrorsByFieldName(fieldName: string): string[] {
-        if (this.state.errors[fieldName] && this.state.errors[fieldName].isTouched) {
-
-        }
-        return [];
+    hasFieldErrors(fieldName: string): boolean {
+        return this.state.errors[fieldName] && this.state.errors[fieldName].isTouched && !!this.state.errors[fieldName].messages;
     }
 
     render() {
@@ -141,14 +138,12 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
 
                     <input type='text' value={this.state.name} name={CategoryFields.NAME} onChange={this.handleChange} />
-                    <div>
-                        {this.state.errors[CategoryFields.NAME] && this.state.errors[CategoryFields.NAME].isTouched ? this.state.errors[CategoryFields.NAME].messages : 'Kein Fehler!'}
-                    </div>
+                    {this.hasFieldErrors(CategoryFields.NAME) ?
+                        <ValidationMessages messages={this.state.errors[CategoryFields.NAME].messages} /> : 'Kein'}
 
                     <input type='number' value={this.state.age} name={CategoryFields.AGE} onChange={this.handleChange} />
-                    <div>
-                        {this.state.errors[CategoryFields.AGE] && this.state.errors[CategoryFields.AGE].isTouched ? this.state.errors[CategoryFields.AGE].messages : 'Kein Fehler!'}
-                    </div>
+                    {this.hasFieldErrors(CategoryFields.AGE) ?
+                        <ValidationMessages messages={this.state.errors[CategoryFields.AGE].messages} /> : 'Kein'}
 
                     <button disabled={this.shouldDisableSubmit()}>Create</button>
                 </form>
