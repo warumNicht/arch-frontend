@@ -43,7 +43,6 @@ interface ErrorMessages {
 }
 
 interface CategoryCreateState {
-    isFormPristine: boolean,
     language: LangEnum,
     name: string,
     age: number,
@@ -55,7 +54,6 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            isFormPristine: true,
             language: LangEnum.DE,
             name: '',
             age: 3,
@@ -103,13 +101,9 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
             messages: errorMessages
         };
 
-
-        let newState: any = {
+        let newState = {
             [name]: value,
             errors: formErrors
-        }
-        if (this.state.isFormPristine) {
-            newState.isFormPristine = false
         }
         this.setState(newState as any);
     }
