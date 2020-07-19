@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import backendHost from '../constants/appConstants';
 
 const api = axios.create({
