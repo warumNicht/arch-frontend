@@ -1,7 +1,8 @@
 import React from "react";
-import { LangEnum } from "../../../../constants/appConstants";
+import { LangEnum, csrfHeaderName } from "../../../../constants/appConstants";
 import { languagesArray } from '../../../../constants/appConstants';
 import ValidationMessages from '../../../../shared/ValidationMessages/ValidationMessages';
+import api from '../../../../util/api';
 
 const createLangOptions = () => {
     return (
@@ -26,16 +27,16 @@ interface ValidatorsByField {
 const validators: ValidatorsByField = {
     [CategoryFields.NAME]: (value: string) => {
         let messages: string[] = [];
-        if(value.length === 0 ){
+        if (value.length === 0) {
             messages.push("Should not be empty");
         }
-        if(value.length < 3 ){
+        if (value.length < 3) {
             messages.push("minimum 3 characaters required")
         }
-        if(value.length > 0 && value.charAt(0)!==value.charAt(0).toUpperCase()){
+        if (value.length > 0 && value.charAt(0) !== value.charAt(0).toUpperCase()) {
             messages.push("Should begin with uppercase");
         }
-        
+
         return messages.length > 0 ? messages : null;
     },
     [CategoryFields.AGE]: (value: number) => {
@@ -97,6 +98,23 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
     handleSubmit = (event: any) => {
         event.preventDefault();
+
+        const config = {
+            headers: {
+                [csrfHeaderName]: localStorage.getItem('token')
+            }
+        };
+
+        api
+            .post(`/admin/category/create2`, { country: 'EN', name: 'Ajax' }, config)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((e: any) => {
+                console.log(e)
+            });
+
+        console.log('submittted')
         console.log(event)
     }
 
