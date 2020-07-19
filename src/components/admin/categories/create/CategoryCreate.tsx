@@ -25,15 +25,20 @@ const validators: any = {
         return value < 18 ? "Age is < 18" : null;
     },
     [CategoryFields.LANGUAGE]: (value: LangEnum) => {
-        return value.length < 3 ? "minimum 3 characaters required" : null;
+        return value.length > 2 ? "maximum 2 characaters required" : null;
     }
 }
 
 interface CategoryCreateState {
+    isFormPristine: boolean,
     language: LangEnum,
     name: string,
+    age: number,
     errors: {
-        [key: string]: string
+        [key: string]: {
+            isTouched: boolean,
+            message: string
+        }
     }
 }
 
@@ -42,12 +47,35 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
     constructor(props: any) {
         super(props);
         this.state = {
+            isFormPristine: true,
             language: LangEnum.DE,
             name: '',
+            age: 3,
             errors: {}
         };
         console.log(this.state)
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentDidMount() {
+        this.setInitialErrors();
+        console.log(this.state)
+        console.log(this.state)
+    }
+
+    setInitialErrors() {
+        let initialErrors: any = {};
+        Object.entries(CategoryFields)
+            .forEach(entry => {
+                const currentErrrorMessage = validators[entry[1]](this.state[entry[1]])
+                initialErrors[entry[1]] = {
+                    isTouched: false,
+                    message: currentErrrorMessage
+                }
+            });
+        this.setState({
+            errors: initialErrors
+        })
     }
 
     handleSubmit = (event: any) => {
@@ -61,17 +89,29 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         const formErrors = this.state.errors;
         const errorMessage = validators[name](value);
 
-        if (errorMessage) {
-            formErrors[name] = errorMessage;
-        } else {
-            delete formErrors[name];
-        }
 
-        const newState = {
+        formErrors[name] = {
+            isTouched: true,
+            message: errorMessage
+        };
+
+
+        let newState: any = {
             [name]: value,
             errors: formErrors
         }
+        if (this.state.isFormPristine) {
+            newState.isFormPristine = false
+        }
         this.setState(newState as any);
+    }
+
+    shouldDisableSubmit(): boolean {
+        const res = !!Object.entries(this.state.errors).find(entry => entry[1].message);
+        console.log(res)
+        const b: boolean = !!res;
+        console.log(b)
+        return b;
     }
 
     render() {
@@ -85,17 +125,17 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
                     </select>
 
 
-                    <input type='text' name={CategoryFields.NAME} onChange={this.handleChange} />
+                    <input type='text' value={this.state.name} name={CategoryFields.NAME} onChange={this.handleChange} />
                     <div>
-                        {this.state.errors[CategoryFields.NAME] ? this.state.errors[CategoryFields.NAME] : 'Kein Fehler!'}
+                        {this.state.errors[CategoryFields.NAME] && this.state.errors[CategoryFields.NAME].isTouched ? this.state.errors[CategoryFields.NAME].message : 'Kein Fehler!'}
                     </div>
 
-                    <input type='number' name={CategoryFields.AGE} onChange={this.handleChange} />
+                    <input type='number' value={this.state.age} name={CategoryFields.AGE} onChange={this.handleChange} />
                     <div>
-                        {this.state.errors[CategoryFields.AGE] ? this.state.errors[CategoryFields.AGE] : 'Kein Fehler!'}
+                        {this.state.errors[CategoryFields.AGE] && this.state.errors[CategoryFields.AGE].isTouched ? this.state.errors[CategoryFields.AGE].message : 'Kein Fehler!'}
                     </div>
 
-                    <button>Create</button>
+                    <button disabled={this.shouldDisableSubmit()}>Create</button>
                 </form>
 
 
