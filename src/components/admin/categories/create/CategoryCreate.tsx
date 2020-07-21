@@ -13,7 +13,7 @@ const createLangOptions = () => {
 }
 
 enum CategoryFields {
-    LANGUAGE = 'language',
+    COUNTRY = 'country',
     NAME = 'name',
     AGE = 'age'
 }
@@ -42,7 +42,7 @@ const validators: ValidatorsByField = {
     [CategoryFields.AGE]: (value: number) => {
         return value < 18 ? ["Age is < 18"] : null;
     },
-    [CategoryFields.LANGUAGE]: (value: LangEnum) => {
+    [CategoryFields.COUNTRY]: (value: LangEnum) => {
         return value.length > 2 ? ["maximum 2 characaters required"] : null;
     }
 }
@@ -55,7 +55,7 @@ interface ErrorMessages {
 }
 
 interface CategoryCreateState {
-    language: LangEnum,
+    country: LangEnum,
     name: string,
     age: number,
     errors: ErrorMessages
@@ -66,7 +66,7 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            language: LangEnum.DE,
+            country: LangEnum.DE,
             name: '',
             age: 3,
             errors: {}
@@ -155,7 +155,7 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
                 <h1>Category Create</h1>
 
                 <form onSubmit={this.handleSubmit} >
-                    <select value={this.state.language} name={CategoryFields.LANGUAGE} onChange={this.handleChange}>
+                    <select value={this.state.country} name={CategoryFields.COUNTRY} onChange={this.handleChange}>
                         {createLangOptions()}
                     </select>
 
