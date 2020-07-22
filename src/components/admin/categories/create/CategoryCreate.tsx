@@ -1,5 +1,5 @@
 import React from "react";
-import { LangEnum, csrfHeaderName } from "../../../../constants/appConstants";
+import { LangEnum, csrfHeaderName, defaultLang, tokenAttributeName } from "../../../../constants/appConstants";
 import { languagesArray } from '../../../../constants/appConstants';
 import ValidationMessages from '../../../../shared/ValidationMessages/ValidationMessages';
 import api from '../../../../util/api';
@@ -49,8 +49,10 @@ interface ErrorMessages {
 }
 
 interface CategoryCreateState {
-    country: LangEnum,
-    name: string,
+    category: {
+        country: LangEnum,
+        name: string
+    }
     errors: ErrorMessages
 }
 
@@ -59,8 +61,10 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            country: LangEnum.DE,
-            name: '',
+            category: {
+                country: defaultLang,
+                name: ''
+            },
             errors: {}
         };
         console.log(this.state)
@@ -69,15 +73,13 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
     componentDidMount() {
         this.setInitialErrors();
-        console.log(this.state)
-        console.log(this.state)
     }
 
     setInitialErrors() {
         let initialErrors: ErrorMessages = {};
         Object.entries(CategoryFields)
             .forEach(entry => {
-                const currentErrrorMessage = validators[entry[1]](this.state[entry[1]])
+                const currentErrrorMessage = validators[entry[1]](this.state.category[entry[1]])
                 initialErrors[entry[1]] = {
                     isTouched: false,
                     messages: currentErrrorMessage
@@ -93,13 +95,12 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
         const config = {
             headers: {
-                [csrfHeaderName]: localStorage.getItem('token')
+                [csrfHeaderName]: localStorage.getItem(tokenAttributeName)
             }
         };
-        console.log(this.state)
 
         api
-            .post(`/admin/category/create2`, {country: null, name: null}, config)
+            .post(`/admin/category/create2`, this.state.category, config)
             .then((res) => {
                 console.log(res.data);
             })
@@ -108,15 +109,14 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
             });
 
         console.log('submittted')
-        console.log(event)
     }
 
     handleChange = (event: any) => {
         event.preventDefault();
+        
         const { name, value } = event.target;
         const formErrors = this.state.errors;
         const errorMessages: string[] | null = validators[name](value);
-
 
         formErrors[name] = {
             isTouched: true,
@@ -124,7 +124,10 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         };
 
         let newState = {
-            [name]: value,
+            category: {
+                ...this.state.category,
+                [name]: value,
+            },
             errors: formErrors
         }
         this.setState(newState as any);
@@ -148,12 +151,12 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
                 <h1>Category Create</h1>
 
                 <form onSubmit={this.handleSubmit} >
-                    <select value={this.state.country} name={CategoryFields.COUNTRY} onChange={this.handleChange}>
+                    <select value={this.state.category.country} name={CategoryFields.COUNTRY} onChange={this.handleChange}>
                         {createLangOptions()}
                     </select>
 
 
-                    <input type='text' value={this.state.name} name={CategoryFields.NAME} onChange={this.handleChange} />
+                    <input type='text' value={this.state.category.name} name={CategoryFields.NAME} onChange={this.handleChange} />
                     {this.hasFieldErrors(CategoryFields.NAME) ?
                         <ValidationMessages messages={this.state.errors[CategoryFields.NAME].messages} /> : 'Kein'}
 
