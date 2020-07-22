@@ -102,7 +102,6 @@ class AvatarContainer extends React.PureComponent<AvatarContainerProps, any> {
       .catch((e: any) => {
         console.log(e)
       });
-
   }
 
   render() {
