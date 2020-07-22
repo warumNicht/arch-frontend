@@ -15,13 +15,10 @@ const createLangOptions = () => {
 enum CategoryFields {
     COUNTRY = 'country',
     NAME = 'name',
-    AGE = 'age'
 }
 
 interface ValidatorsByField {
-    [key: string]: (value: any) => string[] | null,
-    // [CategoryFields.AGE]: (value: number) => string[] | null,
-    // [CategoryFields.LANGUAGE]: (value: LangEnum) => string[] | null,
+    [key: string]: (value: any) => string[] | null
 }
 
 const validators: ValidatorsByField = {
@@ -39,9 +36,6 @@ const validators: ValidatorsByField = {
 
         return messages.length > 0 ? messages : null;
     },
-    [CategoryFields.AGE]: (value: number) => {
-        return value < 18 ? ["Age is < 18"] : null;
-    },
     [CategoryFields.COUNTRY]: (value: LangEnum) => {
         return value.length > 2 ? ["maximum 2 characaters required"] : null;
     }
@@ -57,7 +51,6 @@ interface ErrorMessages {
 interface CategoryCreateState {
     country: LangEnum,
     name: string,
-    age: number,
     errors: ErrorMessages
 }
 
@@ -68,7 +61,6 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         this.state = {
             country: LangEnum.DE,
             name: '',
-            age: 3,
             errors: {}
         };
         console.log(this.state)
@@ -104,11 +96,12 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
                 [csrfHeaderName]: localStorage.getItem('token')
             }
         };
+        console.log(this.state)
 
         api
-            .post(`/admin/category/create2`, { country: 'EN', name: 'Ajax' }, config)
+            .post(`/admin/category/create2`, {country: null, name: null}, config)
             .then((res) => {
-                console.log(res);
+                console.log(res.data);
             })
             .catch((e: any) => {
                 console.log(e)
@@ -163,10 +156,6 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
                     <input type='text' value={this.state.name} name={CategoryFields.NAME} onChange={this.handleChange} />
                     {this.hasFieldErrors(CategoryFields.NAME) ?
                         <ValidationMessages messages={this.state.errors[CategoryFields.NAME].messages} /> : 'Kein'}
-
-                    <input type='number' value={this.state.age} name={CategoryFields.AGE} onChange={this.handleChange} />
-                    {this.hasFieldErrors(CategoryFields.AGE) ?
-                        <ValidationMessages messages={this.state.errors[CategoryFields.AGE].messages} /> : 'Kein'}
 
                     <button disabled={this.shouldDisableSubmit()}>Create</button>
                 </form>
