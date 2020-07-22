@@ -100,7 +100,7 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         };
 
         api
-            .post(`/admin/category/create2`, this.state.category, config)
+            .post(`/admin/category/create`, this.state.category, config)
             .then((res) => {
                 console.log(res.data);
             })
@@ -113,7 +113,7 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
     handleChange = (event: any) => {
         event.preventDefault();
-        
+
         const { name, value } = event.target;
         const formErrors = this.state.errors;
         const errorMessages: string[] | null = validators[name](value);

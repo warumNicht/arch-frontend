@@ -1,6 +1,7 @@
 import React from "react";
 import api from '../../util/api';
 import UserService from '../../services/UserService';
+import { tokenAttributeName } from "../../constants/appConstants";
 
 export class Login extends React.PureComponent<any, any> {
   constructor(props: any) {
@@ -29,7 +30,7 @@ export class Login extends React.PureComponent<any, any> {
           token: res.data,
         });
         console.log(res.data);
-        localStorage.setItem('token', res.data);
+        localStorage.setItem(tokenAttributeName, res.data);
         this.props.login(res.data);
         this.props.setReduxUser(UserService.getPrincipal())
         const { from } = this.props.location.state || { from: { pathname: "/" } };
