@@ -4,10 +4,13 @@ const csrfHeaderName: string = 'X-CSRF-Token';
 enum LangEnum {
     EN = 'en',
     DE = 'de',
-    FR = 'fr'
+    FR = 'fr',
+    FI = 'fi'
 }
 
-const defaultLang: string = LangEnum.EN;
+const defaultLang: LangEnum = LangEnum.EN;
+
+export const tokenAttributeName: string = 'token';
 
 export const cookieValidity: number = 60 * 60 * 1000; // 60 min
 
