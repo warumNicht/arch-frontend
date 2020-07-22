@@ -6,7 +6,7 @@ import ArchitectureAppStore, { Category } from "../../../../redux/interfaces/Arc
 const createCategoriesLinks = (categories: Category[]) => {
     return (
         categories.map((category: Category) => {
-            return <Link to={`/en/admin/category/edit/${category.id}`}>{category.name}</Link>
+            return <Link key={category.id} to={`/en/admin/category/edit/${category.id}`}>{category.name}</Link>
         })
     )
 }
