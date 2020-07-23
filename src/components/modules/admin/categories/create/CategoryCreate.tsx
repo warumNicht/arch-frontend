@@ -3,6 +3,7 @@ import { LangEnum, csrfHeaderName, defaultLang, tokenAttributeName } from "../..
 import { languagesArray } from '../../../../../constants/appConstants';
 import ValidationMessages from '../../../../../shared/ValidationMessages/ValidationMessages';
 import api from '../../../../../util/api';
+import { ErrorMessages, ValidatorsByField } from "../../AdminInterfaces";
 
 const createLangOptions = () => {
     return (
@@ -15,10 +16,6 @@ const createLangOptions = () => {
 enum CategoryFields {
     COUNTRY = 'country',
     NAME = 'name',
-}
-
-interface ValidatorsByField {
-    [key: string]: (value: any) => string[] | null
 }
 
 const validators: ValidatorsByField = {
@@ -41,13 +38,6 @@ const validators: ValidatorsByField = {
     }
 }
 
-interface ErrorMessages {
-    [key: string]: {
-        isTouched: boolean,
-        messages: string[] | null
-    }
-}
-
 interface CategoryCreateState {
     category: {
         country: LangEnum,
@@ -55,7 +45,6 @@ interface CategoryCreateState {
     }
     errors: ErrorMessages
 }
-
 
 class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
     constructor(props: any) {
@@ -141,9 +130,9 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         return b;
     }
 
-    hasFieldErrors(fieldName: string): boolean {
-        return this.state.errors[fieldName] && this.state.errors[fieldName].isTouched && !!this.state.errors[fieldName].messages;
-    }
+    // hasFieldErrors(fieldName: string): boolean {
+    //     return this.state.errors[fieldName] && this.state.errors[fieldName].isTouched && !!this.state.errors[fieldName].messages;
+    // }
 
     render() {
         return (
@@ -157,8 +146,8 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
 
                     <input type='text' value={this.state.category.name} name={CategoryFields.NAME} onChange={this.handleChange} />
-                    {this.hasFieldErrors(CategoryFields.NAME) ?
-                        <ValidationMessages messages={this.state.errors[CategoryFields.NAME].messages} /> : 'Kein'}
+                    
+                    <ValidationMessages validationErrors={this.state.errors[CategoryFields.NAME]} /> 
 
                     <button disabled={this.shouldDisableSubmit()}>Create</button>
                 </form>
