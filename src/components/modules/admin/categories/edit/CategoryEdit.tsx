@@ -13,8 +13,8 @@ const config = {
 const validators: ValidatorsByField = {
     name: (value: string) => {
         let messages: string[] = [];
-        if (value.length === 0) {
-            messages.push("Should not be empty");
+        if (!value) {
+            return null;
         }
         if (value.length < 3) {
             messages.push("minimum 3 characaters required")
@@ -142,14 +142,35 @@ class CategoryEdit extends React.PureComponent<any, CategoryEditState> {
                     messages: this.getWholeFormErrors(newLocalNames)
                 }
             }
-        })
-        console.log(name, value)
+        });
+    }
+
+    shouldDisableSubmit(): boolean {
+        const hasAnyFieldErrors: boolean = !!Object.entries(this.state.errors).find(entry => entry[1].messages);
+        if (!hasAnyFieldErrors) {
+            const isFormTouched: boolean = !!Object.entries(this.state.errors).find(entry => entry[1].isTouched);
+            return !isFormTouched;
+        }
+        return hasAnyFieldErrors;
     }
 
     handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        const categoryId = this.props.match.params.categoryId;
 
-
+        const config = {
+            headers: {
+                [csrfHeaderName]: localStorage.getItem(tokenAttributeName)
+            }
+        };
+        api
+            .put(`/admin/category/edit/${categoryId}`, {localNames: this.state.localNames} ,config)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((e: any) => {
+                console.log(e)
+            });
 
         console.log(this.state)
     }
@@ -163,7 +184,7 @@ class CategoryEdit extends React.PureComponent<any, CategoryEditState> {
                     {this.createLanguageInputs(this.state.localNames)}
 
                     <ValidationMessages validationErrors={this.state.errors['wholeForm']} />
-                    <button >Edit</button>
+                    <button disabled={this.shouldDisableSubmit()}>Edit</button>
                 </form>
 
             </div>
