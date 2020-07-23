@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, RouteComponentProps } from "react-router-dom";
 import { withTranslation, Trans, WithTranslation } from 'react-i18next';
 import CategoriesModule from "./categories/CategoriesModule";
 import ProjectsModule from "./projects/ProjectsModule";
-import { getLangPrefix } from "../../util/LangPrefixUtil";
+import { getLangPrefix } from "../../../util/LangPrefixUtil";
 
 class AdminModule extends React.PureComponent<WithTranslation & RouteComponentProps> {
 

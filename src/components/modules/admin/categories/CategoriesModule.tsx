@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect, RouteComponentProps } from "react-router-dom";
-import { getLangPrefix } from "../../../util/LangPrefixUtil";
+import { getLangPrefix } from "../../../../util/LangPrefixUtil";
 import CategoryCreate from "./create/CategoryCreate";
 import CategoriesList from "./list/CategoriesList";
 import CategoryEdit from "./edit/CategoryEdit";

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import ArchitectureAppStore, { Category } from "../../../../redux/interfaces/ArchitectureAppStore";
+import ArchitectureAppStore, { Category } from "../../../../../redux/interfaces/ArchitectureAppStore";
 
 const createCategoriesLinks = (categories: Category[]) => {
     return (

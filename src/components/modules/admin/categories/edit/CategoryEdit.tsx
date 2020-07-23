@@ -1,6 +1,6 @@
 import React, { FormEvent } from "react";
-import api from '../../../../util/api';
-import { csrfHeaderName, tokenAttributeName } from "../../../../constants/appConstants";
+import api from '../../../../../util/api';
+import { csrfHeaderName, tokenAttributeName } from "../../../../../constants/appConstants";
 
 const config = {
     headers: {
