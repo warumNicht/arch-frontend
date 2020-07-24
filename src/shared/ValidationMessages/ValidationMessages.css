@@ -5,4 +5,5 @@
 
 .validation-messages-holder small{
     color: red;
+    font-weight: bold;
 }
