@@ -1,0 +1,8 @@
+.validation-messages-holder{
+    display: flex;
+    flex-direction: column;
+}
+
+.validation-messages-holder small{
+    color: red;
+}
