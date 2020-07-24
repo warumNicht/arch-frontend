@@ -100,7 +100,6 @@ class ArticleCreate extends React.PureComponent<any, ArticleCreateState> {
                     <button >Create</button>
                 </form>
 
-
             </div>
         );
     }
