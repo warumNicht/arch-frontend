@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { LangEnum, csrfHeaderName, defaultLang, tokenAttributeName } from "../../../../../constants/appConstants";
 import { languagesArray } from '../../../../../constants/appConstants';
 import ValidationMessages from '../../../../../shared/ValidationMessages/ValidationMessages';
@@ -79,7 +79,7 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         })
     }
 
-    handleSubmit = (event: any) => {
+    handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const config = {
@@ -100,7 +100,7 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         console.log('submittted')
     }
 
-    handleChange = (event: any) => {
+    handleChange = (event: React.BaseSyntheticEvent) => {
         event.preventDefault();
 
         const { name, value } = event.target;
