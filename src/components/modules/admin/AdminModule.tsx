@@ -3,9 +3,9 @@ import { Switch, Route, Redirect, RouteComponentProps } from "react-router-dom";
 import { withTranslation, Trans, WithTranslation } from 'react-i18next';
 import CategoriesModule from "./categories/CategoriesModule";
 import ProjectsModule from "./projects/ProjectsModule";
-import { getLangPrefix } from "../../util/LangPrefixUtil";
+import { getLangPrefix } from "../../../util/LangPrefixUtil";
 
-class AdminComponent extends React.PureComponent<WithTranslation & RouteComponentProps> {
+class AdminModule extends React.PureComponent<WithTranslation & RouteComponentProps> {
 
     render() {
         return (
@@ -25,4 +25,4 @@ class AdminComponent extends React.PureComponent<WithTranslation & RouteComponen
     }
 }
 
-export default withTranslation(['translation', 'navbar'])(AdminComponent);
+export default withTranslation(['translation', 'navbar'])(AdminModule);

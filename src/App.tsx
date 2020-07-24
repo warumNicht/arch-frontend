@@ -8,7 +8,7 @@ import Dashboard from "./components/dashboard/dashboard";
 import { PrivateRoute } from "./shared/PrivateRoute";
 import { UserRoles } from "./constants/appConstants";
 import { Unauthorized } from "./components/unauthorized/Unauthorized";
-import AdminModule from "./components/admin/AdminModule";
+import AdminModule from "./components/modules/admin/AdminModule";
 import UserModule from "./components/modules/user/UserModule";
 import { useTranslation } from 'react-i18next';
 import { withCookies } from 'react-cookie';

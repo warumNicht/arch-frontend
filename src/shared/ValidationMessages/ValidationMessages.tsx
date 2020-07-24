@@ -1,5 +1,6 @@
 import React from "react";
 import './ValidationMessages.css';
+import { ErrorMessage } from "../../components/modules/admin/AdminInterfaces";
 
 const listMessages = (messages: string[]) => {
     return (
@@ -9,14 +10,20 @@ const listMessages = (messages: string[]) => {
     )
 }
 
-class ValidationMessages extends React.PureComponent<any> {
+interface ValidationMessagesProps{
+    validationErrors: ErrorMessage
+}
+
+class ValidationMessages extends React.PureComponent<ValidationMessagesProps> {
     
 
     render() {
-        console.log(this.props.messages)
+        if(!this.props.validationErrors || !this.props.validationErrors.isTouched || !this.props.validationErrors.messages ){
+            return '';
+        }
         return (
             <div className='validation-messages-holder'>
-                {listMessages(this.props.messages)}
+                {listMessages(this.props.validationErrors.messages)}
             </div>
         );
     }
