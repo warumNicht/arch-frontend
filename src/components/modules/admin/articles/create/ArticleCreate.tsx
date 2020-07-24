@@ -1,9 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
 import { LangEnum, csrfHeaderName, defaultLang, tokenAttributeName } from "../../../../../constants/appConstants";
 import { languagesArray } from '../../../../../constants/appConstants';
 import ValidationMessages from '../../../../../shared/ValidationMessages/ValidationMessages';
 import api from '../../../../../util/api';
 import { ErrorMessages, ValidatorsByField } from "../../AdminInterfaces";
+import ArchitectureAppStore, { Category } from "../../../../../redux/interfaces/ArchitectureAppStore";
 
 const createLangOptions = () => {
     return (
@@ -13,10 +15,21 @@ const createLangOptions = () => {
     )
 }
 
+const createCategoryOptions = (categories: Category[]) => {
+    return (
+        categories.map((category: Category) => {
+            return <option key={category.id} value={category.id}>{category.name}</option>
+        })
+    )
+}
+
 enum ArticleFields {
     COUNTRY = 'country',
     TITLE = 'title',
     CONTENT = 'content',
+    MAIN_IMAGE_NAME = 'mainImage.name',
+    MAIN_IMAGE_URL = 'mainImage.url',
+    CATEGORY_ID = 'categoryId'
 }
 
 const validators: ValidatorsByField = {
@@ -39,11 +52,11 @@ const validators: ValidatorsByField = {
     }
 }
 
-interface ImageUrlModel{
-    url:string
+interface ImageUrlModel {
+    url: string
 }
 
-interface ImageBindingModel extends ImageUrlModel{
+interface ImageBindingModel extends ImageUrlModel {
     name: string
 }
 
@@ -51,7 +64,12 @@ interface ArticleCreateModel {
     country: LangEnum,
     title: string,
     content: string,
-    mainImage?: ImageBindingModel
+    mainImage?: ImageBindingModel,
+    categoryId?: string
+}
+
+interface ArticleCreateProps {
+    categories: Category[]
 }
 
 interface ArticleCreateState {
@@ -59,7 +77,7 @@ interface ArticleCreateState {
     errors: ErrorMessages
 }
 
-class ArticleCreate extends React.PureComponent<any, ArticleCreateState> {
+class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreateState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -70,11 +88,43 @@ class ArticleCreate extends React.PureComponent<any, ArticleCreateState> {
             },
             errors: {}
         };
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange = (event: React.BaseSyntheticEvent) => {
         event.preventDefault();
+        const { name, value } = event.target;
 
+        let newState: any = {
+            ...this.state.article,
+        }
+
+        if (name.includes('.')) {
+            newState = this.setNestedKey(newState, name, value);
+        } else {
+            newState[name] = value;
+        }
+
+        this.setState({
+            article: newState
+        })
+
+        console.log(newState)
+
+    }
+
+    setNestedKey(obj: any, path: string, value: any) {
+        const pList = path.split('.');
+        const key = pList.pop();
+        if (!key) {
+            return obj;
+        }
+        const pointer = pList.reduce((accumulator, currentValue) => {
+            if (accumulator[currentValue] === undefined) accumulator[currentValue] = {};
+            return accumulator[currentValue];
+        }, obj);
+        pointer[key] = value;
+        return obj;
     }
 
 
@@ -85,16 +135,45 @@ class ArticleCreate extends React.PureComponent<any, ArticleCreateState> {
                 <h1>Article Create</h1>
 
                 <form >
-                    <select value={this.state.article.country} name={ArticleFields.COUNTRY} onChange={this.handleChange}>
-                        {createLangOptions()}
-                    </select>
+                    <div>
+                        <select value={this.state.article.categoryId} name={ArticleFields.CATEGORY_ID} onChange={this.handleChange}>
+                            {createCategoryOptions(this.props.categories)}
+                        </select>
 
-                    <input type='text' value={this.state.article.title} name={ArticleFields.TITLE} onChange={this.handleChange} />
+                        <select value={this.state.article.country} name={ArticleFields.COUNTRY} onChange={this.handleChange}>
+                            {createLangOptions()}
+                        </select>
+                    </div>
 
-                    <textarea  value={this.state.article.content} name={ArticleFields.CONTENT} onChange={this.handleChange} />
+                    <div>
+                        <input
+                            type='text'
+                            value={this.state.article.title}
+                            name={ArticleFields.TITLE}
+                            onChange={this.handleChange} />
+                    </div>
+
+                    <div>
+                        <textarea value={this.state.article.content} name={ArticleFields.CONTENT} onChange={this.handleChange} />
+                    </div>
+
+                    <div>
+                        <input
+                            type='text'
+                            value={this.state.article.mainImage?.name}
+                            name={ArticleFields.MAIN_IMAGE_NAME}
+                            onChange={this.handleChange} />
+                    </div>
+
+                    <div>
+                        <input
+                            type='text'
+                            value={this.state.article.mainImage?.url}
+                            name={ArticleFields.MAIN_IMAGE_URL}
+                            onChange={this.handleChange} />
+                    </div>
 
 
-                    
                     {/* <ValidationMessages validationErrors={null} />  */}
 
                     <button >Create</button>
@@ -106,4 +185,8 @@ class ArticleCreate extends React.PureComponent<any, ArticleCreateState> {
     }
 }
 
-export default ArticleCreate;
+const mapStateToProps = (state: ArchitectureAppStore) => ({
+    categories: state.categories
+});
+
+export default connect(mapStateToProps)(ArticleCreate);
