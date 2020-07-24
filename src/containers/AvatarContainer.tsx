@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import ArchitectureAppStore, { User, Category } from "../redux/interfaces/ArchitectureAppStore";
 import { Link, RouteComponentProps } from "react-router-dom";
 import "./AvatarContainer.css";
-import { csrfHeaderName } from '../constants/appConstants';
+import { csrfHeaderName, tokenAttributeName } from '../constants/appConstants';
 import api from '../util/api';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Cookies } from 'react-cookie';
@@ -82,7 +82,7 @@ class AvatarContainer extends React.PureComponent<AvatarContainerProps, any> {
   }
 
   logout() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(tokenAttributeName);
     if (!token) {
       return;
     }
@@ -91,7 +91,7 @@ class AvatarContainer extends React.PureComponent<AvatarContainerProps, any> {
         [csrfHeaderName]: token
       }
     };
-    localStorage.removeItem('token');
+    localStorage.removeItem(tokenAttributeName);
     api.post(`/users/custom-logout`, null, config)
       .then((res) => {
         console.log(res);
