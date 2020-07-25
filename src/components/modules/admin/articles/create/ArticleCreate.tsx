@@ -49,19 +49,26 @@ const validators: ValidatorsByField = {
         return messages.length > 0 ? messages : null;
     },
     [ArticleFields.TITLE]: (value: string) => {
-        return value.length > 2 ? ["minimum 2 characaters required"] : null;
+        return value.length < 2 ? ["minimum 2 characaters required"] : null;
+    },
+    [ArticleFields.MAIN_IMAGE]: (newState: ArticleCreateState) => {
+        if (!newState.errors[ArticleFields.MAIN_IMAGE_NAME].messages && !newState.errors[ArticleFields.MAIN_IMAGE_URL].messages) {
+            return null;
+        }
+        const res = !newState.article.mainImage?.name || !newState.article.mainImage?.url;
+        return res ? ['Image not valid'] : null;
     },
     [ArticleFields.MAIN_IMAGE_NAME]: (value: string) => {
-        if(!value){
+        if (!value) {
             return null;
         }
-        return value.length > 2 ? ["minimum 2 characaters required"] : null;
+        return value.length < 2 ? ["minimum 2 characaters required"] : null;
     },
     [ArticleFields.MAIN_IMAGE_URL]: (value: string) => {
-        if(!value){
+        if (!value) {
             return null;
         }
-        return value.length > 2 ? ["minimum 2 characaters required"] : null;
+        return value.length < 2 ? ["minimum 2 characaters required"] : null;
     }
 }
 
@@ -101,7 +108,6 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
             },
             errors: {}
         };
-        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
@@ -113,7 +119,7 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         Object.entries(ArticleFields)
             .forEach(entry => {
                 const fieldValidator = validators[entry[1]];
-                if(!fieldValidator){
+                if (entry[1] === ArticleFields.MAIN_IMAGE || !fieldValidator) {
                     return;
                 }
                 const currentErrrorMessage = fieldValidator((this.state.article as any)[entry[1]])
@@ -122,6 +128,12 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                     messages: currentErrrorMessage
                 }
             });
+
+        initialErrors[ArticleFields.MAIN_IMAGE] = {
+            isTouched: false,
+            messages: validators[ArticleFields.MAIN_IMAGE]({ article: this.state.article, errors: initialErrors })
+        }
+
         this.setState({
             errors: initialErrors
         })
@@ -131,25 +143,39 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         event.preventDefault();
         const { name, value } = event.target;
 
-        let newState: any = {
-            ...this.state.article,
+        let newArticle: ArticleCreateModel = {
+            ...this.state.article
+        }
+        this.setNestedKey(newArticle, name, value);
+
+
+        let newErrors: any = {
+            ...this.state.errors
         }
 
-        if (name.includes('.')) {
-            newState = this.setNestedKey(newState, name, value);
-        } else {
-            newState[name] = value;
+        const fieldValidator = validators[name];
+        if (!!fieldValidator) {
+            newErrors[name] = {
+                isTouched: true,
+                messages: fieldValidator(value)
+            }
+            newErrors[ArticleFields.MAIN_IMAGE] = {
+                isTouched: true,
+                messages: validators[ArticleFields.MAIN_IMAGE]({ article: newArticle, errors: newErrors })
+            }
         }
 
         this.setState({
-            article: newState
-        })
-
-        console.log(newState)
-
+            article: newArticle,
+            errors: newErrors
+        });
     }
 
     setNestedKey(obj: any, path: string, value: any) {
+        if (!path.includes('.')) {
+            obj[path] = value;
+            return obj;
+        }
         const pList = path.split('.');
         const key = pList.pop();
         if (!key) {
@@ -161,6 +187,10 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         }, obj);
         pointer[key] = value;
         return obj;
+    }
+
+    shouldDisableSubmit(): boolean {
+        return !!Object.entries(this.state.errors).find(entry => entry[1].messages);
     }
 
 
@@ -212,7 +242,7 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
 
                     {/* <ValidationMessages validationErrors={null} />  */}
 
-                    <button >Create</button>
+                    <button disabled={this.shouldDisableSubmit()}>Create</button>
                 </form>
 
 
