@@ -27,13 +27,14 @@ enum ArticleFields {
     COUNTRY = 'country',
     TITLE = 'title',
     CONTENT = 'content',
+    MAIN_IMAGE = 'mainImage',
     MAIN_IMAGE_NAME = 'mainImage.name',
     MAIN_IMAGE_URL = 'mainImage.url',
     CATEGORY_ID = 'categoryId'
 }
 
 const validators: ValidatorsByField = {
-    [ArticleFields.TITLE]: (value: string) => {
+    [ArticleFields.CONTENT]: (value: string) => {
         let messages: string[] = [];
         if (value.length === 0) {
             messages.push("Should not be empty");
@@ -47,8 +48,20 @@ const validators: ValidatorsByField = {
 
         return messages.length > 0 ? messages : null;
     },
-    [ArticleFields.TITLE]: (value: LangEnum) => {
-        return value.length > 2 ? ["maximum 2 characaters required"] : null;
+    [ArticleFields.TITLE]: (value: string) => {
+        return value.length > 2 ? ["minimum 2 characaters required"] : null;
+    },
+    [ArticleFields.MAIN_IMAGE_NAME]: (value: string) => {
+        if(!value){
+            return null;
+        }
+        return value.length > 2 ? ["minimum 2 characaters required"] : null;
+    },
+    [ArticleFields.MAIN_IMAGE_URL]: (value: string) => {
+        if(!value){
+            return null;
+        }
+        return value.length > 2 ? ["minimum 2 characaters required"] : null;
     }
 }
 
@@ -89,6 +102,29 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
             errors: {}
         };
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentDidMount() {
+        this.setInitialErrors();
+    }
+
+    setInitialErrors() {
+        let initialErrors: ErrorMessages = {};
+        Object.entries(ArticleFields)
+            .forEach(entry => {
+                const fieldValidator = validators[entry[1]];
+                if(!fieldValidator){
+                    return;
+                }
+                const currentErrrorMessage = fieldValidator((this.state.article as any)[entry[1]])
+                initialErrors[entry[1]] = {
+                    isTouched: false,
+                    messages: currentErrrorMessage
+                }
+            });
+        this.setState({
+            errors: initialErrors
+        })
     }
 
     handleChange = (event: React.BaseSyntheticEvent) => {
