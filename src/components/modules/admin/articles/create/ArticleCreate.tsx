@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { connect } from "react-redux";
 import { LangEnum, csrfHeaderName, defaultLang, tokenAttributeName } from "../../../../../constants/appConstants";
 import { languagesArray } from '../../../../../constants/appConstants';
@@ -85,7 +85,7 @@ interface ArticleCreateModel {
     title: string,
     content: string,
     mainImage?: ImageBindingModel,
-    categoryId?: string
+    categoryId: string
 }
 
 interface ArticleCreateProps {
@@ -104,7 +104,8 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
             article: {
                 country: defaultLang,
                 title: 'Château de Chenonceau',
-                content: 'Le château dit des dames'
+                content: 'Le château dit des dames',
+                categoryId: this.props.categories.length > 0 ? this.props.categories[0].id : ''
             },
             errors: {}
         };
@@ -112,6 +113,15 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
 
     componentDidMount() {
         this.setInitialErrors();
+    }
+
+    componentWillReceiveProps(props: ArticleCreateProps){
+        this.setState({
+            article:{
+                ...this.state.article,
+                categoryId: props.categories.length > 0 ? props.categories[0].id : ''
+            }
+        })
     }
 
     setInitialErrors() {
@@ -193,6 +203,32 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         return !!Object.entries(this.state.errors).find(entry => entry[1].messages);
     }
 
+    handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const config = {
+            headers: {
+                [csrfHeaderName]: localStorage.getItem(tokenAttributeName)
+            }
+        };
+
+        const article = {
+            ...this.state.article,
+            country: this.state.article.country.toUpperCase()
+        }
+
+        api
+            .post(`/admin/articles/create`, article, config)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((e: any) => {
+                console.log(e)
+            });
+
+        console.log('submittted')
+    }
+
 
 
     render() {
@@ -200,8 +236,9 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
             <div>
                 <h1>Article Create</h1>
 
-                <form >
+                <form onSubmit={this.handleSubmit}>
                     <div>
+                        <div>Id {this.state.article.categoryId}</div>
                         <select value={this.state.article.categoryId} name={ArticleFields.CATEGORY_ID} onChange={this.handleChange}>
                             {createCategoryOptions(this.props.categories)}
                         </select>
