@@ -34,22 +34,37 @@ enum ArticleFields {
 }
 
 const validators: ValidatorsByField = {
+    [ArticleFields.TITLE]: (value: string) => {
+        let messages: string[] = [];
+        if (value.length === 0) {
+            messages.push("Should not be empty");
+            messages.push("Should begin with uppercase");
+        }
+        if (value.length > 0 ) {
+            const pattern = /^\p{Lu}.*$/u; // u = unicode
+            if(!pattern.test(value)){
+                messages.push("Should begin with uppercase");
+            }
+        }
+        if (value.length < 3 || value.length > 100) {
+            messages.push("length must be between 3 and 100")
+        }
+        return messages.length > 0 ? messages : null;
+    },
     [ArticleFields.CONTENT]: (value: string) => {
         let messages: string[] = [];
         if (value.length === 0) {
             messages.push("Should not be empty");
+            messages.push("Should begin with uppercase");
         }
-        if (value.length < 3) {
-            messages.push("minimum 3 characaters required")
+        if (value.length < 5) {
+            messages.push("minimum 5 characaters required")
         }
         if (value.length > 0 && value.charAt(0) !== value.charAt(0).toUpperCase()) {
             messages.push("Should begin with uppercase");
         }
 
         return messages.length > 0 ? messages : null;
-    },
-    [ArticleFields.TITLE]: (value: string) => {
-        return value.length < 2 ? ["minimum 2 characaters required"] : null;
     },
     [ArticleFields.MAIN_IMAGE]: (newState: ArticleCreateState) => {
         if(!newState.article.mainImage?.name && !newState.article.mainImage?.url){
@@ -108,7 +123,7 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         this.state = {
             article: {
                 country: defaultLang,
-                title: 'Château de Chenonceau',
+                title: 'Ä',
                 content: 'Le château dit des dames',
                 categoryId: this.props.categories.length > 0 ? this.props.categories[0].id : ''
             },
@@ -259,10 +274,12 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                             value={this.state.article.title}
                             name={ArticleFields.TITLE}
                             onChange={this.handleChange} />
+                            <ValidationMessages validationErrors={this.state.errors[ArticleFields.TITLE]}/>
                     </div>
 
                     <div>
                         <textarea value={this.state.article.content} name={ArticleFields.CONTENT} onChange={this.handleChange} />
+                        <ValidationMessages validationErrors={this.state.errors[ArticleFields.CONTENT]}/>
                     </div>
 
                     <div>
@@ -271,6 +288,7 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                             value={this.state.article.mainImage?.name}
                             name={ArticleFields.MAIN_IMAGE_NAME}
                             onChange={this.handleChange} />
+                            <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE_NAME]}/>
                     </div>
 
                     <div>
@@ -279,10 +297,9 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                             value={this.state.article.mainImage?.url}
                             name={ArticleFields.MAIN_IMAGE_URL}
                             onChange={this.handleChange} />
+                            <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE_URL]}/>
                     </div>
-
-
-                    {/* <ValidationMessages validationErrors={null} />  */}
+                    <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE]}/>
 
                     <button disabled={this.shouldDisableSubmit()}>Create</button>
                 </form>
