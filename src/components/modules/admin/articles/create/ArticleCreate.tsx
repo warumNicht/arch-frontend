@@ -52,11 +52,16 @@ const validators: ValidatorsByField = {
         return value.length < 2 ? ["minimum 2 characaters required"] : null;
     },
     [ArticleFields.MAIN_IMAGE]: (newState: ArticleCreateState) => {
+        if(!newState.article.mainImage?.name && !newState.article.mainImage?.url){
+            return null;
+        }
+        if(!newState.article.mainImage?.name || !newState.article.mainImage?.url){
+            return ['Image not valid'];
+        }
         if (!newState.errors[ArticleFields.MAIN_IMAGE_NAME].messages && !newState.errors[ArticleFields.MAIN_IMAGE_URL].messages) {
             return null;
         }
-        const res = !newState.article.mainImage?.name || !newState.article.mainImage?.url;
-        return res ? ['Image not valid'] : null;
+        return ['Image not valid'];
     },
     [ArticleFields.MAIN_IMAGE_NAME]: (value: string) => {
         if (!value) {
