@@ -87,9 +87,21 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
             <div>
                 Article edit {this.props.match.params.articleId}
                 <div>
+                    {this.state.article.mainImage ?
+                        <div>
+                            <button>Change main image</button>
+                        </div>
+                        :
+                        <div>
+                            <button>Add main image</button>
+                        </div>}
+                </div>
+
+                <div>
                     {this.createLanguageDivs(this.state.article.localContent)}
                 </div>
             </div>
+
         )
     }
 }
