@@ -10,3 +10,16 @@ export interface ErrorMessages {
 export interface ValidatorsByField {
     [key: string]: (value: any) => string[] | null
 }
+
+interface ImageUrlModel {
+    url: string
+}
+
+export interface ImageModel extends ImageUrlModel {
+    name: string
+}
+
+export interface LocalContent {
+    title: string,
+    content: string
+}

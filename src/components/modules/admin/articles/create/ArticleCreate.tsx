@@ -4,7 +4,7 @@ import { LangEnum, csrfHeaderName, defaultLang, tokenAttributeName } from "../..
 import { languagesArray } from '../../../../../constants/appConstants';
 import ValidationMessages from '../../../../../shared/ValidationMessages/ValidationMessages';
 import api from '../../../../../util/api';
-import { ErrorMessages, ValidatorsByField } from "../../AdminInterfaces";
+import { ErrorMessages, ValidatorsByField, ImageModel } from "../../AdminInterfaces";
 import ArchitectureAppStore, { Category } from "../../../../../redux/interfaces/ArchitectureAppStore";
 
 const createLangOptions = () => {
@@ -92,19 +92,11 @@ const validators: ValidatorsByField = {
     }
 }
 
-interface ImageUrlModel {
-    url: string
-}
-
-interface ImageBindingModel extends ImageUrlModel {
-    name: string
-}
-
 interface ArticleCreateModel {
     country: LangEnum,
     title: string,
     content: string,
-    mainImage?: ImageBindingModel,
+    mainImage?: ImageModel,
     categoryId: string
 }
 
