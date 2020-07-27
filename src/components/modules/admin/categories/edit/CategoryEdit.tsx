@@ -3,6 +3,8 @@ import api from '../../../../../util/api';
 import { csrfHeaderName, tokenAttributeName } from "../../../../../constants/appConstants";
 import { ErrorMessages, ValidatorsByField, ErrorMessage } from "../../AdminInterfaces";
 import ValidationMessages from "../../../../../shared/ValidationMessages/ValidationMessages";
+import { CategoryFields } from "../create/CategoryCreate";
+import { textFieldValidator } from "../../util/ValidationFunctions";
 
 const config = {
     headers: {
@@ -11,19 +13,13 @@ const config = {
 };
 
 const validators: ValidatorsByField = {
-    name: (value: string) => {
-        let messages: string[] = [];
-        if (!value) {
-            return null;
+    [CategoryFields.NAME]: {
+        validationFunction: textFieldValidator,
+        conditions: {
+            allowEmpty: true,
+            min: 3,
+            beginUppercase: true
         }
-        if (value.length < 3) {
-            messages.push("minimum 3 characaters required")
-        }
-        if (value.length > 0 && value.charAt(0) !== value.charAt(0).toUpperCase()) {
-            messages.push("Should begin with uppercase");
-        }
-
-        return messages.length > 0 ? messages : null;
     }
 }
 
@@ -43,7 +39,6 @@ class CategoryEdit extends React.PureComponent<any, CategoryEditState> {
             localNames: {},
             errors: {}
         }
-        // this.createLanguageInputs = this.createLanguageInputs.bind(this)
     }
 
     componentDidMount() {
@@ -70,9 +65,12 @@ class CategoryEdit extends React.PureComponent<any, CategoryEditState> {
 
     getInitialErrors(data: LocalNames): ErrorMessages {
         let initialErrors: ErrorMessages = {};
+        const validator = validators[CategoryFields.NAME].validationFunction;
+        const conditions = validators[CategoryFields.NAME].conditions;
+
         Object.entries(data)
             .forEach(entry => {
-                const currentErrrorMessage = validators.name(entry[1])
+                const currentErrrorMessage = validator(entry[1], conditions);
                 initialErrors[entry[0]] = {
                     isTouched: false,
                     messages: currentErrrorMessage
@@ -122,9 +120,12 @@ class CategoryEdit extends React.PureComponent<any, CategoryEditState> {
         console.log(this.state)
 
         const { name, value } = event.target;
+        const validator = validators[CategoryFields.NAME].validationFunction;
+        const conditions = validators[CategoryFields.NAME].conditions;
+
         const changedFieldErrors: ErrorMessage = {
             isTouched: true,
-            messages: validators.name(value),
+            messages: validator(value, conditions),
         }
 
         const newLocalNames = {
@@ -146,25 +147,22 @@ class CategoryEdit extends React.PureComponent<any, CategoryEditState> {
     }
 
     shouldDisableSubmit(): boolean {
-        const hasAnyFieldErrors: boolean = !!Object.entries(this.state.errors).find(entry => entry[1].messages);
-        if (!hasAnyFieldErrors) {
-            const isFormTouched: boolean = !!Object.entries(this.state.errors).find(entry => entry[1].isTouched);
-            return !isFormTouched;
+        const errorsTouchedCount: number = Object.entries(this.state.errors)
+            .filter(entry => entry[1].isTouched && entry[1].messages)
+            .length;
+        const isFormTouched: boolean = !!Object.entries(this.state.errors).find(entry => entry[1].isTouched);
+        if (!isFormTouched) {
+            return true;
         }
-        return hasAnyFieldErrors;
+        return errorsTouchedCount > 0;
     }
 
     handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const categoryId = this.props.match.params.categoryId;
 
-        const config = {
-            headers: {
-                [csrfHeaderName]: localStorage.getItem(tokenAttributeName)
-            }
-        };
         api
-            .put(`/admin/category/edit/${categoryId}`, {localNames: this.state.localNames} ,config)
+            .put(`/admin/category/edit/${categoryId}`, { localNames: this.state.localNames }, config)
             .then((res) => {
                 console.log(res.data);
             })

@@ -4,6 +4,7 @@ import { languagesArray } from '../../../../../constants/appConstants';
 import ValidationMessages from '../../../../../shared/ValidationMessages/ValidationMessages';
 import api from '../../../../../util/api';
 import { ErrorMessages, ValidatorsByField } from "../../AdminInterfaces";
+import { textFieldValidator } from "../../util/ValidationFunctions";
 
 const createLangOptions = () => {
     return (
@@ -13,28 +14,26 @@ const createLangOptions = () => {
     )
 }
 
-enum CategoryFields {
+export enum CategoryFields {
     COUNTRY = 'country',
     NAME = 'name',
 }
 
 const validators: ValidatorsByField = {
-    [CategoryFields.NAME]: (value: string) => {
-        let messages: string[] = [];
-        if (value.length === 0) {
-            messages.push("Should not be empty");
+    [CategoryFields.NAME]: {
+        validationFunction: textFieldValidator,
+        conditions: {
+            allowEmpty: false,
+            min: 3,
+            beginUppercase: true
         }
-        if (value.length < 3) {
-            messages.push("minimum 3 characaters required")
-        }
-        if (value.length > 0 && value.charAt(0) !== value.charAt(0).toUpperCase()) {
-            messages.push("Should begin with uppercase");
-        }
-
-        return messages.length > 0 ? messages : null;
     },
-    [CategoryFields.COUNTRY]: (value: LangEnum) => {
-        return value.length > 2 ? ["maximum 2 characaters required"] : null;
+    [CategoryFields.COUNTRY]: {
+        validationFunction: textFieldValidator,
+        conditions: {
+            allowEmpty: false,
+            min: 2
+        }
     }
 }
 
@@ -68,7 +67,9 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         let initialErrors: ErrorMessages = {};
         Object.entries(CategoryFields)
             .forEach(entry => {
-                const currentErrrorMessage = validators[entry[1]](this.state.category[entry[1]])
+                const validator = validators[entry[1]].validationFunction;
+                const conditions = validators[entry[1]].conditions;
+                const currentErrrorMessage = validator(this.state.category[entry[1]], conditions);
                 initialErrors[entry[1]] = {
                     isTouched: false,
                     messages: currentErrrorMessage
@@ -105,7 +106,9 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
         const { name, value } = event.target;
         const formErrors = this.state.errors;
-        const errorMessages: string[] | null = validators[name](value);
+        const validator = validators[name].validationFunction;
+        const conditions = validators[name].conditions;
+        const errorMessages: string[] | null = validator(value, conditions);
 
         formErrors[name] = {
             isTouched: true,
@@ -146,8 +149,8 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
 
                     <input type='text' value={this.state.category.name} name={CategoryFields.NAME} onChange={this.handleChange} />
-                    
-                    <ValidationMessages validationErrors={this.state.errors[CategoryFields.NAME]} /> 
+
+                    <ValidationMessages validationErrors={this.state.errors[CategoryFields.NAME]} />
 
                     <button disabled={this.shouldDisableSubmit()}>Create</button>
                 </form>

@@ -6,6 +6,7 @@ import ValidationMessages from '../../../../../shared/ValidationMessages/Validat
 import api from '../../../../../util/api';
 import { ErrorMessages, ValidatorsByField, ImageModel } from "../../AdminInterfaces";
 import ArchitectureAppStore, { Category } from "../../../../../redux/interfaces/ArchitectureAppStore";
+import { textFieldValidator } from "../../util/ValidationFunctions";
 
 const createLangOptions = () => {
     return (
@@ -34,61 +35,52 @@ enum ArticleFields {
 }
 
 const validators: ValidatorsByField = {
-    [ArticleFields.TITLE]: (value: string) => {
-        let messages: string[] = [];
-        if (value.length === 0) {
-            messages.push("Should not be empty");
-            messages.push("Should begin with uppercase");
+    [ArticleFields.TITLE]: {
+        validationFunction: textFieldValidator,
+        conditions: {
+            allowEmpty: false,
+            min: 2,
+            max: 100,
+            beginUppercase: true
         }
-        if (value.length > 0 ) {
-            const pattern = /^\p{Lu}.*$/u; // u = unicode
-            if(!pattern.test(value)){
-                messages.push("Should begin with uppercase");
+    },
+    [ArticleFields.CONTENT]: {
+        validationFunction: textFieldValidator,
+        conditions: {
+            allowEmpty: false,
+            min: 5,
+            beginUppercase: true
+        }
+    },
+    [ArticleFields.MAIN_IMAGE]: {
+        validationFunction: (newState: ArticleCreateState) => {
+            if (!newState.article.mainImage?.name && !newState.article.mainImage?.url) {
+                return null;
             }
-        }
-        if (value.length < 3 || value.length > 100) {
-            messages.push("length must be between 3 and 100")
-        }
-        return messages.length > 0 ? messages : null;
-    },
-    [ArticleFields.CONTENT]: (value: string) => {
-        let messages: string[] = [];
-        if (value.length === 0) {
-            messages.push("Should not be empty");
-            messages.push("Should begin with uppercase");
-        }
-        if (value.length < 5) {
-            messages.push("minimum 5 characaters required")
-        }
-        if (value.length > 0 && value.charAt(0) !== value.charAt(0).toUpperCase()) {
-            messages.push("Should begin with uppercase");
-        }
-
-        return messages.length > 0 ? messages : null;
-    },
-    [ArticleFields.MAIN_IMAGE]: (newState: ArticleCreateState) => {
-        if(!newState.article.mainImage?.name && !newState.article.mainImage?.url){
-            return null;
-        }
-        if(!newState.article.mainImage?.name || !newState.article.mainImage?.url){
+            if (!newState.article.mainImage?.name || !newState.article.mainImage?.url) {
+                return ['Image not valid'];
+            }
+            if (!newState.errors[ArticleFields.MAIN_IMAGE_NAME].messages && !newState.errors[ArticleFields.MAIN_IMAGE_URL].messages) {
+                return null;
+            }
             return ['Image not valid'];
         }
-        if (!newState.errors[ArticleFields.MAIN_IMAGE_NAME].messages && !newState.errors[ArticleFields.MAIN_IMAGE_URL].messages) {
-            return null;
-        }
-        return ['Image not valid'];
     },
-    [ArticleFields.MAIN_IMAGE_NAME]: (value: string) => {
-        if (!value) {
-            return null;
+    [ArticleFields.MAIN_IMAGE_NAME]: {
+        validationFunction: textFieldValidator,
+        conditions: {
+            allowEmpty: true,
+            min: 2,
+            beginUppercase: true
         }
-        return value.length < 2 ? ["minimum 2 characaters required"] : null;
     },
-    [ArticleFields.MAIN_IMAGE_URL]: (value: string) => {
-        if (!value) {
-            return null;
+    [ArticleFields.MAIN_IMAGE_URL]: {
+        validationFunction: (value: string) => {
+            if (!value) {
+                return null;
+            }
+            return value.length < 2 ? ["minimum 2 characaters required"] : null;
         }
-        return value.length < 2 ? ["minimum 2 characaters required"] : null;
     }
 }
 
@@ -127,9 +119,9 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         this.setInitialErrors();
     }
 
-    componentWillReceiveProps(props: ArticleCreateProps){
+    componentWillReceiveProps(props: ArticleCreateProps) {
         this.setState({
-            article:{
+            article: {
                 ...this.state.article,
                 categoryId: props.categories.length > 0 ? props.categories[0].id : ''
             }
@@ -144,7 +136,9 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                 if (entry[1] === ArticleFields.MAIN_IMAGE || !fieldValidator) {
                     return;
                 }
-                const currentErrrorMessage = fieldValidator((this.state.article as any)[entry[1]])
+                const fieldValidatorFunction = validators[entry[1]].validationFunction;
+                const fieldConditions = validators[entry[1]].conditions;
+                const currentErrrorMessage = fieldValidatorFunction((this.state.article as any)[entry[1]], fieldConditions)
                 initialErrors[entry[1]] = {
                     isTouched: false,
                     messages: currentErrrorMessage
@@ -153,7 +147,7 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
 
         initialErrors[ArticleFields.MAIN_IMAGE] = {
             isTouched: false,
-            messages: validators[ArticleFields.MAIN_IMAGE]({ article: this.state.article, errors: initialErrors })
+            messages: validators[ArticleFields.MAIN_IMAGE].validationFunction({ article: this.state.article, errors: initialErrors })
         }
 
         this.setState({
@@ -177,13 +171,14 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
 
         const fieldValidator = validators[name];
         if (!!fieldValidator) {
+            const conditions = fieldValidator.conditions;
             newErrors[name] = {
                 isTouched: true,
-                messages: fieldValidator(value)
+                messages: fieldValidator.validationFunction(value, conditions)
             }
             newErrors[ArticleFields.MAIN_IMAGE] = {
                 isTouched: true,
-                messages: validators[ArticleFields.MAIN_IMAGE]({ article: newArticle, errors: newErrors })
+                messages: validators[ArticleFields.MAIN_IMAGE].validationFunction({ article: newArticle, errors: newErrors })
             }
         }
 
@@ -266,12 +261,12 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                             value={this.state.article.title}
                             name={ArticleFields.TITLE}
                             onChange={this.handleChange} />
-                            <ValidationMessages validationErrors={this.state.errors[ArticleFields.TITLE]}/>
+                        <ValidationMessages validationErrors={this.state.errors[ArticleFields.TITLE]} />
                     </div>
 
                     <div>
                         <textarea value={this.state.article.content} name={ArticleFields.CONTENT} onChange={this.handleChange} />
-                        <ValidationMessages validationErrors={this.state.errors[ArticleFields.CONTENT]}/>
+                        <ValidationMessages validationErrors={this.state.errors[ArticleFields.CONTENT]} />
                     </div>
 
                     <div>
@@ -280,7 +275,7 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                             value={this.state.article.mainImage?.name}
                             name={ArticleFields.MAIN_IMAGE_NAME}
                             onChange={this.handleChange} />
-                            <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE_NAME]}/>
+                        <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE_NAME]} />
                     </div>
 
                     <div>
@@ -289,9 +284,9 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                             value={this.state.article.mainImage?.url}
                             name={ArticleFields.MAIN_IMAGE_URL}
                             onChange={this.handleChange} />
-                            <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE_URL]}/>
+                        <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE_URL]} />
                     </div>
-                    <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE]}/>
+                    <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE]} />
 
                     <button disabled={this.shouldDisableSubmit()}>Create</button>
                 </form>
