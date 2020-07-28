@@ -23,6 +23,7 @@ export const languagesArray: string[] = Object.entries(LangEnum).filter(entry =>
     .map(entry => {
         return entry[1];
     })
+    
 
 enum UserRoles {
     USER = 'ROLE_USER',

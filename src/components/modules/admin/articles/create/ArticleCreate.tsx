@@ -1,20 +1,14 @@
 import React, { FormEvent } from "react";
 import { connect } from "react-redux";
-import { LangEnum, csrfHeaderName, defaultLang, tokenAttributeName } from "../../../../../constants/appConstants";
-import { languagesArray } from '../../../../../constants/appConstants';
+import { defaultLang } from "../../../../../constants/appConstants";
 import ValidationMessages from '../../../../../shared/ValidationMessages/ValidationMessages';
 import api from '../../../../../util/api';
-import { ErrorMessages, ValidatorsByField, ImageModel } from "../../AdminInterfaces";
+import { ErrorMessages, ValidatorsByField, ImageModel, ArticleBaseModel } from "../../AdminInterfaces";
 import ArchitectureAppStore, { Category } from "../../../../../redux/interfaces/ArchitectureAppStore";
 import { textFieldValidator } from "../../util/ValidationFunctions";
+import { createLangOptions } from "../../../../../util/renderFunctions";
+import { setNestedKey, getTokenHeader } from "../../../../../util/utilFunctions";
 
-const createLangOptions = () => {
-    return (
-        languagesArray.map((lang: string) => {
-            return <option key={lang} value={lang}>{lang}</option>
-        })
-    )
-}
 
 const createCategoryOptions = (categories: Category[]) => {
     return (
@@ -24,7 +18,7 @@ const createCategoryOptions = (categories: Category[]) => {
     )
 }
 
-enum ArticleFields {
+export enum ArticleFields {
     COUNTRY = 'country',
     TITLE = 'title',
     CONTENT = 'content',
@@ -84,10 +78,7 @@ const validators: ValidatorsByField = {
     }
 }
 
-interface ArticleCreateModel {
-    country: LangEnum,
-    title: string,
-    content: string,
+interface ArticleCreateModel extends ArticleBaseModel {
     mainImage?: ImageModel,
     categoryId: string
 }
@@ -130,25 +121,23 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
 
     setInitialErrors() {
         let initialErrors: ErrorMessages = {};
-        Object.entries(ArticleFields)
+        Object.entries(validators)
             .forEach(entry => {
-                const fieldValidator = validators[entry[1]];
-                if (entry[1] === ArticleFields.MAIN_IMAGE || !fieldValidator) {
-                    return;
+                const fieldValidatorFunction = entry[1].validationFunction;
+                const fieldConditions = entry[1].conditions;
+
+               
+                let currentErrorMessage: string[] | null;
+                if (entry[0] === ArticleFields.MAIN_IMAGE) {
+                    currentErrorMessage = fieldValidatorFunction({ article: this.state.article, errors: initialErrors });
+                }else{
+                    currentErrorMessage = fieldValidatorFunction((this.state.article as any)[entry[0]]);
                 }
-                const fieldValidatorFunction = validators[entry[1]].validationFunction;
-                const fieldConditions = validators[entry[1]].conditions;
-                const currentErrrorMessage = fieldValidatorFunction((this.state.article as any)[entry[1]], fieldConditions)
-                initialErrors[entry[1]] = {
+                initialErrors[entry[0]] = {
                     isTouched: false,
-                    messages: currentErrrorMessage
+                    messages: currentErrorMessage
                 }
             });
-
-        initialErrors[ArticleFields.MAIN_IMAGE] = {
-            isTouched: false,
-            messages: validators[ArticleFields.MAIN_IMAGE].validationFunction({ article: this.state.article, errors: initialErrors })
-        }
 
         this.setState({
             errors: initialErrors
@@ -162,7 +151,7 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         let newArticle: ArticleCreateModel = {
             ...this.state.article
         }
-        this.setNestedKey(newArticle, name, value);
+        setNestedKey(newArticle, name, value);
 
 
         let newErrors: any = {
@@ -188,24 +177,6 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         });
     }
 
-    setNestedKey(obj: any, path: string, value: any) {
-        if (!path.includes('.')) {
-            obj[path] = value;
-            return obj;
-        }
-        const pList = path.split('.');
-        const key = pList.pop();
-        if (!key) {
-            return obj;
-        }
-        const pointer = pList.reduce((accumulator, currentValue) => {
-            if (accumulator[currentValue] === undefined) accumulator[currentValue] = {};
-            return accumulator[currentValue];
-        }, obj);
-        pointer[key] = value;
-        return obj;
-    }
-
     shouldDisableSubmit(): boolean {
         return !!Object.entries(this.state.errors).find(entry => entry[1].messages);
     }
@@ -213,19 +184,13 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
     handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const config = {
-            headers: {
-                [csrfHeaderName]: localStorage.getItem(tokenAttributeName)
-            }
-        };
-
         const article = {
             ...this.state.article,
             country: this.state.article.country.toUpperCase()
         }
 
         api
-            .post(`/admin/articles/create`, article, config)
+            .post(`/admin/articles/create`, article, getTokenHeader())
             .then((res) => {
                 console.log(res.data);
             })

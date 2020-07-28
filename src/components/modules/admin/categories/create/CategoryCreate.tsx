@@ -1,18 +1,10 @@
 import React, { FormEvent } from "react";
 import { LangEnum, csrfHeaderName, defaultLang, tokenAttributeName } from "../../../../../constants/appConstants";
-import { languagesArray } from '../../../../../constants/appConstants';
 import ValidationMessages from '../../../../../shared/ValidationMessages/ValidationMessages';
 import api from '../../../../../util/api';
 import { ErrorMessages, ValidatorsByField } from "../../AdminInterfaces";
 import { textFieldValidator } from "../../util/ValidationFunctions";
-
-const createLangOptions = () => {
-    return (
-        languagesArray.map((lang: string) => {
-            return <option key={lang} value={lang}>{lang}</option>
-        })
-    )
-}
+import { createLangOptions } from "../../../../../util/renderFunctions";
 
 export enum CategoryFields {
     COUNTRY = 'country',
@@ -65,12 +57,12 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
 
     setInitialErrors() {
         let initialErrors: ErrorMessages = {};
-        Object.entries(CategoryFields)
+        Object.entries(validators)
             .forEach(entry => {
-                const validator = validators[entry[1]].validationFunction;
-                const conditions = validators[entry[1]].conditions;
-                const currentErrrorMessage = validator(this.state.category[entry[1]], conditions);
-                initialErrors[entry[1]] = {
+                const validator = entry[1].validationFunction;
+                const conditions = entry[1].conditions;
+                const currentErrrorMessage = validator((this.state.category as any)[entry[0]], conditions);
+                initialErrors[entry[0]] = {
                     isTouched: false,
                     messages: currentErrrorMessage
                 }
@@ -132,10 +124,6 @@ class CategoryCreate extends React.PureComponent<any, CategoryCreateState> {
         console.log(b)
         return b;
     }
-
-    // hasFieldErrors(fieldName: string): boolean {
-    //     return this.state.errors[fieldName] && this.state.errors[fieldName].isTouched && !!this.state.errors[fieldName].messages;
-    // }
 
     render() {
         return (

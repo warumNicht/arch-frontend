@@ -1,3 +1,5 @@
+import { LangEnum } from "../../../constants/appConstants";
+
 export interface ErrorMessage {
     isTouched: boolean,
     messages: string[] | null
@@ -14,12 +16,24 @@ export interface Conditions {
     beginUppercase?: boolean
 }
 
-interface ImageUrlModel {
+export interface ImageUrlModel {
     url: string
 }
 
 export interface ImageModel extends ImageUrlModel {
     name: string
+}
+
+export interface ArticleCountry {
+    country: LangEnum,
+}
+
+export interface ArticleTitleContent {
+    title: string,
+    content: string
+}
+
+export interface ArticleBaseModel extends ArticleCountry, ArticleTitleContent {
 }
 
 export interface ValidatorsByField {
