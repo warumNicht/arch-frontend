@@ -171,8 +171,6 @@ class CategoryEdit extends React.PureComponent<any, CategoryEditState> {
             .catch((e: any) => {
                 console.log(e)
             });
-
-        console.log(this.state)
     }
 
     render() {
