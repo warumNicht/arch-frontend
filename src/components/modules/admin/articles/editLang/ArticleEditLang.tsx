@@ -60,6 +60,21 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
             });
     }
 
+    handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const articleId = this.props.match.params.articleId;
+        const lang = this.props.match.params.lang;
+
+        api
+            .patch(`/admin/articles/edit/${articleId}/${lang}`, this.state.article, getTokenHeader())
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((e: any) => {
+                console.log(e)
+            });
+    }
+
     handleChange = (event: React.BaseSyntheticEvent) => {
         event.preventDefault();
         const { name, value } = event.target;
@@ -69,7 +84,7 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
         return (
             <div>
                 <div>Article edit lang</div>
-                <form>
+                <form onSubmit={this.handleSubmit}>
                     <div>
                         <input
                             type='text'
@@ -96,6 +111,7 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
                         :
                         ''
                     }
+                    <button >Edit language</button>
                 </form>
             </div>
         )
