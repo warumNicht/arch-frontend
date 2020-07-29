@@ -9,7 +9,6 @@ import { textFieldValidator } from "../../util/ValidationFunctions";
 import { createLangOptions } from "../../../../../util/renderFunctions";
 import { setNestedKey, getTokenHeader } from "../../../../../util/utilFunctions";
 
-
 const createCategoryOptions = (categories: Category[]) => {
     return (
         categories.map((category: Category) => {
