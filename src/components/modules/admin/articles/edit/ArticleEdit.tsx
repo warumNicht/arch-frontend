@@ -2,7 +2,7 @@ import React, { FormEvent } from "react";
 import api from '../../../../../util/api';
 import { Category } from "../../../../../redux/interfaces/ArchitectureAppStore";
 import { RouteComponentProps, Link } from "react-router-dom";
-import { ImageModel, LanguageContent, ErrorMessages, ImageUrlModel } from "../../AdminInterfaces";
+import { ErrorMessages, ImageUrlModel, LocalContent } from "../../AdminInterfaces";
 import { getTokenHeader } from "../../../../../util/utilFunctions";
 import { getLangPrefix } from "../../../../../util/LangPrefixUtil";
 
@@ -12,10 +12,6 @@ export interface ArticleIdRouterParams {
 
 interface ArticleEditProps extends RouteComponentProps<ArticleIdRouterParams> {
     categories: Category[]
-}
-
-interface LocalContent {
-    [key: string]: LanguageContent
 }
 
 interface ArticleEditModel {

@@ -43,7 +43,11 @@ export interface ValidatorsByField {
     }
 }
 
-export interface LanguageContent {
+export interface LanguageTitle {
     title: string,
-    content: string
+    // content: string
+}
+
+export interface LocalContent {
+    [key: string]: LanguageTitle
 }
