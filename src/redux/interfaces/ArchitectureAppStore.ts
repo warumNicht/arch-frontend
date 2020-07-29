@@ -38,5 +38,5 @@ export default interface ArchitectureAppStore {
     token: string,
     user: User,
     categories: Category[],
-    // articlesByCategories: ArticlesByCategories
+    articlesByCategories: ArticlesByCategories
 }
