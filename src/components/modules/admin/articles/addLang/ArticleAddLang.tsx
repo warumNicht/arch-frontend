@@ -10,7 +10,7 @@ import { textFieldValidator } from "../../util/ValidationFunctions";
 import { RouteComponentProps } from "react-router-dom";
 import { ArticleIdRouterParams } from "../edit/ArticleEdit";
 
-const validators: ValidatorsByField = {
+export const langValidators: ValidatorsByField = {
     [ArticleFields.TITLE]: {
         validationFunction: textFieldValidator,
         conditions: {
@@ -64,7 +64,6 @@ class ArticleAddLang extends React.PureComponent<RouteComponentProps<ArticleIdRo
         const articleId = this.props.match.params.articleId;
         console.log(articleId)
         this.loadArticle();
-        this.setInitialErrors();
     }
 
     loadArticle() {
@@ -73,12 +72,14 @@ class ArticleAddLang extends React.PureComponent<RouteComponentProps<ArticleIdRo
             .get(`/admin/articles/addLang/${articleId}`, getTokenHeader())
             .then((res) => {
                 console.log(res.data);
+                let newArticle = {
+                    ...this.state.article
+                }
                 if (res.data) {
+                    newArticle.mainImage = '';
                     this.setState({
-                        article: {
-                            ...this.state.article,
-                            mainImage: ''
-                        }
+                        article: newArticle,
+                        errors: this.getInitialErrors(newArticle)
                     })
                 }
             })
@@ -87,30 +88,27 @@ class ArticleAddLang extends React.PureComponent<RouteComponentProps<ArticleIdRo
             });
     }
 
-    setInitialErrors() {
+    getInitialErrors(article: ArticleAddLangModel): ErrorMessages {
         let initialErrors: ErrorMessages = {};
-        Object.entries(validators)
+        Object.entries(langValidators)
             .forEach(entry => {
                 const fieldValidatorFunction = entry[1].validationFunction;
                 const fieldConditions = entry[1].conditions;
-                const currentErrorMessage = fieldValidatorFunction((this.state.article as any)[entry[0]], fieldConditions);
+                const currentErrorMessage = fieldValidatorFunction((article as any)[entry[0]], fieldConditions);
                 initialErrors[entry[0]] = {
                     isTouched: false,
                     messages: currentErrorMessage
                 }
             });
-
-        this.setState({
-            errors: initialErrors
-        })
+        return initialErrors;
     }
 
     handleChange = (event: React.BaseSyntheticEvent) => {
         event.preventDefault();
         const { name, value } = event.target;
-        const fieldValidator = validators[name];
+        const fieldValidator = langValidators[name];
 
-        if(fieldValidator){
+        if (fieldValidator) {
             const fieldValidatorFunction = fieldValidator.validationFunction;
             const fieldConditions = fieldValidator.conditions;
             const currentErrorMessage = fieldValidatorFunction(value, fieldConditions);
@@ -118,27 +116,31 @@ class ArticleAddLang extends React.PureComponent<RouteComponentProps<ArticleIdRo
             this.setState({
                 article: {
                     ...this.state.article,
-                    [name] : value
+                    [name]: value
                 },
-                errors:{
+                errors: {
                     ...this.state.errors,
-                    [name]:{
+                    [name]: {
                         isTouched: true,
                         messages: currentErrorMessage
                     }
                 }
             })
-        }else{
+        } else {
             this.setState({
                 article: {
                     ...this.state.article,
-                    [name] : value
+                    [name]: value
                 }
             })
-        }  
+        }
     }
 
     shouldDisableSubmit(): boolean {
+        const isFormPristine: boolean = !Object.entries(this.state.errors).find(entry => entry[1].isTouched);
+        if (isFormPristine) {
+            return true;
+        }
         return !!Object.entries(this.state.errors).find(entry => entry[1].messages);
     }
 

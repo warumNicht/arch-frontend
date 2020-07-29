@@ -106,20 +106,17 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         };
     }
 
-    componentDidMount() {
-        this.setInitialErrors();
-    }
-
     componentWillReceiveProps(props: ArticleCreateProps) {
         this.setState({
             article: {
                 ...this.state.article,
                 categoryId: props.categories.length > 0 ? props.categories[0].id : ''
-            }
+            },
+            errors: this.getInitialErrors(this.state.article)
         })
     }
 
-    setInitialErrors() {
+    getInitialErrors(article: ArticleCreateModel): ErrorMessages {
         let initialErrors: ErrorMessages = {};
         Object.entries(validators)
             .forEach(entry => {
@@ -129,19 +126,16 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                
                 let currentErrorMessage: string[] | null;
                 if (entry[0] === ArticleFields.MAIN_IMAGE) {
-                    currentErrorMessage = fieldValidatorFunction({ article: this.state.article, errors: initialErrors });
+                    currentErrorMessage = fieldValidatorFunction({ article: article, errors: initialErrors });
                 }else{
-                    currentErrorMessage = fieldValidatorFunction((this.state.article as any)[entry[0]]);
+                    currentErrorMessage = fieldValidatorFunction((article as any)[entry[0]]);
                 }
                 initialErrors[entry[0]] = {
                     isTouched: false,
                     messages: currentErrorMessage
                 }
             });
-
-        this.setState({
-            errors: initialErrors
-        })
+        return initialErrors;
     }
 
     handleChange = (event: React.BaseSyntheticEvent) => {
@@ -178,6 +172,10 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
     }
 
     shouldDisableSubmit(): boolean {
+        const isFormPristine: boolean = !Object.entries(this.state.errors).find(entry => entry[1].isTouched);
+        if (isFormPristine) {
+            return true;
+        }
         return !!Object.entries(this.state.errors).find(entry => entry[1].messages);
     }
 
