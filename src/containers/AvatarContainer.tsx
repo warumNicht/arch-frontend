@@ -8,7 +8,7 @@ import api from '../util/api';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Cookies } from 'react-cookie';
 import getPathWithoutLangPrefix, { getLangPrefix } from '../util/LangPrefixUtil';
-import { setCurrentUser, storeCategoriesInRedux } from "../redux/actions/actions";
+import { setCurrentUser, storeCategoriesInRedux } from "../redux/actions/actionCreators";
 import UserService from '../services/UserService';
 import SlidingDropdown from "../shared/SlidingDropdown/SlidingDropdown";
 import { languagesArray } from '../constants/appConstants';
@@ -51,7 +51,10 @@ class AvatarContainer extends React.PureComponent<AvatarContainerProps, any> {
 
   componentDidMount() {
     console.log(this.props)
-    this.loadCategories();
+    if(this.props.categories.length===0){
+      this.loadCategories();
+    }
+  
     this.changeLanguage = this.changeLanguage.bind(this)
   }
 

@@ -15,16 +15,17 @@ export interface SelectedCategories{
 }
 
 interface Image{
-    name: string,
+    // id: string,
     url: string
 }
 
 export interface Article{
     id: string,
-    name: string,
-    mainImage: Image,
-    images: Image[],
-    admin:{
+    title: string,
+    categoryId: string,
+    mainImage?: Image,
+    images?: Image[],
+    admin?:{
         localTitles: LocalContent
     }
 }

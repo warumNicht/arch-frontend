@@ -8,6 +8,7 @@ import ArchitectureAppStore, { Category } from "../../../../../redux/interfaces/
 import { textFieldValidator } from "../../util/ValidationFunctions";
 import { createLangOptions } from "../../../../../util/renderFunctions";
 import { setNestedKey, getTokenHeader } from "../../../../../util/utilFunctions";
+import { Link } from "react-router-dom";
 
 
 const createCategoryOptions = (categories: Category[]) => {
@@ -123,11 +124,11 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                 const fieldValidatorFunction = entry[1].validationFunction;
                 const fieldConditions = entry[1].conditions;
 
-               
+
                 let currentErrorMessage: string[] | null;
                 if (entry[0] === ArticleFields.MAIN_IMAGE) {
                     currentErrorMessage = fieldValidatorFunction({ article: article, errors: initialErrors });
-                }else{
+                } else {
                     currentErrorMessage = fieldValidatorFunction((article as any)[entry[0]]);
                 }
                 initialErrors[entry[0]] = {
@@ -205,6 +206,8 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
         return (
             <div>
                 <h1>Article Create</h1>
+                <Link to={`/en/admin/articles/edit/1`}>Edit 1</Link>
+                <Link to={`/en/admin/articles/edit/2`}>Edit 2</Link>
 
                 <form onSubmit={this.handleSubmit}>
                     <div>

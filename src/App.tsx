@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, Link } from "react-router-dom";
 import "./App.css";
 import AvatarContainer from "./containers/AvatarContainer";
 import NotFoundPage from "./components/not-found/NotFoundPage";
@@ -12,7 +12,7 @@ import AdminModule from "./components/modules/admin/AdminModule";
 import UserModule from "./components/modules/user/UserModule";
 import { useTranslation } from 'react-i18next';
 import { withCookies } from 'react-cookie';
-import { getLangCookie, createCookieOptions } from './util/LangPrefixUtil';
+import { getLangCookie, createCookieOptions, getLangPrefix } from './util/LangPrefixUtil';
 
 function App(props: any) {
   const { t, i18n } = useTranslation();
@@ -30,12 +30,17 @@ function App(props: any) {
     i18n.changeLanguage(currentUrlLangPrefix);
   }
   if (currentLangCookie && currentLangCookie !== currentUrlLangPrefix) {
-    props.cookies.set('lang', currentUrlLangPrefix,createCookieOptions());
+    props.cookies.set('lang', currentUrlLangPrefix, createCookieOptions());
     i18n.changeLanguage(currentUrlLangPrefix);
     return (<Redirect to={{ pathname: `/${currentUrlLangPrefix}/` }} />)
   }
   return (
     <div>
+      <div>
+        <Link to={`/en/admin/articles/edit/1`}>Article: 1</Link>
+        <Link to={`/en/admin/articles/edit/2`}>Article: 2</Link>
+        <Link to={`/en/admin/articles/listAll`}>Articles All</Link>
+      </div>
       <div>
         <p>{t('welcome', 'Hello there')}</p>
       </div>

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import setToken, {setCurrentUser} from '../redux/actions/actions'
+import setToken, {setCurrentUser} from '../redux/actions/actionCreators'
 import { Login } from '../components/login/login';
 import { User } from '../redux/interfaces/ArchitectureAppStore';
 

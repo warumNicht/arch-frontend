@@ -1,10 +1,14 @@
 import React, { FormEvent } from "react";
 import api from '../../../../../util/api';
-import { Category } from "../../../../../redux/interfaces/ArchitectureAppStore";
+import { Category, Article } from "../../../../../redux/interfaces/ArchitectureAppStore";
 import { RouteComponentProps, Link } from "react-router-dom";
 import { ErrorMessages, ImageUrlModel, LocalContent } from "../../AdminInterfaces";
 import { getTokenHeader } from "../../../../../util/utilFunctions";
 import { getLangPrefix } from "../../../../../util/LangPrefixUtil";
+import store from '../../../../../redux/store';
+import { loadArticle } from "../../../../../redux/actions/actionCreators";
+import articles from "../../../../../redux/reducers/articles/articles";
+import { AxiosResponse } from "axios";
 
 export interface ArticleIdRouterParams {
     articleId: string
@@ -48,10 +52,39 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
 
     loadArticle() {
         const articleId = this.props.match.params.articleId;
+        const found: Article = store.getState().articlesByCategories.articles.find((article: Article) => article.id === articleId)
+        if(found){
+            let articleToEdit: ArticleEditModel = {
+                id:found.id,
+                categoryId: found.categoryId,
+                localContent : found.admin ? found.admin.localTitles : {},
+            };
+            if(found.mainImage){
+                articleToEdit.mainImage={url: found.mainImage.url}
+            }
+            this.setState({
+                article: articleToEdit
+            })
+            return;
+        }
+
         api
             .get(`/admin/articles/edit/${articleId}`, getTokenHeader())
-            .then((res) => {
+            .then((res: AxiosResponse<ArticleEditModel>) => {
                 console.log(res.data);
+                let article: Article = {
+                    id: articleId,
+                    title: res.data.localContent[this.langPrefix.toUpperCase()].title,
+                    categoryId: res.data.categoryId,
+                    admin:{
+                        localTitles: res.data.localContent
+                    }
+                }
+                if(res.data.mainImage){
+                    article.mainImage = {url: res.data.mainImage.url};
+                }
+                store.dispatch(loadArticle(article));
+
                 this.setState({
                     article: res.data
                 })

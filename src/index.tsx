@@ -5,7 +5,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 
-import setToken, { setCurrentUser } from './redux/actions/actions'
+import setToken, { setCurrentUser } from './redux/actions/actionCreators'
 import { Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 import { CookiesProvider } from 'react-cookie';
