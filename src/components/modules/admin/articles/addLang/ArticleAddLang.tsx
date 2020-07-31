@@ -10,7 +10,7 @@ import { getTokenHeader } from "../../../../../util/utilFunctions";
 import { textFieldValidator } from "../../util/ValidationFunctions";
 import { RouteComponentProps } from "react-router-dom";
 import { ArticleIdRouterParams } from "../edit/ArticleEdit";
-import ArchitectureAppStore from "../../../../../redux/interfaces/ArchitectureAppStore";
+import ArchitectureAppStore, { Article } from "../../../../../redux/interfaces/ArchitectureAppStore";
 import { articleAddLang } from "../../../../../redux/actions/actionCreators";
 
 export const langValidators: ValidatorsByField = {
@@ -45,12 +45,16 @@ interface ArticleAddLangModel extends ArticleBaseModel {
     mainImage?: string
 }
 
+interface ArticleAddLangProps extends RouteComponentProps<ArticleIdRouterParams>{
+    editedArticle: Article | undefined
+}
+
 interface ArticleAddLangState {
     article: ArticleAddLangModel,
     errors: ErrorMessages
 }
 
-class ArticleAddLang extends React.PureComponent<RouteComponentProps<ArticleIdRouterParams>, ArticleAddLangState> {
+class ArticleAddLang extends React.PureComponent<ArticleAddLangProps, ArticleAddLangState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -70,25 +74,39 @@ class ArticleAddLang extends React.PureComponent<RouteComponentProps<ArticleIdRo
     }
 
     loadArticle() {
+        if(this.props.editedArticle){
+            this.handleResposne(!!this.props.editedArticle.mainImage);
+            return;
+        }
         const articleId = this.props.match.params.articleId;
         api
             .get(`/admin/articles/addLang/${articleId}`, getTokenHeader())
             .then((res) => {
                 console.log(res.data);
-                let newArticle = {
-                    ...this.state.article
-                }
-                if (res.data) {
-                    newArticle.mainImage = '';
-                    this.setState({
-                        article: newArticle,
-                        errors: this.getInitialErrors(newArticle)
-                    })
-                }
+                this.handleResposne(res.data);
             })
             .catch((e: any) => {
                 console.log(e)
             });
+    }
+
+    handleResposne(hasMainImage: boolean): void{
+        let newArticle = {
+            ...this.state.article
+        }
+        if (hasMainImage) {
+            newArticle.mainImage = '';
+            this.setState({
+                article: newArticle,
+                errors: this.getInitialErrors(newArticle)
+            })
+        }
+    }
+
+    loadArticleFromStore(){
+        let articleToState: ArticleAddLangModel = {
+            ...this.state.article
+        }
     }
 
     getInitialErrors(article: ArticleAddLangModel): ErrorMessages {
@@ -210,9 +228,12 @@ class ArticleAddLang extends React.PureComponent<RouteComponentProps<ArticleIdRo
     }
 }
 
-const mapStateToProps = (state: ArchitectureAppStore) => ({
-    articles: state.articlesByCategories.articles
-});
+const mapStateToProps = (state: ArchitectureAppStore, ownProps: ArticleAddLangProps) => {
+    const editedArticleId: string = ownProps.match.params.articleId;
+    return {
+        editedArticle: state.articlesByCategories.articles.find((article: Article)=> article.id === editedArticleId)
+    }
+};
 
 const mapDispatchToProps = (dispatch: any) => ({
     addLangToArticleInStore: (article: any) => dispatch(articleAddLang(article))
