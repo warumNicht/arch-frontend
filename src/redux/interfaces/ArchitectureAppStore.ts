@@ -22,11 +22,12 @@ interface Image{
 export interface Article{
     id: string,
     title: string,
+    content?: string,
     categoryId: string,
     mainImage?: Image,
     images?: Image[],
     admin?:{
-        localTitles: LocalContent
+        localContent: LocalContent
     }
 }
 

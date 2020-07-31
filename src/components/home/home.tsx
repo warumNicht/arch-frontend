@@ -39,7 +39,10 @@ class Home extends React.PureComponent<WithTranslation, any> {
         return this.state.articles.map((a: any) => {
             return <article>
                 <div>{a.id}</div>
-                <div>{a.localisedContent.title}</div>
+                <div>{a.title}</div>
+                <div>
+                    <img src={a.mainImage}></img>
+                </div>
                 <Link to={`/en/admin/articles/edit/${a.id}`}>Article {a.id}</Link>
             </article>
         })

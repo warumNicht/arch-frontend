@@ -1,11 +1,11 @@
 import React, { FormEvent } from "react";
+import { connect } from "react-redux";
 import api from '../../../../../util/api';
-import { Category, Article } from "../../../../../redux/interfaces/ArchitectureAppStore";
+import ArchitectureAppStore, { Category, Article } from "../../../../../redux/interfaces/ArchitectureAppStore";
 import { RouteComponentProps, Link } from "react-router-dom";
 import { ErrorMessages, ImageUrlModel, LocalContent } from "../../AdminInterfaces";
 import { getTokenHeader } from "../../../../../util/utilFunctions";
 import { getLangPrefix } from "../../../../../util/LangPrefixUtil";
-import store from '../../../../../redux/store';
 import { loadArticle } from "../../../../../redux/actions/actionCreators";
 import articles from "../../../../../redux/reducers/articles/articles";
 import { AxiosResponse } from "axios";
@@ -15,7 +15,9 @@ export interface ArticleIdRouterParams {
 }
 
 interface ArticleEditProps extends RouteComponentProps<ArticleIdRouterParams> {
-    categories: Category[]
+    categories: Category[],
+    articles: Article[],
+    loadArticleInRedux: (article: Article) => void
 }
 
 interface ArticleEditModel {
@@ -50,21 +52,15 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
         this.loadArticle();
     }
 
+    findArticleByIdIfExists(articleId: string): Article | undefined {
+        return this.props.articles.find((article: Article) => article.id === articleId)
+    }
+
     loadArticle() {
         const articleId = this.props.match.params.articleId;
-        const found: Article = store.getState().articlesByCategories.articles.find((article: Article) => article.id === articleId)
-        if(found){
-            let articleToEdit: ArticleEditModel = {
-                id:found.id,
-                categoryId: found.categoryId,
-                localContent : found.admin ? found.admin.localTitles : {},
-            };
-            if(found.mainImage){
-                articleToEdit.mainImage={url: found.mainImage.url}
-            }
-            this.setState({
-                article: articleToEdit
-            })
+        const found: Article | undefined = this.findArticleByIdIfExists(articleId);
+        if (found) {
+            this.loadArticleFromStore(found);
             return;
         }
 
@@ -72,27 +68,44 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
             .get(`/admin/articles/edit/${articleId}`, getTokenHeader())
             .then((res: AxiosResponse<ArticleEditModel>) => {
                 console.log(res.data);
-                let article: Article = {
-                    id: articleId,
-                    title: res.data.localContent[this.langPrefix.toUpperCase()].title,
-                    categoryId: res.data.categoryId,
-                    admin:{
-                        localTitles: res.data.localContent
-                    }
-                }
-                if(res.data.mainImage){
-                    article.mainImage = {url: res.data.mainImage.url};
-                }
-                store.dispatch(loadArticle(article));
+                this.updateArticleInStore(articleId, res.data);
 
                 this.setState({
                     article: res.data
-                })
-
+                });
             })
             .catch((e: any) => {
                 console.log(e)
             });
+    }
+
+    loadArticleFromStore(found: Article) {
+        let articleToEdit: ArticleEditModel = {
+            id: found.id,
+            categoryId: found.categoryId,
+            localContent: found.admin ? found.admin.localContent : {},
+        };
+        if (found.mainImage) {
+            articleToEdit.mainImage = { url: found.mainImage.url }
+        }
+        this.setState({
+            article: articleToEdit
+        })
+    }
+
+    updateArticleInStore(articleId: string, editedArticle: ArticleEditModel) {
+        let article: Article = {
+            id: articleId,
+            title: editedArticle.localContent[this.langPrefix.toUpperCase()].title,
+            categoryId: editedArticle.categoryId,
+            admin: {
+                localContent: editedArticle.localContent
+            }
+        }
+        if (editedArticle.mainImage) {
+            article.mainImage = { url: editedArticle.mainImage.url };
+        }
+        this.props.loadArticleInRedux(article);
     }
 
     createLanguageDivs(localContent: LocalContent) {
@@ -116,7 +129,7 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
                 <div>
                     {this.state.article.mainImage ?
                         <div>
-                            <img src={this.state.article.mainImage.url}/>
+                            <img src={this.state.article.mainImage.url} />
                             <button>Change main image</button>
                         </div>
                         :
@@ -137,4 +150,12 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
     }
 }
 
-export default ArticleEdit;
+const mapStateToProps = (state: ArchitectureAppStore) => ({
+    articles: state.articlesByCategories.articles
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+    loadArticleInRedux: (article: Article) => dispatch(loadArticle(article))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleEdit);

@@ -15,6 +15,7 @@ const CategoryActions = {
 export const ArticlesActions = {
     LOAD_ARTICLE: 'LOAD_ARTICLE',
     GET_ARTICLE_BY_ID: 'GET_ARTICLE_BY_ID',
+    EDIT_ARTICLE_LANG: 'EDIT_ARTICLE_LANG'
 }
 
 export default TokenActions;

@@ -45,7 +45,7 @@ export interface ValidatorsByField {
 
 export interface LanguageTitle {
     title: string,
-    // content: string
+    content?: string
 }
 
 export interface LocalContent {
