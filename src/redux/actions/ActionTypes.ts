@@ -14,7 +14,7 @@ const CategoryActions = {
 
 export const ArticlesActions = {
     LOAD_ARTICLE: 'LOAD_ARTICLE',
-    GET_ARTICLE_BY_ID: 'GET_ARTICLE_BY_ID',
+    ADD_LANG: 'ADD_LANG',
     EDIT_ARTICLE_LANG: 'EDIT_ARTICLE_LANG'
 }
 

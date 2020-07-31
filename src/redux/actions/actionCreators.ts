@@ -33,6 +33,6 @@ export function editArticleLang(article: ArticleEditLangRedux): ActionT<ArticleE
     return { type: ArticlesActions.EDIT_ARTICLE_LANG, payload: article }
 }
 
-export function getArticleById(articleId: string): Action { //to del
-    return { type: ArticlesActions.GET_ARTICLE_BY_ID, payload: articleId }
+export function articleAddLang(article: any): ActionT<any> {
+    return { type: ArticlesActions.ADD_LANG, payload: article }
 }

@@ -1,4 +1,5 @@
 import React, { FormEvent } from "react";
+import { connect } from "react-redux";
 import api from '../../../../../util/api';
 import { defaultLang } from "../../../../../constants/appConstants";
 import { ArticleBaseModel, ErrorMessages, ValidatorsByField } from "../../AdminInterfaces";
@@ -9,6 +10,8 @@ import { getTokenHeader } from "../../../../../util/utilFunctions";
 import { textFieldValidator } from "../../util/ValidationFunctions";
 import { RouteComponentProps } from "react-router-dom";
 import { ArticleIdRouterParams } from "../edit/ArticleEdit";
+import ArchitectureAppStore from "../../../../../redux/interfaces/ArchitectureAppStore";
+import { articleAddLang } from "../../../../../redux/actions/actionCreators";
 
 export const langValidators: ValidatorsByField = {
     [ArticleFields.TITLE]: {
@@ -207,4 +210,12 @@ class ArticleAddLang extends React.PureComponent<RouteComponentProps<ArticleIdRo
     }
 }
 
-export default ArticleAddLang;
+const mapStateToProps = (state: ArchitectureAppStore) => ({
+    articles: state.articlesByCategories.articles
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+    addLangToArticleInStore: (article: any) => dispatch(articleAddLang(article))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleAddLang);
