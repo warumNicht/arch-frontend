@@ -10,7 +10,6 @@ import { createLangOptions } from "../../../../../util/renderFunctions";
 import { setNestedKey, getTokenHeader } from "../../../../../util/utilFunctions";
 import { Link } from "react-router-dom";
 
-
 const createCategoryOptions = (categories: Category[]) => {
     return (
         categories.map((category: Category) => {
