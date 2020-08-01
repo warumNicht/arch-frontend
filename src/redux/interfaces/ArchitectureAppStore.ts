@@ -1,4 +1,3 @@
-import { LocalContent } from "../../components/modules/admin/AdminInterfaces";
 
 export interface User{
     username: string,
@@ -16,7 +15,18 @@ export interface SelectedCategories{
 
 interface Image{
     // id: string,
+    name?: string,
     url: string
+}
+
+export interface LanguageContent {
+    title: string,
+    content?: string,
+    mainImage?: Image
+}
+
+export interface LocalContent {
+    [key: string]: LanguageContent
 }
 
 export interface Article{

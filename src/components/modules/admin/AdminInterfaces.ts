@@ -42,12 +42,3 @@ export interface ValidatorsByField {
         conditions?: Conditions
     }
 }
-
-export interface LanguageTitle {
-    title: string,
-    content?: string
-}
-
-export interface LocalContent {
-    [key: string]: LanguageTitle
-}

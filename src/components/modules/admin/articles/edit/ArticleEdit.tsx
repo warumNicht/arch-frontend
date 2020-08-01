@@ -55,7 +55,7 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
     loadArticle() {
         const articleId = this.props.match.params.articleId;
         const found: Article | undefined = this.props.editedArticle;
-        if (found) {
+        if (found && found.admin?.localContent) {
             this.loadArticleFromStore(found);
             return;
         }

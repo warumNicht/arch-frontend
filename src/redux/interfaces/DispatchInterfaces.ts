@@ -1,4 +1,4 @@
-import { LanguageTitle, LocalContent } from "../../components/modules/admin/AdminInterfaces";
+import { LocalContent } from "../../components/modules/admin/AdminInterfaces";
 
 export interface ArticleEditLangRedux {
     id: string,
