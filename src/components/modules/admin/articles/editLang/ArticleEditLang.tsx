@@ -18,7 +18,7 @@ interface ArticleEditLangRouterParams {
 }
 
 interface ArticleEditLangProps extends RouteComponentProps<ArticleEditLangRouterParams> {
-    articles: Article[],
+    editedArticle: Article | undefined,
     updateArticleLang: (article: ArticleEditLangRedux) => void
 }
 
@@ -178,9 +178,12 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
     }
 }
 
-const mapStateToProps = (state: ArchitectureAppStore) => ({
-    articles: state.articlesByCategories.articles
-});
+const mapStateToProps = (state: ArchitectureAppStore, ownProps: ArticleEditLangProps) => {
+    const editedArticleId: string = ownProps.match.params.articleId;
+    return {
+        editedArticle: state.articlesByCategories.articles.find((article: Article)=> article.id === editedArticleId)
+    }
+};
 
 const mapDispatchToProps = (dispatch: any) => ({
     updateArticleLang: (article: ArticleEditLangRedux) => dispatch(editArticleLang(article))
