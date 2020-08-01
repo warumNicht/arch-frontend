@@ -12,6 +12,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { ArticleIdRouterParams } from "../edit/ArticleEdit";
 import ArchitectureAppStore, { Article } from "../../../../../redux/interfaces/ArchitectureAppStore";
 import { articleAddLang } from "../../../../../redux/actions/actionCreators";
+import { ArticleAddLangRedux } from "../../../../../redux/interfaces/DispatchInterfaces";
 
 export const langValidators: ValidatorsByField = {
     [ArticleFields.TITLE]: {
@@ -42,11 +43,12 @@ export const langValidators: ValidatorsByField = {
 }
 
 interface ArticleAddLangModel extends ArticleBaseModel {
-    mainImage?: string
+    mainImageName?: string
 }
 
 interface ArticleAddLangProps extends RouteComponentProps<ArticleIdRouterParams>{
-    editedArticle: Article | undefined
+    editedArticle: Article | undefined,
+    addLangToArticleInStore: (article: ArticleAddLangRedux) => void
 }
 
 interface ArticleAddLangState {
@@ -95,17 +97,11 @@ class ArticleAddLang extends React.PureComponent<ArticleAddLangProps, ArticleAdd
             ...this.state.article
         }
         if (hasMainImage) {
-            newArticle.mainImage = '';
+            newArticle.mainImageName = '';
             this.setState({
                 article: newArticle,
                 errors: this.getInitialErrors(newArticle)
             })
-        }
-    }
-
-    loadArticleFromStore(){
-        let articleToState: ArticleAddLangModel = {
-            ...this.state.article
         }
     }
 
@@ -177,10 +173,24 @@ class ArticleAddLang extends React.PureComponent<ArticleAddLangProps, ArticleAdd
             .post(`/admin/articles/addLang/${this.props.match.params.articleId}`, article, getTokenHeader())
             .then((res) => {
                 console.log(res.data);
+                this.updateArticleInStore(article);
             })
             .catch((e: any) => {
                 console.log(e)
             });
+    }
+
+    updateArticleInStore(article: any){
+        let articleToUpdate: ArticleAddLangRedux = {
+            id: this.props.match.params.articleId,
+            country: article.country.toUpperCase(),
+            title: article.title,
+            content: article.content
+        }
+        if(article.mainImageName){
+            articleToUpdate.mainImageName = article.mainImageName;
+        }
+        this.props.addLangToArticleInStore(articleToUpdate);
     }
 
     render() {
@@ -208,11 +218,11 @@ class ArticleAddLang extends React.PureComponent<ArticleAddLangProps, ArticleAdd
                         <ValidationMessages validationErrors={this.state.errors[ArticleFields.CONTENT]} />
                     </div>
 
-                    {this.state.article.mainImage !== undefined ?
+                    {this.state.article.mainImageName !== undefined ?
                         <div>
                             <input
                                 type='text'
-                                value={this.state.article.mainImage}
+                                value={this.state.article.mainImageName}
                                 name={ArticleFields.MAIN_IMAGE}
                                 onChange={this.handleChange} />
                             <ValidationMessages validationErrors={this.state.errors[ArticleFields.MAIN_IMAGE]} />
@@ -236,7 +246,7 @@ const mapStateToProps = (state: ArchitectureAppStore, ownProps: ArticleAddLangPr
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    addLangToArticleInStore: (article: any) => dispatch(articleAddLang(article))
+    addLangToArticleInStore: (article: ArticleAddLangRedux) => dispatch(articleAddLang(article))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleAddLang);

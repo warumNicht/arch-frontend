@@ -1,9 +1,9 @@
 import React, { FormEvent } from "react";
 import { connect } from "react-redux";
 import api from '../../../../../util/api';
-import ArchitectureAppStore, { Category, Article } from "../../../../../redux/interfaces/ArchitectureAppStore";
+import ArchitectureAppStore, { Category, Article, LocalContent } from "../../../../../redux/interfaces/ArchitectureAppStore";
 import { RouteComponentProps, Link } from "react-router-dom";
-import { ErrorMessages, ImageUrlModel, LocalContent } from "../../AdminInterfaces";
+import { ErrorMessages, ImageUrlModel} from "../../AdminInterfaces";
 import { getTokenHeader } from "../../../../../util/utilFunctions";
 import { getLangPrefix } from "../../../../../util/LangPrefixUtil";
 import { loadArticle } from "../../../../../redux/actions/actionCreators";
