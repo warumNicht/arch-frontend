@@ -82,7 +82,7 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
             localContent: found.admin ? found.admin.localContent : {},
         };
         if (found.mainImage) {
-            articleToEdit.mainImage = { url: found.mainImage.url }
+            articleToEdit.mainImage = { url: found.mainImage.url || '' }
         }
         this.setState({
             article: articleToEdit

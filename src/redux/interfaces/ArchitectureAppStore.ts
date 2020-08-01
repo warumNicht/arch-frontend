@@ -16,7 +16,7 @@ export interface SelectedCategories{
 interface Image{
     // id: string,
     name?: string,
-    url: string
+    url?: string
 }
 
 export interface LanguageContent {

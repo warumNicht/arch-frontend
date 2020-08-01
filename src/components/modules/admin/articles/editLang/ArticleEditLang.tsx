@@ -7,7 +7,7 @@ import { ArticleTitleContent, ErrorMessages } from "../../AdminInterfaces";
 import ValidationMessages from "../../../../../shared/ValidationMessages/ValidationMessages";
 import { ArticleFields } from "../create/ArticleCreate";
 import { langValidators } from "../addLang/ArticleAddLang";
-import ArchitectureAppStore, { Article, User } from "../../../../../redux/interfaces/ArchitectureAppStore";
+import ArchitectureAppStore, { Article, User, LocalContent, LanguageContent } from "../../../../../redux/interfaces/ArchitectureAppStore";
 import { editArticleLang, setCurrentUser } from "../../../../../redux/actions/actionCreators";
 import { ArticleEditLangRedux } from "../../../../../redux/interfaces/DispatchInterfaces";
 
@@ -50,6 +50,12 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
 
 
     loadArticle() {
+        if (this.props.editedArticle) {
+            if (this.props.editedArticle.admin?.localContent[this.props.match.params.lang]) {
+                this.loadArticleFromStore();
+                return;
+            }
+        }
         const articleId = this.props.match.params.articleId;
         const lang = this.props.match.params.lang;
         api
@@ -64,6 +70,23 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
             .catch((e: any) => {
                 console.log(e)
             });
+    }
+
+    loadArticleFromStore() {
+        const localContent: LanguageContent | undefined = this.props.editedArticle?.admin?.localContent[this.props.match.params.lang];
+        if(localContent){
+            let articleToEdit: ArticleEditLangModel = {
+                title: localContent.title,
+                content: localContent.content || ''
+            }
+            if(localContent.mainImage){
+                articleToEdit.mainImage = localContent.mainImage.name
+            }
+            this.setState({
+                article: articleToEdit
+            })
+        }
+        
     }
 
     getInitialErrors(article: ArticleEditLangModel): ErrorMessages {
@@ -90,16 +113,18 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
             .patch(`/admin/articles/edit/${articleId}/${lang}`, this.state.article, getTokenHeader())
             .then((res) => {
                 console.log(res.data);
-                const editedArticle: ArticleEditLangRedux = {
+                let editedArticle: ArticleEditLangRedux = {
                     id: articleId,
                     // mainImage: this.state.article.mainImage ? this.state.article.mainImage : undefined,
                     localContent: {
                         [lang]: {
                             title: this.state.article.title,
-                            content: this.state.article.content
+                            content: this.state.article.content,
+                            mainImage: this.state.article.mainImage ? {name:this.state.article.mainImage} : undefined
                         }
                     }
                 }
+ 
                 console.log(this.props.updateArticleLang);
                 this.props.updateArticleLang(editedArticle);
                 // store.dispatch(editArticleLang(editedArticle))
@@ -181,7 +206,7 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
 const mapStateToProps = (state: ArchitectureAppStore, ownProps: ArticleEditLangProps) => {
     const editedArticleId: string = ownProps.match.params.articleId;
     return {
-        editedArticle: state.articlesByCategories.articles.find((article: Article)=> article.id === editedArticleId)
+        editedArticle: state.articlesByCategories.articles.find((article: Article) => article.id === editedArticleId)
     }
 };
 
