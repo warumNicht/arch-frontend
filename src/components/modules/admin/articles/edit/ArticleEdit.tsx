@@ -16,7 +16,7 @@ export interface ArticleIdRouterParams {
 
 interface ArticleEditProps extends RouteComponentProps<ArticleIdRouterParams> {
     categories: Category[],
-    articles: Article[],
+    editedArticle: Article | undefined,
     loadArticleInRedux: (article: Article) => void
 }
 
@@ -52,13 +52,9 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
         this.loadArticle();
     }
 
-    findArticleByIdIfExists(articleId: string): Article | undefined {
-        return this.props.articles.find((article: Article) => article.id === articleId)
-    }
-
     loadArticle() {
         const articleId = this.props.match.params.articleId;
-        const found: Article | undefined = this.findArticleByIdIfExists(articleId);
+        const found: Article | undefined = this.props.editedArticle;
         if (found) {
             this.loadArticleFromStore(found);
             return;
@@ -150,9 +146,12 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
     }
 }
 
-const mapStateToProps = (state: ArchitectureAppStore) => ({
-    articles: state.articlesByCategories.articles
-});
+const mapStateToProps = (state: ArchitectureAppStore, ownProps: ArticleEditProps) => {
+    const editedArticleId: string = ownProps.match.params.articleId;
+    return {
+        editedArticle: state.articlesByCategories.articles.find((article: Article)=> article.id === editedArticleId)
+    }
+};
 
 const mapDispatchToProps = (dispatch: any) => ({
     loadArticleInRedux: (article: Article) => dispatch(loadArticle(article))
