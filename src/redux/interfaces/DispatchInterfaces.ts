@@ -9,9 +9,10 @@ export interface ArticleEditLangRedux extends WithId{
     localContent: LocalContent
 }
 
-export interface ArticleAddLangRedux extends WithId{
+export interface ArticleLangRedux extends WithId{
     country: string,
     title: string,
     content: string,
     mainImageName?: string,
+    isCurrentLanguageEdited: boolean
 }

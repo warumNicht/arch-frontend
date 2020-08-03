@@ -1,7 +1,7 @@
 import TokenActions, { UserActions, CategoryActions, ArticlesActions } from './ActionTypes';
 import Action, { SetUserAction, AddArticleAction, ActionT } from '../interfaces/Action';
 import { User, Category, Article } from '../interfaces/ArchitectureAppStore';
-import { ArticleEditLangRedux, ArticleAddLangRedux } from '../interfaces/DispatchInterfaces';
+import { ArticleEditLangRedux, ArticleLangRedux } from '../interfaces/DispatchInterfaces';
 
 export default function setToken(token: string): Action {
     return { type: TokenActions.SET_TOKEN, payload: token }
@@ -32,6 +32,6 @@ export function editArticleLang(article: ArticleEditLangRedux): ActionT<ArticleE
     return { type: ArticlesActions.EDIT_ARTICLE_LANG, payload: article }
 }
 
-export function articleAddLang(article: ArticleAddLangRedux): ActionT<ArticleAddLangRedux> {
+export function articleAddLang(article: ArticleLangRedux): ActionT<ArticleLangRedux> {
     return { type: ArticlesActions.ADD_LANG, payload: article }
 }

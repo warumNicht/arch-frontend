@@ -50,12 +50,23 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
 
 
     loadArticle() {
-        if (this.props.editedArticle) {
-            if (this.props.editedArticle.admin?.localContent[this.props.match.params.lang]) {
-                this.loadArticleFromStore();
-                return;
-            }
+        if (!this.props.editedArticle) {
+            this.fetchWholeArticle();
+            return;
         }
+        if (!this.props.editedArticle.admin) {
+            this.fetchAdminArtibutes();
+            return;
+        }
+
+        const languageContent: LanguageContent = this.props.editedArticle.admin.localContent[this.props.match.params.lang];
+        if (languageContent && languageContent.content) {
+            this.loadArticleFromStore();
+            return;
+        }else{
+            this.fetchArticleContent();
+        }
+
         const articleId = this.props.match.params.articleId;
         const lang = this.props.match.params.lang;
         api
@@ -72,21 +83,44 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
             });
     }
 
+    fetchWholeArticle() {
+        const articleId = this.props.match.params.articleId;
+        const lang = this.props.match.params.lang;
+        api
+            .get(`/admin/articles/edit/${articleId}/${lang}/all`, getTokenHeader())
+            .then((res) => {
+                console.log(res.data);
+
+            })
+            .catch((e: any) => {
+                console.log(e)
+            });
+
+    }
+
+    fetchAdminArtibutes() {
+
+    }
+
+    fetchArticleContent() {
+
+    }
+
     loadArticleFromStore() {
         const localContent: LanguageContent | undefined = this.props.editedArticle?.admin?.localContent[this.props.match.params.lang];
-        if(localContent){
+        if (localContent) {
             let articleToEdit: ArticleEditLangModel = {
                 title: localContent.title,
                 content: localContent.content || ''
             }
-            if(localContent.mainImage){
+            if (localContent.mainImage) {
                 articleToEdit.mainImage = localContent.mainImage.name
             }
             this.setState({
                 article: articleToEdit
             })
         }
-        
+
     }
 
     getInitialErrors(article: ArticleEditLangModel): ErrorMessages {
@@ -120,11 +154,11 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
                         [lang]: {
                             title: this.state.article.title,
                             content: this.state.article.content,
-                            mainImage: this.state.article.mainImage ? {name:this.state.article.mainImage} : undefined
+                            mainImage: this.state.article.mainImage ? { name: this.state.article.mainImage } : undefined
                         }
                     }
                 }
- 
+
                 console.log(this.props.updateArticleLang);
                 this.props.updateArticleLang(editedArticle);
                 // store.dispatch(editArticleLang(editedArticle))

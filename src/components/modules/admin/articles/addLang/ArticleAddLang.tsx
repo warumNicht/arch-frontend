@@ -12,7 +12,8 @@ import { RouteComponentProps } from "react-router-dom";
 import { ArticleIdRouterParams } from "../edit/ArticleEdit";
 import ArchitectureAppStore, { Article } from "../../../../../redux/interfaces/ArchitectureAppStore";
 import { articleAddLang } from "../../../../../redux/actions/actionCreators";
-import { ArticleAddLangRedux } from "../../../../../redux/interfaces/DispatchInterfaces";
+import { ArticleLangRedux } from "../../../../../redux/interfaces/DispatchInterfaces";
+import { getLangPrefix } from "../../../../../util/LangPrefixUtil";
 
 export const langValidators: ValidatorsByField = {
     [ArticleFields.TITLE]: {
@@ -48,7 +49,7 @@ interface ArticleAddLangModel extends ArticleBaseModel {
 
 interface ArticleAddLangProps extends RouteComponentProps<ArticleIdRouterParams>{
     editedArticle: Article | undefined,
-    addLangToArticleInStore: (article: ArticleAddLangRedux) => void
+    addLangToArticleInStore: (article: ArticleLangRedux) => void
 }
 
 interface ArticleAddLangState {
@@ -181,11 +182,13 @@ class ArticleAddLang extends React.PureComponent<ArticleAddLangProps, ArticleAdd
     }
 
     updateArticleInStore(article: any){
-        let articleToUpdate: ArticleAddLangRedux = {
+        const country = article.country.toUpperCase();
+        let articleToUpdate: ArticleLangRedux = {
             id: this.props.match.params.articleId,
-            country: article.country.toUpperCase(),
+            country: country,
             title: article.title,
-            content: article.content
+            content: article.content,
+            isCurrentLanguageEdited: getLangPrefix(this.props.match.path).toUpperCase() === country ? true : false
         }
         if(article.mainImageName){
             articleToUpdate.mainImageName = article.mainImageName;
@@ -246,7 +249,7 @@ const mapStateToProps = (state: ArchitectureAppStore, ownProps: ArticleAddLangPr
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    addLangToArticleInStore: (article: ArticleAddLangRedux) => dispatch(articleAddLang(article))
+    addLangToArticleInStore: (article: ArticleLangRedux) => dispatch(articleAddLang(article))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleAddLang);

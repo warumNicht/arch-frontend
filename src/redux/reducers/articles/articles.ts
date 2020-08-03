@@ -1,11 +1,11 @@
 import { ArticlesActions } from '../../actions/ActionTypes';
 import { Article } from '../../interfaces/ArchitectureAppStore';
 import { ActionT } from '../../interfaces/Action';
-import { ArticleEditLangRedux, ArticleAddLangRedux } from '../../interfaces/DispatchInterfaces';
+import { ArticleEditLangRedux, ArticleLangRedux } from '../../interfaces/DispatchInterfaces';
 
 const initialArticlesState: Article[] = [];
 
-function articles(state = initialArticlesState, action: ActionT<Article & ArticleEditLangRedux & ArticleAddLangRedux>) {
+function articles(state = initialArticlesState, action: ActionT<Article & ArticleEditLangRedux & ArticleLangRedux>) {
     switch (action.type) {
         case ArticlesActions.LOAD_ARTICLE: {
             if (findArticleById(state, action.payload.id)) {
@@ -64,6 +64,17 @@ function articles(state = initialArticlesState, action: ActionT<Article & Articl
                                     title: action.payload.title,
                                     content: action.payload.content
                                 }
+                            }
+                        }
+                    }
+                    
+                    if(action.payload.isCurrentLanguageEdited){
+                        updatedArticle.title = action.payload.title;
+                        updatedArticle.content = action.payload.content;
+                        if(updatedArticle.mainImage){
+                            updatedArticle.mainImage = {
+                                ...updatedArticle.mainImage,
+                                name: action.payload.mainImageName
                             }
                         }
                     }
