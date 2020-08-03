@@ -22,7 +22,7 @@ interface Image{
 export interface LanguageContent {
     title: string,
     content?: string,
-    mainImage?: Image
+    mainImageName?: string
 }
 
 export interface LocalContent {

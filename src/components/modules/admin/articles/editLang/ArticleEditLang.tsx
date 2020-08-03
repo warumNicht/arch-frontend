@@ -8,8 +8,9 @@ import ValidationMessages from "../../../../../shared/ValidationMessages/Validat
 import { ArticleFields } from "../create/ArticleCreate";
 import { langValidators } from "../addLang/ArticleAddLang";
 import ArchitectureAppStore, { Article, User, LocalContent, LanguageContent } from "../../../../../redux/interfaces/ArchitectureAppStore";
-import { editArticleLang, setCurrentUser } from "../../../../../redux/actions/actionCreators";
+import { editArticleLang, setCurrentUser, loadArticle } from "../../../../../redux/actions/actionCreators";
 import { ArticleEditLangRedux } from "../../../../../redux/interfaces/DispatchInterfaces";
+import { AxiosResponse } from "axios";
 
 
 interface ArticleEditLangRouterParams {
@@ -19,7 +20,8 @@ interface ArticleEditLangRouterParams {
 
 interface ArticleEditLangProps extends RouteComponentProps<ArticleEditLangRouterParams> {
     editedArticle: Article | undefined,
-    updateArticleLang: (article: ArticleEditLangRedux) => void
+    updateArticleLang: (article: ArticleEditLangRedux) => void,
+    loadArticleInRedux: (article: Article) => void
 }
 
 interface ArticleEditLangModel extends ArticleTitleContent {
@@ -48,39 +50,44 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
         this.loadArticle();
     }
 
+    componentWillReceiveProps(props:ArticleEditLangProps){
+        console.log(props)
+        console.log(props.editedArticle)
+    }
+
 
     loadArticle() {
         if (!this.props.editedArticle) {
             this.fetchWholeArticle();
             return;
         }
-        if (!this.props.editedArticle.admin) {
-            this.fetchAdminArtibutes();
-            return;
-        }
+        // if (!this.props.editedArticle.admin) {
+        //     this.fetchAdminArtibutes();
+        //     return;
+        // }
 
-        const languageContent: LanguageContent = this.props.editedArticle.admin.localContent[this.props.match.params.lang];
-        if (languageContent && languageContent.content) {
-            this.loadArticleFromStore();
-            return;
-        }else{
-            this.fetchArticleContent();
-        }
+        // const languageContent: LanguageContent = this.props.editedArticle.admin.localContent[this.props.match.params.lang];
+        // if (languageContent && languageContent.content) {
+        //     this.loadArticleFromStore();
+        //     return;
+        // }else{
+        //     this.fetchArticleContent();
+        // }
 
-        const articleId = this.props.match.params.articleId;
-        const lang = this.props.match.params.lang;
-        api
-            .get(`/admin/articles/edit/${articleId}/${lang}`, getTokenHeader())
-            .then((res) => {
-                console.log(res.data);
-                this.setState({
-                    article: res.data,
-                    errors: this.getInitialErrors(res.data)
-                })
-            })
-            .catch((e: any) => {
-                console.log(e)
-            });
+        // const articleId = this.props.match.params.articleId;
+        // const lang = this.props.match.params.lang;
+        // api
+        //     .get(`/admin/articles/edit/${articleId}/${lang}`, getTokenHeader())
+        //     .then((res) => {
+        //         console.log(res.data);
+        //         this.setState({
+        //             article: res.data,
+        //             errors: this.getInitialErrors(res.data)
+        //         })
+        //     })
+        //     .catch((e: any) => {
+        //         console.log(e)
+        //     });
     }
 
     fetchWholeArticle() {
@@ -88,9 +95,25 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
         const lang = this.props.match.params.lang;
         api
             .get(`/admin/articles/edit/${articleId}/${lang}/all`, getTokenHeader())
-            .then((res) => {
+            .then((res: AxiosResponse<Article>) => {
                 console.log(res.data);
+                const article: Article = res.data;
+                this.props.loadArticleInRedux(article);
 
+                if(article.admin){
+                    let articleToEdit: ArticleEditLangModel = {
+                        title: article.admin.localContent[lang].title,
+                        content: article.admin.localContent[lang].content || ''
+                    }
+                    if (article.admin.localContent[lang].mainImageName) {
+                        articleToEdit.mainImage = article.admin.localContent[lang].mainImageName
+                    }
+                    this.setState({
+                        article: articleToEdit
+                    })
+                }
+
+           
             })
             .catch((e: any) => {
                 console.log(e)
@@ -113,8 +136,8 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
                 title: localContent.title,
                 content: localContent.content || ''
             }
-            if (localContent.mainImage) {
-                articleToEdit.mainImage = localContent.mainImage.name
+            if (localContent.mainImageName) {
+                articleToEdit.mainImage = localContent.mainImageName
             }
             this.setState({
                 article: articleToEdit
@@ -154,7 +177,7 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
                         [lang]: {
                             title: this.state.article.title,
                             content: this.state.article.content,
-                            mainImage: this.state.article.mainImage ? { name: this.state.article.mainImage } : undefined
+                            mainImageName: this.state.article.mainImage ? this.state.article.mainImage : undefined
                         }
                     }
                 }
@@ -240,12 +263,13 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
 const mapStateToProps = (state: ArchitectureAppStore, ownProps: ArticleEditLangProps) => {
     const editedArticleId: string = ownProps.match.params.articleId;
     return {
-        editedArticle: state.articlesByCategories.articles.find((article: Article) => article.id === editedArticleId)
+        editedArticle: state.articlesByCategories.articles.find((article: Article) => article.id === editedArticleId),
     }
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    updateArticleLang: (article: ArticleEditLangRedux) => dispatch(editArticleLang(article))
+    updateArticleLang: (article: ArticleEditLangRedux) => dispatch(editArticleLang(article)),
+    loadArticleInRedux: (article: Article) => dispatch(loadArticle(article))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleEditLang);
