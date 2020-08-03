@@ -51,8 +51,20 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
     }
 
     componentWillReceiveProps(props:ArticleEditLangProps){
-        console.log(props)
-        console.log(props.editedArticle)
+        const article: Article | undefined = props.editedArticle;
+
+        if(article && article.admin){
+            let articleToEdit: ArticleEditLangModel = {
+                title: article.admin.localContent[props.match.params.lang].title,
+                content: article.admin.localContent[props.match.params.lang].content || ''
+            }
+            if (article.admin.localContent[props.match.params.lang].mainImageName) {
+                articleToEdit.mainImage = article.admin.localContent[props.match.params.lang].mainImageName
+            }
+            this.setState({
+                article: articleToEdit
+            })
+        }
     }
 
 
@@ -97,29 +109,11 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
         api
             .get(`/admin/articles/edit/${articleId}/${lang}/all`, getTokenHeader())
             .then((res: AxiosResponse<Article>) => {
-                console.log(res.data);
-                const article: Article = res.data;
-                this.props.loadArticleInRedux(article);
-
-                if(article.admin){
-                    let articleToEdit: ArticleEditLangModel = {
-                        title: article.admin.localContent[lang].title,
-                        content: article.admin.localContent[lang].content || ''
-                    }
-                    if (article.admin.localContent[lang].mainImageName) {
-                        articleToEdit.mainImage = article.admin.localContent[lang].mainImageName
-                    }
-                    this.setState({
-                        article: articleToEdit
-                    })
-                }
-
-           
+                this.props.loadArticleInRedux(res.data);
             })
             .catch((e: any) => {
                 console.log(e)
             });
-
     }
 
     fetchAdminArtibutes() {
