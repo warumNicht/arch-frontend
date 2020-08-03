@@ -57,22 +57,23 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
 
 
     loadArticle() {
+        console.log(this.props.editedArticle)
         if (!this.props.editedArticle) {
             this.fetchWholeArticle();
             return;
         }
-        // if (!this.props.editedArticle.admin) {
-        //     this.fetchAdminArtibutes();
-        //     return;
-        // }
+        if (!this.props.editedArticle.admin) {
+            this.fetchAdminArtibutes();
+            return;
+        }
 
-        // const languageContent: LanguageContent = this.props.editedArticle.admin.localContent[this.props.match.params.lang];
-        // if (languageContent && languageContent.content) {
-        //     this.loadArticleFromStore();
-        //     return;
-        // }else{
-        //     this.fetchArticleContent();
-        // }
+        const languageContent: LanguageContent = this.props.editedArticle.admin.localContent[this.props.match.params.lang];
+        if (languageContent && languageContent.content) {
+            this.loadArticleFromStore();
+            return;
+        }else{
+            this.fetchArticleContent();
+        }
 
         // const articleId = this.props.match.params.articleId;
         // const lang = this.props.match.params.lang;
@@ -262,9 +263,13 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
 
 const mapStateToProps = (state: ArchitectureAppStore, ownProps: ArticleEditLangProps) => {
     const editedArticleId: string = ownProps.match.params.articleId;
-    return {
-        editedArticle: state.articlesByCategories.articles.find((article: Article) => article.id === editedArticleId),
+    const allArticles: Article[] = state.articlesByCategories.articles;
+    const found = allArticles.find((article: Article) => article.id.toString() === editedArticleId);
+    console.log(state.articlesByCategories.articles)
+    const res = {
+        editedArticle: found,
     }
+    return res;
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
