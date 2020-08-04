@@ -1,7 +1,7 @@
 import TokenActions, { UserActions, CategoryActions, ArticlesActions } from './ActionTypes';
 import Action, { SetUserAction, AddArticleAction, ActionT } from '../interfaces/Action';
 import { User, Category, Article } from '../interfaces/ArchitectureAppStore';
-import { ArticleEditLangRedux, ArticleLangRedux } from '../interfaces/DispatchInterfaces';
+import { ArticleEditLangRedux, ArticleLangRedux, AddAdminContentRedux, ArticleContentRedux } from '../interfaces/DispatchInterfaces';
 
 export default function setToken(token: string): Action {
     return { type: TokenActions.SET_TOKEN, payload: token }
@@ -28,10 +28,22 @@ export function loadArticle(article: Article): ActionT<Article> {
     return { type: ArticlesActions.LOAD_ARTICLE, payload: article }
 }
 
+export function loadArticlesList(articles: Article[]): ActionT<Article[]> {
+    return { type: ArticlesActions.LOAD_LIST_OF_ARTICLES, payload: articles }
+}
+
 export function editArticleLang(article: ArticleEditLangRedux): ActionT<ArticleEditLangRedux> {
     return { type: ArticlesActions.EDIT_ARTICLE_LANG, payload: article }
 }
 
 export function articleAddLang(article: ArticleLangRedux): ActionT<ArticleLangRedux> {
     return { type: ArticlesActions.ADD_LANG, payload: article }
+}
+
+export function addAdminContent(article: AddAdminContentRedux): ActionT<AddAdminContentRedux> {
+    return { type: ArticlesActions.ADD_ADMIN_CONTENT, payload: article }
+}
+
+export function addContent(article: ArticleContentRedux): ActionT<ArticleContentRedux> {
+    return { type: ArticlesActions.ADD_CONTENT, payload: article }
 }

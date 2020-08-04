@@ -1,11 +1,12 @@
 import { ArticlesActions } from '../../actions/ActionTypes';
 import { Article } from '../../interfaces/ArchitectureAppStore';
 import { ActionT } from '../../interfaces/Action';
-import { ArticleEditLangRedux, ArticleLangRedux } from '../../interfaces/DispatchInterfaces';
+import { ArticleEditLangRedux, ArticleLangRedux, AddAdminContentRedux, ArticleContentRedux } from '../../interfaces/DispatchInterfaces';
 
 const initialArticlesState: Article[] = [];
 
-function articles(state = initialArticlesState, action: ActionT<Article & ArticleEditLangRedux & ArticleLangRedux>) {
+function articles(state = initialArticlesState,
+    action: ActionT<Article & Article[] & ArticleEditLangRedux & ArticleLangRedux & AddAdminContentRedux & ArticleContentRedux>) {
     switch (action.type) {
         case ArticlesActions.LOAD_ARTICLE: {
             if (findArticleById(state, action.payload.id)) {
@@ -14,6 +15,21 @@ function articles(state = initialArticlesState, action: ActionT<Article & Articl
             return [
                 ...state,
                 action.payload
+            ]
+        }
+        case ArticlesActions.LOAD_LIST_OF_ARTICLES: {
+            let notContainedArticles: Article[] = [];
+
+            action.payload.forEach((article: Article) => {
+                const found = findArticleById(state, article.id);
+                if (!found) {
+                    notContainedArticles.push(article);
+                }
+            })
+            console.log(notContainedArticles)
+            return [
+                ...state,
+                ...notContainedArticles
             ]
         }
         case ArticlesActions.EDIT_ARTICLE_LANG:
@@ -49,29 +65,29 @@ function articles(state = initialArticlesState, action: ActionT<Article & Articl
                     if (updatedArticle.admin) {
                         updatedArticle.admin = {
                             ...article.admin,
-                            localContent : {
+                            localContent: {
                                 ...article.admin?.localContent,
-                                [action.payload.country]:{
+                                [action.payload.country]: {
                                     title: action.payload.title,
                                     content: action.payload.content
                                 }
                             }
                         }
-                    }else{
+                    } else {
                         updatedArticle.admin = {
-                            localContent : {
-                                [action.payload.country]:{
+                            localContent: {
+                                [action.payload.country]: {
                                     title: action.payload.title,
                                     content: action.payload.content
                                 }
                             }
                         }
                     }
-                    
-                    if(action.payload.isCurrentLanguageEdited){
+
+                    if (action.payload.isCurrentLanguageEdited) {
                         updatedArticle.title = action.payload.title;
                         updatedArticle.content = action.payload.content;
-                        if(updatedArticle.mainImage){
+                        if (updatedArticle.mainImage) {
                             updatedArticle.mainImage = {
                                 ...updatedArticle.mainImage,
                                 name: action.payload.mainImageName
@@ -79,6 +95,46 @@ function articles(state = initialArticlesState, action: ActionT<Article & Articl
                         }
                     }
                     return updatedArticle
+                }
+                return article;
+            })
+        }
+        case ArticlesActions.ADD_ADMIN_CONTENT: {
+            return state.map((article: Article) => {
+                if (article.id.toString() === action.payload.id) {
+                    let updatedArticle = {
+                        ...article,
+                        admin: {
+                            localContent: action.payload.localContent
+                        }
+                    }
+                    return updatedArticle;
+                }
+                return article;
+            })
+        }
+        case ArticlesActions.ADD_CONTENT: {
+            return state.map((article: Article) => {
+                if (article.id.toString() === action.payload.id) {
+                    const langContent = article.admin?.localContent[action.payload.country];
+                    let updatedArticle = {
+                        ...article,
+                        admin: {
+                            ...article.admin,
+                            localContent: {
+                                ...article.admin?.localContent,
+                                [action.payload.country]: {
+                                    ...langContent,
+                                    content: action.payload.content,
+                                    // mainImageName: ''
+                                }
+                            }
+                        }
+                    }
+                    if(action.payload.mainImageName){
+                        (updatedArticle.admin.localContent as any)[action.payload.country].mainImageName = action.payload.mainImageName;      
+                    }
+                    return updatedArticle;
                 }
                 return article;
             })

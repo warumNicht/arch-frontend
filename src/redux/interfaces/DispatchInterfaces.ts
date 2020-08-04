@@ -16,3 +16,13 @@ export interface ArticleLangRedux extends WithId{
     mainImageName?: string,
     isCurrentLanguageEdited: boolean
 }
+
+export interface AddAdminContentRedux extends WithId{
+    localContent: LocalContent
+}
+
+export interface ArticleContentRedux extends WithId{
+    country: string,
+    content:string,
+    mainImageName?: string,
+}
