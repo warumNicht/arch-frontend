@@ -22,7 +22,7 @@ interface ArticleEditLangProps extends RouteComponentProps<ArticleEditLangRouter
     editedArticle: Article | undefined,
     updateArticleLang: (article: ArticleEditLangRedux) => void,
     loadArticleInRedux: (article: Article) => void,
-    addAdminContent: (adminArticle: AddAdminContentRedux) =>  void,
+    addAdminContent: (adminArticle: AddAdminContentRedux) => void,
     addContent: (contentArticle: ArticleContentRedux) => void
 }
 
@@ -72,12 +72,13 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
 
     loadArticle() {
         console.log(this.props.editedArticle)
+
         if (!this.props.editedArticle) {
-            this.fetchWholeArticle();
+            this.fetchArticle();
             return;
         }
         if (!this.props.editedArticle.admin) {
-            this.fetchAdminArtibutes();
+            this.fetchArticle('map');
             return;
         }
 
@@ -86,72 +87,40 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
             this.loadArticleFromStore();
             return;
         } else {
-            this.fetchArticleContent();
+            this.fetchArticle('content');
         }
-
-        // const articleId = this.props.match.params.articleId;
-        // const lang = this.props.match.params.lang;
-        // api
-        //     .get(`/admin/articles/edit/${articleId}/${lang}`, getTokenHeader())
-        //     .then((res) => {
-        //         console.log(res.data);
-        //         this.setState({
-        //             article: res.data,
-        //             errors: this.getInitialErrors(res.data)
-        //         })
-        //     })
-        //     .catch((e: any) => {
-        //         console.log(e)
-        //     });
     }
 
-    fetchWholeArticle() {
+    fetchArticle(param?: 'map' | 'content') {
         const articleId = this.props.match.params.articleId;
         const lang = this.props.match.params.lang;
-        api
-            .get(`/admin/articles/edit/${articleId}/${lang}/all`, getTokenHeader())
-            .then((res: AxiosResponse<Article>) => {
-                this.props.loadArticleInRedux(res.data);
-            })
-            .catch((e: any) => {
-                console.log(e)
-            });
-    }
+        const requestParam: string = param ? `?filter=${param}` : '';
 
-    fetchAdminArtibutes() {
-        const articleId = this.props.match.params.articleId;
-        const lang = this.props.match.params.lang;
         api
-            .get(`/admin/articles/edit/${articleId}/${lang}/admin`, getTokenHeader())
-            .then((res: AxiosResponse<LocalContent>) => {
-                console.log(res.data)
-                const articleWithAdminContent: AddAdminContentRedux = {
-                    id: articleId,
-                    localContent: res.data
-                }
-                this.props.addAdminContent(articleWithAdminContent);  
-            })
-            .catch((e: any) => {
-                console.log(e)
-            });
-    }
+            .get(`/admin/articles/edit/${articleId}/${lang}${requestParam}`)
+            .then((res: AxiosResponse<Article & LocalContent & any>) => {
+                if (param === 'map') {
+                    const articleWithAdminContent: AddAdminContentRedux = {
+                        id: articleId,
+                        localContent: res.data
+                    }
+                    this.props.addAdminContent(articleWithAdminContent);
 
-    fetchArticleContent() {
-        const articleId = this.props.match.params.articleId;
-        const lang = this.props.match.params.lang;
-        api
-            .get(`/admin/articles/edit/${articleId}/${lang}/content`, getTokenHeader())
-            .then((res: AxiosResponse<any>) => {
-                console.log(res.data) 
-                let contentArticle: ArticleContentRedux = {
-                    id: articleId,
-                    country: lang,
-                    content: res.data.content
+                } else if (param === 'content') {
+
+                    let contentArticle: ArticleContentRedux = {
+                        id: articleId,
+                        country: lang,
+                        content: res.data.content
+                    }
+                    if (res.data.mainImageName) {
+                        contentArticle.mainImageName = res.data.mainImageName
+                    }
+                    this.props.addContent(contentArticle);
+
+                } else {
+                    this.props.loadArticleInRedux(res.data);
                 }
-                if(res.data.mainImageName){
-                    contentArticle.mainImageName = res.data.mainImageName
-                }
-                this.props.addContent(contentArticle);
             })
             .catch((e: any) => {
                 console.log(e)
