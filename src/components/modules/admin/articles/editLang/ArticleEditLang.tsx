@@ -97,7 +97,9 @@ class ArticleEditLang extends React.PureComponent<ArticleEditLangProps, ArticleE
         const requestParam: string = param ? `?filter=${param}` : '';
 
         api
-            .get(`/admin/articles/edit/${articleId}/${lang}${requestParam}`)
+            .get(`/admin/articles/edit/${articleId}/${lang}${requestParam}`, 
+            getTokenHeader()
+            )
             .then((res: AxiosResponse<Article & LocalContent & any>) => {
                 if (param === 'map') {
                     const articleWithAdminContent: AddAdminContentRedux = {
