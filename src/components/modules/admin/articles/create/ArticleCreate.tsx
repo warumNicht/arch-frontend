@@ -256,7 +256,6 @@ class ArticleCreate extends React.PureComponent<ArticleCreateProps, ArticleCreat
                     <button disabled={this.shouldDisableSubmit()}>Create</button>
                 </form>
 
-
             </div>
         );
     }

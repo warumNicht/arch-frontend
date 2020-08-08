@@ -19,11 +19,6 @@ function App(props: any) {
   const currentLangCookie = getLangCookie(props);
   const currentUrlLangPrefix = props.match.path.substring(1);
 
-  let d = new Date();
-  console.log(d)
-  d.setTime(d.getTime() + (1 * 60 * 1000)); //1 min
-  console.log(d)
-
   if (!currentLangCookie) {
     //set cookie
     props.cookies.set('lang', currentUrlLangPrefix, createCookieOptions());
