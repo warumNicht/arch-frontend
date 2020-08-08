@@ -117,8 +117,6 @@ class ArticleEdit extends React.PureComponent<ArticleEditProps, ArticleEditState
     }
 
     render() {
-        const articleId: string = this.props.match.params.articleId;
-        const langPrefix: string = getLangPrefix(this.props.match.path);
         return (
             <div>
                 Article edit {this.articleId}
