@@ -3,7 +3,7 @@ import { Conditions } from "../AdminInterfaces";
 export function textFieldValidator
     (value: string, conditions?: Conditions): string[] | null {
     let messages: string[] = [];
-    if (!conditions || value === undefined || value === null  || value.length === 0 && conditions.allowEmpty) {
+    if (!conditions || value === undefined || value === null || (value.length === 0 && conditions.allowEmpty)) {
         return null;
     }
 
